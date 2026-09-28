@@ -6,6 +6,7 @@ PAW is a pet-care discovery platform for the Philippines, launching in Angeles C
 |---|---|
 | [PRD.md](PRD.md) | What are we building, for whom, and why? Features by phase, go-to-market, monetization, risks |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | How is it built? Stack, system diagram, data model, search, auth, costs, decision log |
+| [DESIGN.md](DESIGN.md) | How does it look and behave? UX principles, screens, UX decisions, brand kit, tokens, performance and accessibility |
 | [ROADMAP.md](ROADMAP.md) | In what order? Vertical slices with checkboxes and exit criteria per phase |
 | [pitch/clinics.md](pitch/clinics.md) · [pitch/pet-owners.md](pitch/pet-owners.md) | What to say and ask in Phase 0 interviews: pitch, deck outline, features, workflows, FAQ, notes template |
 | [../CLAUDE.md](../CLAUDE.md) | How should Claude work in this repo? Conventions, glossary, status |

@@ -5,6 +5,7 @@ Pet-care discovery platform for the Philippines, launching in Angeles City / Reg
 ## Docs — read before feature work
 - `AI_DOCS/PRD.md`: what and why (features are tagged by phase: [P1]–[P4])
 - `AI_DOCS/ARCHITECTURE.md`: stack, data model, search, auth, decision log
+- `AI_DOCS/DESIGN.md`: UX principles, screens, UX decisions, tokens, performance and accessibility budgets. Read it before any UI work.
 - `AI_DOCS/ROADMAP.md`: build order as vertical slices. **Tick the checkbox when a slice ships.**
 - `AI_DOCS/pitch/`: interview and pitch kits for clinics and pet owners (Phase 0 validation). Keep their feature lists in sync with the PRD.
 - `AI_DOCS/archive/`: superseded drafts. Ignore them; don't use them as a source of truth.
