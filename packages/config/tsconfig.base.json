@@ -11,6 +11,13 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
 
+    // Code runs as TypeScript (Node's type stripping, Vite, Next.js); tsc only type-checks.
+    // Relative imports therefore use the real ".ts" extension, and only syntax Node can
+    // strip is allowed (no enums, namespaces or constructor parameter properties).
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,

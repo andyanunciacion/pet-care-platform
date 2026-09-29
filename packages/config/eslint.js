@@ -26,6 +26,9 @@ export default defineConfig(
     },
     rules: {
       '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }],
+      // Fastify plugins and handlers are async by convention (the returned promise tells
+      // Fastify they're done), even when they don't await anything.
+      '@typescript-eslint/require-await': 'off',
     },
   },
   {

@@ -27,13 +27,13 @@
 ### P0-T2 · API skeleton
 `backend` · Depends on: P0-T1
 **Goal:** A running Fastify API with the conventions every future route follows.
-- [ ] `apps/api` with Fastify + `fastify-type-provider-zod`
-- [ ] Env vars validated with Zod at startup (the app refuses to boot if they're invalid)
-- [ ] `GET /health` (API up + DB reachable)
-- [ ] Error format: RFC 9457 `problem+json`
-- [ ] pino logging (no personal data), helmet, CORS
-- [ ] OpenAPI generation (`@fastify/swagger`) + docs page in dev
-- [ ] Integration test for `/health`
+- [x] `apps/api` with Fastify + `fastify-type-provider-zod`
+- [x] Env vars validated with Zod at startup (the app refuses to boot if they're invalid)
+- [x] `GET /health` (API up + DB reachable)
+- [x] Error format: RFC 9457 `problem+json`
+- [x] pino logging (no personal data), helmet, CORS
+- [x] OpenAPI generation (`@fastify/swagger`) + docs page in dev
+- [x] Integration test for `/health`
 
 **Done when:** `pnpm dev` serves `/health` and the OpenAPI docs locally, and the tests pass.
 

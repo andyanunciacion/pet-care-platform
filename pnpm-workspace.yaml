@@ -7,15 +7,18 @@ packages:
 catalog:
   '@eslint/js': ^10.0.1
   '@types/node': ^24.19.0
+  '@types/pg': ^8.23.1
   eslint: ^10.11.0
   eslint-config-prettier: ^10.1.8
   globals: ^17.12.0
+  pg: ^8.23.0
   prettier: ^3.9.9
   turbo: ^2.11.5
   # Stay on 6.0.x: typescript-eslint doesn't support TypeScript 6.1+ / 7 yet.
   typescript: ~6.0.3
   typescript-eslint: ^8.70.0
   vitest: ^5.0.2
+  zod: ^4.6.5
 
 # Refuse to install on a Node version outside "engines" (see .nvmrc).
 engineStrict: true
