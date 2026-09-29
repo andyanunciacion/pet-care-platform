@@ -44,12 +44,13 @@
 ### 3.1 Monorepo & tooling
 | Concern | Choice | Why |
 |---|---|---|
-| Package manager / workspaces | **pnpm** workspaces | Fast, strict about dependencies, standard for TS monorepos |
-| Task runner | **Turborepo** | Cached builds/tests across apps with minimal config |
-| Language | **TypeScript** (`strict: true`) | See §1 |
+| Runtime | **Node.js 24 LTS** (pinned in `.nvmrc` + `engines`) | Supported until April 2028; see D13 |
+| Package manager / workspaces | **pnpm** workspaces, shared tool versions in a pnpm **catalog** | Fast, strict about dependencies, standard for TS monorepos. The catalog keeps one version of each tool across packages |
+| Task runner | **Turborepo** | Cached builds, lint, and typecheck across apps with minimal config |
+| Language | **TypeScript 6.0** (`strict: true`) | See §1 and D14 |
 | Validation | **Zod** | One schema serves as runtime validation, TS type, and OpenAPI source |
-| Lint / format | ESLint + Prettier (or Biome) | Pick one when the repo is set up; don't mix |
-| Tests | **Vitest** (unit/integration), **Playwright** (end-to-end) | Fast, TS-native |
+| Lint / format | **ESLint (flat config) + Prettier** | Mainstream, best documented, and has Next.js-specific lint rules |
+| Tests | **Vitest** (unit/integration), **Playwright** (end-to-end) | Fast, TS-native. One root Vitest run covers every package (Vitest "projects") |
 | CI | **GitHub Actions** | Lint, typecheck, test, and build on every push/PR |
 
 ### 3.2 API — `apps/api`
@@ -99,7 +100,7 @@
 | Errors / monitoring | **Sentry** (web, API, worker, mobile) + uptime checks |
 | Payments (P3) | **PayMongo** (GCash, Maya, cards) |
 
-## 4. Proposed monorepo layout (to be created)
+## 4. Monorepo layout (packages are added as their slices ship)
 
 ```
 paw/
@@ -260,3 +261,5 @@ Rough figures as of late 2026. **Verify current pricing before committing.**
 | D10 | **Better Auth** instead of hand-rolled JWT/OTP | Security-sensitive code we shouldn't write ourselves; supports orgs + Expo | Library stagnates |
 | D11 | **Singapore region** for all hosting | Lowest latency to PH among major providers | A PH region becomes available |
 | D12 | **Vets-only launch on a type-agnostic model** (`business` / `branch`, never `clinic`, in schema and API) | Adding groomers, boarding, and pet shops later becomes mostly data, taxonomy, and UI copy rather than migrations (see §5.3) | — |
+| D13 | **Node 24 LTS** instead of Node 22 | Node 22 reaches end-of-life in April 2027, months after launch; 24 is supported until April 2028. ESLint 10 also needs Node ≥ 22.13 | Node 26 becomes LTS (Oct 2026); upgrade well before April 2028 |
+| D14 | **TypeScript 6.0.x**, not 7 (the native Go compiler) | typescript-eslint's type-aware rules need the JS compiler API, which TS 7 doesn't ship yet (peer range `<6.1.0`). Pinned with `~6.0.x` in the pnpm catalog | typescript-eslint supports TS 7 |

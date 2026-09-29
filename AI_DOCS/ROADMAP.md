@@ -29,7 +29,7 @@
 - [ ] Update `DESIGN.md` §6 with what the prototype tests showed.
 
 **Groundwork (technical)**
-- [ ] Monorepo setup: pnpm + Turborepo, TS strict, lint/format, Vitest, `docker-compose` with Postgres+PostGIS.
+- [x] Monorepo setup: pnpm + Turborepo, TS strict, lint/format, Vitest, `docker-compose` with Postgres+PostGIS.
 - [ ] CI on GitHub Actions: lint, typecheck, test, build.
 - [ ] Walking skeleton: API `/health`, web home page calling the API through the typed client, deployed to **staging**.
 - [ ] Design tokens + shadcn/ui theme in `apps/web` (placeholder brand from DESIGN.md §7.1 until the brand kit lands; §8).

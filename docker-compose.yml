@@ -1,0 +1,24 @@
+# Local development database. Start: `docker compose up -d`. Wipe data: `docker compose down -v`.
+services:
+  db:
+    # Postgres 16 with PostGIS 3.5. The image enables the postgis extension in the "paw" database on first start.
+    image: postgis/postgis:16-3.5
+    environment:
+      POSTGRES_USER: paw
+      POSTGRES_PASSWORD: paw
+      POSTGRES_DB: paw
+    ports:
+      # Bound to localhost only, so the dev database isn't reachable from the network.
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Check over TCP: on first start the image runs init scripts on a temporary,
+      # socket-only server, which would otherwise report "healthy" too early.
+      test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U paw -d paw']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

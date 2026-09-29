@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output and caches
+dist/
+.next/
+out/
+.turbo/
+coverage/
+*.tsbuildinfo
+
+# Env files (secrets). Only the example is committed.
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+
+# Hosting CLIs
+.vercel/
+
+# Claude Code personal settings
+.claude/settings.local.json
