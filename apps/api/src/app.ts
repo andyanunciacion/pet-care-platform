@@ -9,7 +9,7 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
-import { createDatabase, type Database } from './db.ts';
+import { createDatabase } from '@paw/db';
 import type { Env } from './env.ts';
 import { errorHandler, notFoundHandler } from './errors.ts';
 import { loggerOptions } from './logger.ts';
@@ -17,15 +17,13 @@ import { healthRoutes } from './routes/health.ts';
 
 export interface AppOptions {
   env: Env;
-  /** Tests can pass a fake; otherwise a real connection pool is created. */
-  database?: Database;
 }
 
 /**
  * Builds the Fastify app without starting to listen, so tests can call it
  * in-process with `app.inject()` (no network, no port).
  */
-export async function buildApp({ env, database }: AppOptions) {
+export async function buildApp({ env }: AppOptions) {
   const app = Fastify({ logger: loggerOptions(env) }).withTypeProvider<ZodTypeProvider>();
 
   // Zod schemas on routes validate requests and serialize responses.
@@ -34,8 +32,13 @@ export async function buildApp({ env, database }: AppOptions) {
   app.setErrorHandler(errorHandler);
   app.setNotFoundHandler(notFoundHandler);
 
-  const db = database ?? createDatabase(env.DATABASE_URL, app.log);
-  app.addHook('onClose', () => db.close());
+  const database = createDatabase({
+    connectionString: env.DATABASE_URL,
+    onIdleError: (error) => {
+      app.log.error({ err: error }, 'idle database connection failed');
+    },
+  });
+  app.addHook('onClose', () => database.close());
 
   await app.register(helmet, {
     // The API only returns JSON, so a Content-Security-Policy protects nothing, except
@@ -53,7 +56,7 @@ export async function buildApp({ env, database }: AppOptions) {
     await app.register(swaggerUi, { routePrefix: '/docs' });
   }
 
-  await app.register(healthRoutes, { database: db });
+  await app.register(healthRoutes, { database });
 
   return app;
 }

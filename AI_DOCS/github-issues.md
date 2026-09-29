@@ -40,11 +40,11 @@
 ### P0-T3 · Database package
 `backend` · Depends on: P0-T1
 **Goal:** Drizzle set up so slice 1 can focus purely on the schema.
-- [ ] `packages/db`: Drizzle ORM + drizzle-kit, connection helper
-- [ ] First migration: enable `postgis` and `pg_trgm` extensions
-- [ ] Scripts: `db:generate`, `db:migrate`, `db:studio`
-- [ ] Test helper: fresh database per test run (real Postgres+PostGIS in Docker)
-- [ ] `/health` checks the DB through this package
+- [x] `packages/db`: Drizzle ORM + drizzle-kit, connection helper
+- [x] First migration: enable `postgis` and `pg_trgm` extensions
+- [x] Scripts: `db:generate`, `db:migrate`, `db:studio`
+- [x] Test helper: fresh database per test run (real Postgres+PostGIS in Docker)
+- [x] `/health` checks the DB through this package
 
 **Done when:** migrations run against the local Docker DB, and an integration test can create and query a table.
 
@@ -65,7 +65,7 @@
 `infra` · Depends on: P0-T4
 **Goal:** Every PR is checked automatically.
 - [ ] GitHub Actions: install (cached), lint, typecheck, test, build
-- [ ] Postgres+PostGIS service container for integration tests
+- [ ] Postgres+PostGIS service container for integration tests (tests create their own database, so `DATABASE_URL` must be a user allowed to `CREATE DATABASE`)
 - [ ] Turborepo caching in CI
 - [ ] Required status check on `develop` and `production` (branch protection, set up by you)
 

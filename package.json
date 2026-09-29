@@ -14,7 +14,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:generate": "pnpm --filter @paw/db db:generate",
+    "db:migrate": "pnpm --filter @paw/db db:migrate",
+    "db:studio": "pnpm --filter @paw/db db:studio"
   },
   "prettier": "@paw/config/prettier",
   "devDependencies": {

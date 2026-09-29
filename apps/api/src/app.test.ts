@@ -1,17 +1,13 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { buildApp } from './app.ts';
-import type { Database } from './db.ts';
 import type { Problem } from './errors.ts';
 import { testEnv } from './testing.ts';
-
-// These tests don't need a real database.
-const fakeDatabase: Database = { ping: () => Promise.resolve(), close: () => Promise.resolve() };
 
 let app: Awaited<ReturnType<typeof buildApp>>;
 
 beforeAll(async () => {
-  app = await buildApp({ env: testEnv(), database: fakeDatabase });
+  app = await buildApp({ env: testEnv() });
   // Test-only routes to exercise the error handler.
   app.get(
     '/test/validated',
