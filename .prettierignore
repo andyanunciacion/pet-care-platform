@@ -1,0 +1,5 @@
+pnpm-lock.yaml
+
+# Hand-written docs: Prettier would realign every Markdown table.
+AI_DOCS/
+CLAUDE.md

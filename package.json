@@ -1,0 +1,26 @@
+{
+  "name": "paw",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=24.21.0 <25"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "prettier": "@paw/config/prettier",
+  "devDependencies": {
+    "@paw/config": "workspace:*",
+    "prettier": "catalog:",
+    "turbo": "catalog:",
+    "vitest": "catalog:"
+  }
+}

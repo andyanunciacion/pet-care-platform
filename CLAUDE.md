@@ -13,7 +13,19 @@ Pet-care discovery platform for the Philippines, launching in Angeles City / Reg
 If code and docs disagree, ask which is right, then update the one that's wrong. When a decision changes, update ARCHITECTURE.md's decision log in the same change.
 
 ## Current status
-Phase 0: validation runs in parallel with development. Only Phase 0 groundwork and Phase 1 slices 1–7 are cleared for building. Slices 8–11 wait for the validation checkpoint in ROADMAP.md. **The monorepo has not been created yet**, so there are no build/test commands. Add a "Commands" section here once it exists.
+Phase 0: validation runs in parallel with development. Only Phase 0 groundwork and Phase 1 slices 1–7 are cleared for building. Slices 8–11 wait for the validation checkpoint in ROADMAP.md.
+
+**Work queue:** `AI_DOCS/github-issues.md` breaks the roadmap into GitHub-issue-sized pieces (slice 2 → 2a–2e, 5 → 5a–5c, 11 → 11a/11b; 11a is not blocked). P0-T1 (monorepo foundation) is done; next are P0-T2 (API skeleton) and P0-T3 (database package). The founder creates the issues; branch off `develop` as `<issue#>-<slug>`. Tooling on this machine: nvm-windows, pnpm, Docker Desktop.
+
+## Commands
+Node 24 (`.nvmrc`; `pnpm install` refuses other versions) and pnpm (exact version pinned in `packageManager`). Run from the repo root.
+- `pnpm install`
+- `pnpm dev` / `pnpm build` / `pnpm lint` / `pnpm typecheck`: run in every app and package through Turborepo (cached)
+- `pnpm test`: all tests once (Vitest projects, one per app/package). `pnpm test:watch` for watch mode. One package: `pnpm test --project @paw/config`. One file: `pnpm test path/to/file.test.ts`
+- `pnpm format` / `pnpm format:check`: Prettier (docs in `AI_DOCS/` are excluded)
+- `docker compose up -d`: local Postgres 16 + PostGIS on `localhost:5432` (URL in `.env.example`). `docker compose down -v` wipes the data.
+
+Adding an app or package: name it `@paw/<name>`, extend `@paw/config/tsconfig.base.json`, add an `eslint.config.js` extending `@paw/config/eslint` (see `packages/config/eslint.config.js`), give it `lint` and `typecheck` scripts, and take shared tool versions from the pnpm catalog (`"typescript": "catalog:"`, defined in `pnpm-workspace.yaml`).
 
 ## Working with the founder
 - Solo founder, fluent in **TypeScript** and open to other tech when it's the better fit. Learning the rest of the stack (Next.js internals, Fastify, Drizzle, PostGIS, Expo, infra) by reviewing every change.
