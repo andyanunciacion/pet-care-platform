@@ -21,10 +21,18 @@
 - [ ] Decide on brand name and domain. Register the domain.
 - [ ] Draft the privacy notice and terms (template plus review).
 
+**Design (UX)** — see [DESIGN.md](DESIGN.md)
+- [x] UX structure: principles, screen list, key UX decisions (`DESIGN.md`).
+- [ ] Clickable prototype of the P1 owner screens (home, results list/map, clinic page, emergency view, report sheet). Use it in owner interviews.
+- [ ] Clinic-side prototype screens ("your free page", hours editor, For clinics page). Use them in clinic interviews.
+- [ ] Brand kit: logo, palette, fonts (freelancer or DIY). Blocked on the brand name.
+- [ ] Update `DESIGN.md` §6 with what the prototype tests showed.
+
 **Groundwork (technical)**
 - [ ] Monorepo setup: pnpm + Turborepo, TS strict, lint/format, Vitest, `docker-compose` with Postgres+PostGIS.
 - [ ] CI on GitHub Actions: lint, typecheck, test, build.
 - [ ] Walking skeleton: API `/health`, web home page calling the API through the typed client, deployed to **staging**.
+- [ ] Design tokens + shadcn/ui theme in `apps/web` (placeholder brand from DESIGN.md §7.1 until the brand kit lands; §8).
 - [ ] Sentry wired into web and API.
 
 **Exit criteria:** seed list covers the launch area; at least ~5 clinics say they'd claim a free listing; the skeleton is deployed to staging; the validation checkpoint (before Phase 1 slice 8) is done.
@@ -32,6 +40,7 @@
 ## Phase 1 — Directory MVP (web + API + admin)
 
 Slices, in order. Ops tooling comes early so seed data entry can start while the public site is being built.
+Every owner-facing slice (4–7) is only done after a 3–5 person usability check on staging and meeting the performance budget (DESIGN.md §9, §11).
 
 1. [ ] **Core schema:** business, branch, hours, exceptions, species, service categories, branch services, products, media; PSGC reference data.
 2. [ ] **Super admin: listings CRUD + CSV import.** Auth for PAW ops. Duplicate detection. Audit log.
