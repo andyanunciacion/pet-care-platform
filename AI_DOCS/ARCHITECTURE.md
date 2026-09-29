@@ -127,6 +127,7 @@ Conventions:
 - Every table has `created_at` / `updated_at` (timestamptz).
 - Soft-delete (`deleted_at`) only where history matters.
 - Money is stored as **integer centavos** (PHP).
+- Column names are snake_case in SQL; Drizzle maps them from camelCase TypeScript fields automatically.
 - Times are stored in UTC; business-hour fields are local wall-clock times interpreted in `Asia/Manila`.
 - Phone numbers use E.164 format (`+63…`).
 - Addresses carry **PSGC codes** (Philippine Standard Geographic Code) for province, city/municipality, and barangay, so city landing pages and filters are clean.
@@ -220,7 +221,7 @@ Estimated effort: a few slices, not a rewrite.
 - **Database:** automated daily backups plus a tested restore procedure before launch.
 - **Testing:**
   - Unit tests for `packages/domain` (hours logic, ranking).
-  - API integration tests against a real Postgres+PostGIS (Docker).
+  - API integration tests against a real Postgres+PostGIS (Docker). Each test run creates its own database from `template1`, applies the migrations, and drops it afterwards, so tests see exactly what production has.
   - Playwright end-to-end tests for the critical flows: search → clinic page → contact; claim → approve; edit hours.
 - **Environments:** local (docker-compose), **staging** (preview deploys plus a staging DB), production. Migrations run in CI/CD, never by hand in production.
 
@@ -265,3 +266,5 @@ Rough figures as of late 2026. **Verify current pricing before committing.**
 | D14 | **TypeScript 6.0.x**, not 7 (the native Go compiler) | typescript-eslint's type-aware rules need the JS compiler API, which TS 7 doesn't ship yet (peer range `<6.1.0`). Pinned with `~6.0.x` in the pnpm catalog | typescript-eslint supports TS 7 |
 | D15 | **Node runs the API's TypeScript directly** (type stripping, built into Node 24): no build step, no `tsx`/`ts-node`; `tsc` only type-checks | Fewer moving parts: what runs in dev is what runs in prod, and workspace packages can export `.ts` source without their own build. Cost: `.ts` extensions in relative imports and no enums/namespaces (`erasableSyntaxOnly`) | A dependency needs non-erasable TS syntax, or startup time matters (bundle with esbuild/tsdown then) |
 | D16 | **node-postgres (`pg`)** as the Postgres driver | The most widely used driver; supported by Drizzle and used internally by pg-boss, so API, worker, and jobs share one driver | — |
+| D17 | **Drizzle 0.45 (stable)**, not the 1.0 release candidate | Boring over new: 1.0 was still an RC in Sept 2026. Migrations are plain SQL files, so upgrading later is cheap | Drizzle 1.0 is released (upgrade with `drizzle-kit up`) |
+| D18 | **Migrations applied by our own script** (`runMigrations()` from drizzle-orm's migrator), not `drizzle-kit migrate` | The same code runs locally, in tests, and on deploy, and production doesn't need the drizzle-kit dev tool installed | — |
