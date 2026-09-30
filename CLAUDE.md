@@ -15,7 +15,7 @@ If code and docs disagree, ask which is right, then update the one that's wrong.
 ## Current status
 Phase 0: validation runs in parallel with development. Only Phase 0 groundwork and Phase 1 slices 1–7 are cleared for building. Slices 8–11 wait for the validation checkpoint in ROADMAP.md.
 
-**Work queue:** `AI_DOCS/github-issues.md` breaks the roadmap into GitHub-issue-sized pieces (slice 2 → 2a–2e, 5 → 5a–5c, 11 → 11a/11b; 11a is not blocked). P0-T1 to P0-T4 (monorepo, API, database package, web skeleton) are done; next is P0-T5 (CI), then P0-T6 (staging deploy). P1-1 (slice 1: schema) is also unblocked. The founder creates the issues; branch off `develop` as `<issue#>-<slug>`. Tooling on this machine: nvm-windows, pnpm, Docker Desktop.
+**Work queue:** `AI_DOCS/github-issues.md` breaks the roadmap into GitHub-issue-sized pieces (slice 2 → 2a–2e, 5 → 5a–5c, 11 → 11a/11b; 11a is not blocked). P0-T1 to P0-T4 (monorepo, API, database package, web skeleton) are done; P0-T5 (CI) is written and gets confirmed on its first PR (green run, then a deliberately broken test turns it red). Next is P0-T6 (staging deploy). P1-1 (slice 1: schema) is also unblocked. The founder creates the issues; branch off `develop` as `<issue#>-<slug>`. Tooling on this machine: nvm-windows, pnpm, Docker Desktop.
 
 ## Commands
 Node 24 (`.nvmrc`; `pnpm install` refuses other versions) and pnpm (exact version pinned in `packageManager`). Run from the repo root.
@@ -29,6 +29,8 @@ Node 24 (`.nvmrc`; `pnpm install` refuses other versions) and pnpm (exact versio
 - `pnpm db:generate`: after changing tables in `packages/db/src/schema`, writes a new SQL migration to `packages/db/migrations` (review it and commit it). `pnpm db:generate --custom --name=<name>` gives an empty one for hand-written SQL
 - `pnpm db:migrate`: applies pending migrations to `DATABASE_URL` (the dev database locally)
 - `pnpm db:studio`: browse the dev database at https://local.drizzle.studio
+
+CI (`.github/workflows/ci.yml`) runs `pnpm format:check`, `lint`, `typecheck`, `test` and `build` on every PR, against a Postgres+PostGIS service container. The job is named `checks`; branch protection on `develop` and `production` requires it. Run the same commands locally before pushing.
 
 Adding an app or package: name it `@paw/<name>`, extend `@paw/config/tsconfig.base.json`, add an `eslint.config.js` extending `@paw/config/eslint` (see `packages/config/eslint.config.js`), give it `lint` and `typecheck` scripts, and take shared tool versions from the pnpm catalog (`"typescript": "catalog:"`, defined in `pnpm-workspace.yaml`).
 
