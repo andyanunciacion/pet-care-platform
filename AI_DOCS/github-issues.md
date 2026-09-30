@@ -51,13 +51,13 @@
 ### P0-T4 · Web skeleton + design tokens
 `frontend` · Depends on: P0-T2
 **Goal:** A Next.js app, themed with the placeholder brand, that talks to the API through a typed client.
-- [ ] `apps/web`: Next.js (App Router), Tailwind, shadcn/ui
-- [ ] Design tokens from DESIGN.md §7.1 as CSS variables (shadcn names + PAW status tokens)
-- [ ] System font stack, `PawPrint` wordmark placeholder, favicon
-- [ ] i18n layer for UI strings (English only for now; DESIGN.md UX15)
-- [ ] `packages/api-client`: types generated from the API's OpenAPI spec (openapi-typescript + openapi-fetch)
-- [ ] Home page shows the API health status through the typed client
-- [ ] Route groups scaffolded: public, `/dashboard`, `/admin` (empty, `noindex`)
+- [x] `apps/web`: Next.js (App Router), Tailwind, shadcn/ui
+- [x] Design tokens from DESIGN.md §7.1 as CSS variables (shadcn names + PAW status tokens)
+- [x] System font stack, `PawPrint` wordmark placeholder, favicon
+- [x] i18n layer for UI strings (English only for now; DESIGN.md UX15)
+- [x] `packages/api-client`: types generated from the API's OpenAPI spec (openapi-typescript + openapi-fetch)
+- [x] Home page shows the API health status through the typed client
+- [x] Route groups scaffolded: public, `/dashboard`, `/admin` (empty, `noindex`)
 
 **Done when:** `pnpm dev` runs web + API together, and the home page renders in placeholder brand colors with the API status.
 

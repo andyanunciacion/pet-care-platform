@@ -32,7 +32,7 @@
 - [x] Monorepo setup: pnpm + Turborepo, TS strict, lint/format, Vitest, `docker-compose` with Postgres+PostGIS.
 - [ ] CI on GitHub Actions: lint, typecheck, test, build.
 - [ ] Walking skeleton: API `/health`, web home page calling the API through the typed client, deployed to **staging**.
-- [ ] Design tokens + shadcn/ui theme in `apps/web` (placeholder brand from DESIGN.md §7.1 until the brand kit lands; §8).
+- [x] Design tokens + shadcn/ui theme in `apps/web` (placeholder brand from DESIGN.md §7.1 until the brand kit lands; §8).
 - [ ] Sentry wired into web and API.
 
 **Exit criteria:** seed list covers the launch area; at least ~5 clinics say they'd claim a free listing; the skeleton is deployed to staging; the validation checkpoint (before Phase 1 slice 8) is done.

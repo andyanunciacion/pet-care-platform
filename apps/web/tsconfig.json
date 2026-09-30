@@ -1,0 +1,24 @@
+{
+  "extends": "@paw/config/tsconfig.base.json",
+  "compilerOptions": {
+    // Next.js bundles the app, so it uses bundler-style resolution (extensionless imports).
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "types": ["node"],
+    "plugins": [{ "name": "next" }],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "src",
+    "*.ts",
+    "*.js",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}
