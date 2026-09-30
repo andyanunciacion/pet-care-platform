@@ -51,7 +51,7 @@
 | Validation | **Zod** | One schema serves as runtime validation, TS type, and OpenAPI source |
 | Lint / format | **ESLint (flat config) + Prettier** | Mainstream, best documented, and has Next.js-specific lint rules |
 | Tests | **Vitest** (unit/integration), **Playwright** (end-to-end) | Fast, TS-native. One root Vitest run covers every package (Vitest "projects") |
-| CI | **GitHub Actions** | Lint, typecheck, test, and build on every push/PR |
+| CI | **GitHub Actions** (`.github/workflows/ci.yml`) | Format check, lint, typecheck, test (against a Postgres+PostGIS service container), and build on every PR and on pushes to `develop`/`production`. Turborepo's local cache is kept between runs with `actions/cache` (no remote-cache account needed) |
 
 ### 3.2 API — `apps/api`
 | Concern | Choice | Why |

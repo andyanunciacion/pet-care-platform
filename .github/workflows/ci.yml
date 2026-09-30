@@ -1,0 +1,72 @@
+# Checks every pull request, and develop/production after each merge.
+# Branch protection on develop and production requires the "checks" job to pass.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [develop, production]
+
+# A newer push to the same PR or branch cancels the run still in progress.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Read-only token: CI only reads the code.
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    # Same Postgres + PostGIS image as docker-compose.yml. The tests create (and drop)
+    # their own databases, so the user must be allowed to CREATE DATABASE (paw is superuser).
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: paw
+          POSTGRES_PASSWORD: paw
+          POSTGRES_DB: paw
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U paw -d paw"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+    env:
+      DATABASE_URL: postgres://paw:paw@localhost:5432/paw
+      TURBO_TELEMETRY_DISABLED: '1'
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # Installs the pnpm version pinned in package.json's "packageManager".
+      - uses: pnpm/action-setup@v6
+
+      # Installs the Node version in .nvmrc and caches pnpm's package store between runs.
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Turborepo's local cache: tasks whose inputs didn't change are replayed, not rerun.
+      # Caches saved on develop are also restored for PRs targeting it.
+      - uses: actions/cache@v6
+        with:
+          path: .turbo/cache
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
