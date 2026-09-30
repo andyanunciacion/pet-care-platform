@@ -1,0 +1,96 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+/*
+ * PAW design tokens: the placeholder brand from DESIGN.md §7.1.
+ * This is the only place colors, radius and fonts are defined. Components use the
+ * Tailwind classes these produce (bg-primary, text-status-open, …), never raw values,
+ * so swapping in the real brand kit is a change to this block only.
+ * Colors are OKLCH (shadcn's format); the hex source is noted for each.
+ * Dark mode is not planned for launch (UX16); it would be a `.dark { … }` block overriding these.
+ */
+:root {
+  --radius: 0.75rem;
+
+  /* shadcn/ui base tokens (every shadcn component themes from these) */
+  --background: oklch(1 0 0); /* #FFFFFF */
+  --foreground: oklch(0.208 0.04 265.8); /* #0F172A slate-900 */
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.511 0.086 186.4); /* #0F766E teal-700 */
+  --primary-foreground: oklch(1 0 0); /* #FFFFFF */
+  --secondary: oklch(0.968 0.007 247.9); /* #F1F5F9 slate-100 */
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.968 0.007 247.9); /* #F1F5F9 slate-100 */
+  --muted-foreground: oklch(0.554 0.041 257.4); /* #64748B slate-500 */
+  --accent: oklch(0.962 0.058 95.6); /* #FEF3C7 amber-100: backgrounds only, never text */
+  --accent-foreground: var(--foreground);
+  --destructive: oklch(0.505 0.19 27.5); /* #B91C1C red-700 */
+  --border: oklch(0.929 0.013 255.5); /* #E2E8F0 slate-200 */
+  --input: var(--border);
+  --ring: var(--primary);
+
+  /* PAW semantic tokens (DESIGN.md §8). All meet WCAG AA (≥ 4.5:1) as text on white. */
+  --status-open: oklch(0.527 0.137 150.1); /* #15803D green-700 */
+  --status-closing: oklch(0.555 0.146 49); /* #B45309 amber-700 */
+  --status-closed: oklch(0.505 0.19 27.5); /* #B91C1C red-700 */
+  --status-unknown: oklch(0.554 0.041 257.4); /* #64748B slate-500 */
+  --stale: oklch(0.555 0.146 49); /* #B45309 amber-700 */
+  --verified: oklch(0.546 0.215 262.9); /* #2563EB blue-600 */
+  --emergency: oklch(0.577 0.215 27.3); /* #DC2626 red-600 */
+}
+
+/* Exposes the tokens to Tailwind as utilities: bg-primary, text-status-open, rounded-lg, … */
+@theme inline {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-status-open: var(--status-open);
+  --color-status-closing: var(--status-closing);
+  --color-status-closed: var(--status-closed);
+  --color-status-unknown: var(--status-unknown);
+  --color-stale: var(--stale);
+  --color-verified: var(--verified);
+  --color-emergency: var(--emergency);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+  body {
+    /* Minimum body text is 16px (DESIGN.md §8). */
+    @apply bg-background text-base text-foreground;
+  }
+}

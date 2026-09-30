@@ -1,0 +1,27 @@
+{
+  "name": "@paw/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Typed client for the PAW API, generated from its OpenAPI spec.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "node scripts/generate.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.17.0"
+  },
+  "devDependencies": {
+    "@paw/api": "workspace:*",
+    "@paw/config": "workspace:*",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

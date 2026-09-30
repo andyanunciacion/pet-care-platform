@@ -4,6 +4,9 @@
   "private": true,
   "description": "PAW REST API (Fastify).",
   "type": "module",
+  "exports": {
+    "./openapi": "./src/openapi.ts"
+  },
   "scripts": {
     "dev": "node --env-file-if-exists=.env --watch src/server.ts",
     "start": "node src/server.ts",

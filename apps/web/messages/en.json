@@ -1,0 +1,27 @@
+{
+  "Metadata": {
+    "description": "Find vet clinics in Angeles City with up-to-date hours, services and prices."
+  },
+  "Header": {
+    "homeLink": "PAW home"
+  },
+  "Home": {
+    "title": "Find a vet near you",
+    "subtitle": "Clinic hours, services and prices in Angeles City, kept up to date."
+  },
+  "ApiStatus": {
+    "title": "System status",
+    "checking": "Checking…",
+    "ok": "API and database are up",
+    "degraded": "API is up, but the database is unreachable",
+    "down": "API is unreachable"
+  },
+  "Dashboard": {
+    "title": "Clinic dashboard",
+    "comingSoon": "Coming soon: update your clinic's hours, services and prices."
+  },
+  "Admin": {
+    "title": "PAW admin",
+    "comingSoon": "Coming soon: listings, imports and review queues."
+  }
+}

@@ -101,7 +101,7 @@ Public (owners, indexable)
 | UX12 | **Zero results** | Never a dead end. Offer to widen the radius, remove filters, or search nearby cities, and show "Emergency" if it's night time. The query is logged for ops |
 | UX13 | **Hours editor** | A weekly grid with a "Closed" toggle per day, multiple intervals per day (lunch break), "copy to all weekdays", overnight shown clearly ("until 2 AM next day"), an exceptions calendar for holidays, and a live preview of how owners will see it. This is the most complex form, so prototype it for clinic interviews |
 | UX14 | **Admin vs dashboard density** | `/admin`: dense tables, keyboard-friendly, desktop-first. `/dashboard`: mobile-first, one task per screen, big controls |
-| UX15 | **Language** | English copy at launch, written plainly. Search understands Filipino terms (PRD §7.1). All UI strings go through an i18n layer from day 1 so Filipino can be added later (library chosen at monorepo setup) |
+| UX15 | **Language** | English copy at launch, written plainly. Search understands Filipino terms (PRD §7.1). All UI strings go through an i18n layer from day 1 so Filipino can be added later (**next-intl**, strings in `apps/web/messages/en.json`; no locale in URLs yet) |
 | UX16 | **Dark mode** | Not at launch. Tokens are structured so it can be added without refactoring |
 | UX17 | **Listings with no hours data** | Show them, don't hide them; coverage matters. Status reads **"Hours unknown — call ahead"** (the `--status-unknown` style). These listings are excluded from the "Open now" and emergency results and ranked below listings with hours |
 | UX18 | **Bottom tab bar** | None in P1 (see §4). Revisit in P2 when accounts, favorites, and pets add enough sections |
@@ -138,7 +138,7 @@ Public (owners, indexable)
 | `--verified` | `#2563EB` | blue-600 | Verified badge |
 | `--emergency` | `#DC2626` | red-600 | Emergency chip and view |
 
-All text colors above meet WCAG AA contrast (≥ 4.5:1) on white. Re-check this when the real palette arrives. Values will be converted to shadcn's color format (OKLCH) at setup.
+All text colors above meet WCAG AA contrast (≥ 4.5:1) on white (lowest: slate-500 at 4.76:1). Re-check this when the real palette arrives. The values live, converted to OKLCH (shadcn's color format), in `apps/web/src/app/globals.css`.
 
 **Brand kit deliverables:**
 - Logo: SVG, full + icon-only, light and dark background versions

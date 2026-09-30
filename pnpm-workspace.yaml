@@ -25,9 +25,17 @@ catalog:
 # Which dependencies may run install scripts (pnpm blocks them by default, since
 # they run arbitrary code at install time). Only allow one when it's really needed.
 allowBuilds:
-  # Its script only re-checks the native binary, which pnpm already installs
-  # as a platform-specific optional dependency.
-  esbuild: false
+  # Denied: each ships its native binary as a platform-specific optional dependency
+  # (e.g. @swc/core-win32-x64-msvc); the script only re-checks it or builds from source.
+  '@parcel/watcher': false # via next-intl
+  '@swc/core': false # via next-intl
+  esbuild: false # via drizzle-kit
+  unrs-resolver: false # via eslint-config-next
+
+peerDependencyRules:
+  allowedVersions:
+    # Declares TypeScript 5 only, but works on 6 (verified by the api-client drift test).
+    openapi-typescript>typescript: '6'
 
 # Refuse to install on a Node version outside "engines" (see .nvmrc).
 engineStrict: true

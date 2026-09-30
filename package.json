@@ -17,7 +17,8 @@
     "format:check": "prettier --check .",
     "db:generate": "pnpm --filter @paw/db db:generate",
     "db:migrate": "pnpm --filter @paw/db db:migrate",
-    "db:studio": "pnpm --filter @paw/db db:studio"
+    "db:studio": "pnpm --filter @paw/db db:studio",
+    "api:generate": "pnpm --filter @paw/api-client generate"
   },
   "prettier": "@paw/config/prettier",
   "devDependencies": {
