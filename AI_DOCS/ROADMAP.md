@@ -30,7 +30,7 @@
 
 **Groundwork (technical)**
 - [x] Monorepo setup: pnpm + Turborepo, TS strict, lint/format, Vitest, `docker-compose` with Postgres+PostGIS.
-- [ ] CI on GitHub Actions: lint, typecheck, test, build.
+- [x] CI on GitHub Actions: lint, typecheck, test, build.
 - [ ] Walking skeleton: API `/health`, web home page calling the API through the typed client, deployed to **staging**.
 - [x] Design tokens + shadcn/ui theme in `apps/web` (placeholder brand from DESIGN.md §7.1 until the brand kit lands; §8).
 - [ ] Sentry wired into web and API.
@@ -42,7 +42,7 @@
 Slices, in order. Ops tooling comes early so seed data entry can start while the public site is being built.
 Every owner-facing slice (4–7) is only done after a 3–5 person usability check on staging and meeting the performance budget (DESIGN.md §9, §11).
 
-1. [ ] **Core schema:** business, branch, hours, exceptions, species, service categories, branch services, products, media; PSGC reference data.
+1. [x] **Core schema:** business, branch, hours, exceptions, species, service categories, branch services, products, media; PSGC reference data.
 2. [ ] **Super admin: listings CRUD + CSV import.** Auth for PAW ops. Duplicate detection. Audit log.
 3. [ ] **Hours logic** in `packages/domain`: open now, closes at, next opening, stale flag. Heavily unit-tested.
 4. [ ] **Public clinic page:** SSR, photos, branches, hours, "last confirmed", services + price ranges, products, contact and directions buttons, JSON-LD. **Validation tool:** once this is deployed to staging, create real pages for the clinics you're interviewing and show them on your phone ("this is your free page — is anything wrong or missing?").

@@ -8,6 +8,41 @@
       "when": 1790689310006,
       "tag": "0000_enable-extensions",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790831952388,
+      "tag": "0001_uuid-v7",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790831996822,
+      "tag": "0002_core-schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790833070633,
+      "tag": "0003_services-media-audit",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790834174890,
+      "tag": "0004_psgc-pampanga",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790834188938,
+      "tag": "0005_taxonomy",
+      "breakpoints": true
     }
   ]
 }
