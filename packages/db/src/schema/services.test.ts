@@ -53,12 +53,15 @@ describe('species and service_category', () => {
 
   it('nest categories, with synonyms for search', async () => {
     const surgery = await insertTestCategory(db, { name: 'Surgery' });
-    const spayNeuter = await insertTestCategory(db, {
+    // Made-up synonyms: test files share one database, so real ones ("kapon") would show up
+    // in the reference-data tests' searches.
+    const synonyms = ['test synonym', 'another test synonym'];
+    const child = await insertTestCategory(db, {
       name: 'Spay / neuter',
       parentId: surgery.id,
-      synonyms: ['kapon', 'castration'],
+      synonyms,
     });
-    expect(spayNeuter).toMatchObject({ parentId: surgery.id, synonyms: ['kapon', 'castration'] });
+    expect(child).toMatchObject({ parentId: surgery.id, synonyms });
     expect((await insertTestCategory(db)).synonyms).toEqual([]);
   });
 

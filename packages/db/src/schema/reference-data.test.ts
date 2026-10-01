@@ -119,7 +119,12 @@ describe('taxonomy', () => {
       const rows = await db
         .select({ code: serviceCategory.code })
         .from(serviceCategory)
-        .where(sql`${term} = any(${serviceCategory.synonyms})`);
+        .where(
+          and(
+            sql`${term} = any(${serviceCategory.synonyms})`,
+            sql`${serviceCategory.code} not like 'category_%'`, // test fixtures
+          ),
+        );
       return rows.map((row) => row.code);
     };
     expect(await find('kapon')).toEqual(['spay_neuter']);
