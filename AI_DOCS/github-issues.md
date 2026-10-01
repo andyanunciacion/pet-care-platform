@@ -67,7 +67,7 @@
 - [x] GitHub Actions: install (cached), lint, typecheck, test, build
 - [x] Postgres+PostGIS service container for integration tests (tests create their own database, so `DATABASE_URL` must be a user allowed to `CREATE DATABASE`)
 - [x] Turborepo caching in CI
-- [ ] Required status check on `develop` and `production` (branch protection, set up by you: require the `checks` job)
+- [x] Required status check on `develop` and `production` (branch protection, set up by you: require the `checks` job)
 
 **Done when:** a PR shows green checks, and a deliberately broken test turns them red.
 
