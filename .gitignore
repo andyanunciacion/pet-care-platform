@@ -19,6 +19,9 @@ next-env.d.ts
 # Logs
 *.log
 
+# Downloaded source data (e.g. the PSA's PSGC .xlsx, re-downloadable; see packages/db/scripts/psgc-sql.ts)
+*.xlsx
+
 # OS / editor
 .DS_Store
 Thumbs.db

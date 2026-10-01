@@ -138,11 +138,11 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 ### P1-1 · Core schema
 `backend` · Depends on: P0-T3
 **Goal:** The Phase 1 data model from ARCHITECTURE.md §5.1 (the parts not tied to auth).
-- [ ] Tables: `business`, `branch` (PostGIS point), `branch_hours`, `branch_hours_exception`, `species`, `service_category` (+ synonyms), `branch_service` (+ `price_unit`), `product`, `media`, `audit_log`
-- [ ] Enums: business type (only `vet_clinic` enabled), claim status, listing status
-- [ ] PSGC reference data (province → city → barangay) for Pampanga to start
-- [ ] Seed: species list, service categories with Filipino synonyms (kapon, bakuna, purga…)
-- [ ] Naming follows CLAUDE.md (`business`, never `clinic`)
+- [x] Tables: `business`, `branch` (PostGIS point), `branch_hours`, `branch_hours_exception`, `species`, `service_category` (+ synonyms), `branch_service` (+ `price_unit`), `product`, `media`, `audit_log`
+- [x] Enums: business type (only `vet_clinic` enabled), claim status, listing status
+- [x] PSGC reference data (province → city → barangay) for Pampanga to start
+- [x] Seed: species list, service categories with Filipino synonyms (kapon, bakuna, purga…)
+- [x] Naming follows CLAUDE.md (`business`, never `clinic`)
 
 **Done when:** migrations and seeds run cleanly, and integration tests cover the key constraints.
 
