@@ -100,7 +100,7 @@ Phase tags: **[P1]** Directory MVP · **[P2]** Accounts & engagement · **[P3]**
 - [P1] **Claim a listing**: verify the listed phone number (code sent by SMS or call), provide the PRC license number of the vet in charge, and upload a business/Mayor's permit → PAW reviews → Verified.
 - [P1] Business profile: name, description, logo, photos, business type(s), species treated.
 - [P1] **Branches**: address, map pin, contact channels, emergency / 24-hour flags. Branch-first from day 1, even if most clinics have one.
-- [P1] **Hours**: weekly schedule with multiple intervals per day (lunch breaks), overnight intervals, and date exceptions (holidays, closures).
+- [P1] **Hours**: weekly schedule with multiple intervals per day (lunch breaks), overnight intervals, and date exceptions (holidays, closures). A one-tap **"Closed today"** button with an optional note for sudden closures (the vet is sick, a power outage).
 - [P1] **Hours confirmation**: a monthly SMS/email nudge with a one-tap "still correct" link. Stale listings are flagged publicly.
 - [P1] Services (category, name, species, price range, notes) and simple products (no stock counts).
 - [P1] Review and accept or reject "incorrect info" reports about their own listing.
