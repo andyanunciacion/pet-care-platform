@@ -113,6 +113,18 @@
 - [ ] Logo (full + icon, light/dark), favicon/app icon, palette, font, image direction (DESIGN.md §7)
 - [ ] Palette checked for WCAG AA contrast; the token file updated to replace the placeholders
 
+### P0-D4 · Design tooling: Impeccable
+`design` `infra` · Depends on: P0-T4 · Do before P1-4 (the first owner-facing page)
+**Goal:** Claude reviews and polishes UI with [Impeccable](https://impeccable.style/) (free, Apache 2.0), using PAW's own docs and tokens as its context.
+- [ ] Install the plugin (by you): `/plugin marketplace add pbakaus/impeccable`, then install it from `/plugin`. Optional: its anti-pattern check hook (`npx impeccable install`), which lives in the gitignored `.claude/settings.local.json`
+- [ ] Run `/impeccable init` on this issue's branch, answering from what PRD.md and DESIGN.md already decide
+- [ ] Review what it wrote (`PRODUCT.md`, `DESIGN.md`, `.impeccable/`). Fold anything new into `AI_DOCS/DESIGN.md` (likely a "Voice & tone" section), and keep the root `PRODUCT.md` / `DESIGN.md` as short summaries pointing at `AI_DOCS`, so there's one source of truth
+- [ ] `.gitignore`: add its ignore block (`# impeccable-ignore-start/end`); commit `.impeccable/config.json` and `design.json`, not `config.local.json`
+- [ ] CLAUDE.md: when to use it, and which commands. Use `critique`, `audit`, `polish`, `typeset`, `layout`, `clarify`, `harden`, `adapt`, `optimize`. Avoid `bolder`, `overdrive`, `delight`, `animate` unless a design decision calls for them: they work against "light on data", "calm in emergencies" and the performance budget (DESIGN §2, §9)
+- [ ] ARCHITECTURE decision log: record the tool, and when to revisit it
+
+**Done when:** `/impeccable critique` on the home page gives feedback that uses PAW's tokens and principles, and `AI_DOCS/` is still the only source of truth for product and design decisions.
+
 ---
 
 ## Phase 0 — Validation (optional to track as issues)
