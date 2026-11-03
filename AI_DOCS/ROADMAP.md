@@ -44,7 +44,7 @@ Every owner-facing slice (4–7) is only done after a 3–5 person usability che
 
 1. [x] **Core schema:** business, branch, hours, exceptions, species, service categories, branch services, products, media; PSGC reference data.
 2. [ ] **Super admin: listings CRUD + CSV import.** Auth for PAW ops. Duplicate detection. Audit log.
-3. [ ] **Hours logic** in `packages/domain`: open now, closes at, next opening, stale flag. Heavily unit-tested.
+3. [x] **Hours logic** in `packages/domain`: open now, closes at, next opening, stale flag. Heavily unit-tested.
 4. [ ] **Public clinic page:** SSR, photos, branches, hours, "last confirmed", services + price ranges, products, contact and directions buttons, JSON-LD. **Validation tool:** once this is deployed to staging, create real pages for the clinics you're interviewing and show them on your phone ("this is your free page — is anything wrong or missing?").
 5. [ ] **Search API + search UI:** text + synonyms + filters (species, category, open now, emergency) + distance; list and map (MapLibre); search logging.
 6. [ ] **SEO landing pages:** city, service × city, 24-hour; sitemap; Open Graph images.

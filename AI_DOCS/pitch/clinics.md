@@ -119,7 +119,7 @@ Tips:
 4. PAW reviews it (usually within a few days) → **Verified** badge.
 
 **3. Keep it fresh.**
-- Update services, prices, photos, and hours anytime, including holiday closures.
+- Update services, prices, photos, and hours anytime, including holiday closures. If the vet is suddenly out, one tap marks the clinic "Closed today", so nobody makes a wasted trip.
 - Once a month you get a reminder. One tap on "Still correct" updates the *"last confirmed"* date that owners see.
 - If an owner reports wrong info, you approve or reject it.
 

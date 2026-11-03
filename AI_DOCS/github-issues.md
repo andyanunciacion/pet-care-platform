@@ -165,9 +165,9 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 
 ### P1-3 · Hours logic (`packages/domain`)
 `backend` · Depends on: P0-T1 (can run in parallel with P1-1 / P1-2)
-- [ ] Pure functions: `isOpenNow`, `closesAt`, `nextOpening`, `openStatus` (the DESIGN.md UX4 states), `freshness` (UX5 thresholds)
-- [ ] Handles lunch breaks, overnight intervals, date exceptions, 24h, and "no hours data" (UX17); `Asia/Manila`
-- [ ] Heavy unit tests covering the edge cases
+- [x] Pure functions: `isOpenNow`, `closesAt`, `nextOpening`, `openStatus` (the DESIGN.md UX4 states), `freshness` (UX5 thresholds)
+- [x] Handles lunch breaks, overnight intervals, date exceptions, 24h, and "no hours data" (UX17); `Asia/Manila`
+- [x] Heavy unit tests covering the edge cases
 
 **Done when:** tests cover every UX4/UX5/UX17 state, including overnight and holiday cases.
 
@@ -175,6 +175,7 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 `ops` `frontend` · Depends on: P1-2b, P1-3
 - [ ] `HoursEditor` component (DESIGN.md UX13): weekly grid, multiple intervals, copy to weekdays, overnight, exceptions calendar, live preview of how owners see it
 - [ ] "Confirm hours" action (sets `hours_confirmed_at`/`_by = paw_ops`)
+- [ ] One-tap "Closed today" action with an optional note (creates today's closed exception; shown as "Closed today" even when regular hours are unknown, UX4)
 
 **Done when:** you can enter a clinic with a lunch break plus a holiday closure, and the preview shows the right status.
 
@@ -262,7 +263,7 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 Phone/email OTP for clinic users, `business_member`, phone verification of the listed number, PRC number + permit upload (private R2 bucket, signed URLs), admin claims queue, verified badge.
 
 ### P1-9 · Clinic dashboard `blocked`
-Mobile-first `/dashboard`: overview, profile, branches, hours editor (reuses P1-2c), services, products, photos, correction reports.
+Mobile-first `/dashboard`: overview (with "Confirm hours" and "Closed today" buttons), profile, branches, hours editor (reuses P1-2c), services, products, photos, correction reports.
 
 ### P1-10 · Worker + hours-confirmation nudges `blocked`
 `apps/worker` with pg-boss; monthly nudge (channel decided at the checkpoint) with a one-tap `/confirm/{token}` page; stale-listing flags.
