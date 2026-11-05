@@ -59,7 +59,7 @@
 | Framework | **Fastify** + `fastify-type-provider-zod` | Mature, fast, long-running server (good for jobs and uploads), strong plugins (`@fastify/rate-limit`, `@fastify/helmet`, `@fastify/cors`, `@fastify/multipart`) |
 | API style | **REST, `/v1`**, OpenAPI generated from Zod route schemas (`@fastify/swagger`) | Works for web, mobile, and future partners; public GET responses can be cached by a CDN |
 | ORM / migrations | **Drizzle ORM** + drizzle-kit | SQL-like and type-safe; handles PostGIS/raw SQL cleanly (Prisma does not support PostGIS natively) |
-| Auth | **Better Auth** | TS-native. Phone OTP, email OTP, Google, sessions, an organization/member plugin (clinic teams), and Expo support. Replaces hand-rolled JWT/OTP code |
+| Auth | **Better Auth** (pinned to an exact version) | TS-native. Phone OTP, email OTP, Google, sessions, built-in rate limiting, an organization/member plugin (clinic teams), and Expo support. Replaces hand-rolled JWT/OTP code. P1 ops sign in with Google; OTP arrives with clinic accounts (slice 8) |
 | Errors | RFC 9457 `application/problem+json` | One consistent error shape for all clients |
 | Logging | pino (Fastify's built-in logger), structured JSON, no personal data | |
 
@@ -136,7 +136,7 @@ Conventions:
 
 | Entity | Key fields | Notes |
 |---|---|---|
-| `user` | name, email?, phone?, platform_role (`user` \| `super_admin`) | Managed by Better Auth (plus its session/account/verification tables) |
+| `user` | name, email, image, platform_role (`user` \| `super_admin`, default `user`) | Managed by Better Auth (plus its `session` / `account` / `verification` tables, written by hand in `packages/db/src/schema/auth.ts` with our UUID v7 ids). Email is required while Google is the only sign-in method; phone (and an optional email) come with phone OTP in slice 8. `platform_role` can't be set through any auth endpoint, only by `promote-admin` |
 | `business` | name, slug (unique), type (enum; only `vet_clinic` exists at launch — see §5.3), description, logo, `claim_status` (`unclaimed` \| `pending` \| `verified`), `listing_status` (`published` \| `hidden` \| `permanently_closed`; new listings start `hidden`), data_source | One brand/owner |
 | `branch` | business_id, name, slug (unique per business), address_line, psgc codes (province, city, barangay), `location geography(Point,4326)` (required), is_24h, accepts_emergencies, `listing_status` (lets one branch close for good), `hours_confirmed_at`, `hours_confirmed_by` (`clinic` \| `paw_ops` \| `report`) | **Most public data hangs off the branch** |
 | `branch_contact` | branch_id, type (`phone` \| `messenger` \| `viber` \| `email`), value, label ("Globe", "Landline"), sort_order | Any number of each per branch (D24). Phone and Viber are E.164 |
@@ -155,7 +155,7 @@ Conventions:
 | `correction_report` | branch_id, field, current_value, suggested_value, note, reporter_contact?, status, resolved_by | |
 | `listing_event` | branch_id, type (`view` \| `call_click` \| `messenger_click` \| `directions_click` \| …), session_hash, created_at | No personal data; rolled up daily |
 | `search_log` | query, filters (jsonb), area (coarse), result_count, created_at | Powers zero-result reports |
-| `audit_log` | actor_id, action, entity_type, entity_id, diff (jsonb), created_at | Every admin/dashboard write. Append-only. actor_id is null for scripts; its foreign key to `user` arrives with auth (P1-2a) |
+| `audit_log` | actor_id, action, entity_type, entity_id, diff (jsonb), created_at | Every admin/dashboard write. Append-only. actor_id references `user` (null for scripts, e.g. `promote-admin`); a user with audit history can't be deleted until we decide how to anonymize it |
 
 ### 5.2 Later entities
 - **P2:** `pet`, `favorite`, `staff_profile`, `appointment_request`, `inquiry_thread` / `inquiry_message`, `review` / `review_reply`, `notification`, `reminder`, `push_token`.
@@ -194,12 +194,16 @@ Estimated effort: a few slices, not a rewrite.
 
 ## 7. Auth & authorization
 
-- **Better Auth** runs in the API. The web app uses HTTP-only cookies scoped to the parent domain (`api.<domain>` + `<domain>`). The mobile app uses Better Auth's Expo integration.
-- **Methods:** phone OTP (SMS), email OTP / magic link, Google. Phase 1 only needs accounts for clinic staff and PAW ops.
+- **Better Auth** runs in the API, at `/v1/auth/*`. The mobile app (P2) uses Better Auth's Expo integration.
+- **Same-origin proxy (D31):** the web app rewrites `/v1/*` to the API, so browsers only ever talk to the web origin. The HTTP-only session cookie is first-party there, and the browser needs no CORS. Better Auth's `baseURL` is therefore the **web** origin, and Google's redirect URI is `<web origin>/v1/auth/callback/google`. Server Components call the API directly (server to server) and forward the user's `cookie` header.
+- **Browser calls (D33):** the only two, "start Google sign-in" and "sign out", are plain `fetch` calls in `apps/web/src/lib/auth-client.ts`, not Better Auth's browser client.
+- **Methods:** Google for P1 (PAW ops). Phone OTP (SMS) and email OTP / magic link arrive with clinic accounts in slice 8; owners sign in from P2.
 - **RBAC** is enforced in the API service layer, never only in the UI:
-  - `platform_role` controls `/admin`.
-  - `business_member.role` controls a business's data.
-- **Rate limits** apply to OTP send/verify (per phone and per IP), report submission, and login. Turnstile protects the public forms.
+  - `platform_role` controls `/admin`. Every route in the API's `/v1/admin` plugin passes `requirePlatformRole('super_admin')`: 401 without a valid session, 403 with another role.
+  - The web app's `requireAdmin()` (a Next.js data access layer function, called by the admin layout and every admin page) asks `GET /v1/admin/me` and redirects to `/login`. That's for UX only; the API decides.
+  - `business_member.role` controls a business's data (slice 8).
+- **Rate limits (D32):** Better Auth's built-in limiter on `/v1/auth/*` (10 sign-in or callback attempts a minute per client IP, 100 for other auth calls). It keys on the client IP that Fastify resolves with `TRUST_PROXY_HOPS`, passed in a header the API always overwrites, so a forged `X-Forwarded-For` doesn't help. Later: OTP send/verify (per phone and per IP) in slice 8, report submission in slice 7. Turnstile protects the public forms.
+- **Origin and CSRF checks** stay on in every environment, tests included. Better Auth turns them off under `NODE_ENV=test` unless `disableOriginCheck: false` is set, which the API does.
 
 ## 8. Web rendering & SEO
 
@@ -284,3 +288,6 @@ Rough figures as of late 2026. **Verify current pricing before committing.**
 | D28 | **Hours rules** (`packages/domain`): an interval belongs to the day it starts (a holiday exception doesn't cut short the previous night's overnight shift); exceptions override everything, including 24h, and a "closed today" (or special hours today) shows even when regular hours are unknown; touching intervals merge into one open period | Matches how clinics think of their shifts, and lets a 24h clinic still mark closures. Merging means "closes at" is the real closing time | Clinics find the overnight rule confusing in the hours editor |
 | D29 | **Manila time via the built-in `Intl` API**, no date library; hours math in Manila wall-clock minutes | Works in Node and browsers with no dependency. Safe because the Philippines has no daylight saving time (none since 1978) | `Temporal` ships in Node and browsers, or PAW expands to a country with daylight saving time |
 | D30 | **Railway Postgres (PostGIS template)** instead of Neon, in the same Railway project as the API; the API connects over Railway's private network; migrations run as the API's pre-deploy command | One less account; private networking means no egress fees and no public database endpoint needed; a failed migration stops the deploy and the old version keeps serving | Before launch, if Railway's backups/point-in-time restore don't meet the tested-restore requirement (§9), or per-PR database branches become worth it (Neon). Moving is a `DATABASE_URL` change plus a dump/restore |
+| D31 | **Same-origin proxy for the API** (the web app rewrites `/v1/*` to `API_URL`) instead of a session cookie on the parent domain (`api.<domain>` + `<domain>`) | Works before PAW has a domain: staging's `*.vercel.app` and `*.up.railway.app` are unrelated sites, so a cookie set by the API would be third-party and Safari blocks it. One origin also means no CORS for the browser, and it keeps working unchanged once a custom domain exists. Costs: browser calls to the API make an extra hop through Vercel, `API_URL` must be set at build time, and per-commit Vercel preview URLs can't sign in (Google needs exact redirect URIs, so only the `develop` branch alias is registered) | Latency through Vercel hurts the admin or dashboard, or the mobile app needs the API directly (it talks to the API URL anyway) |
+| D32 | **Better Auth's built-in rate limiter** (memory store) for `/v1/auth/*`, keyed on the client IP from Fastify's `trustProxy` (`TRUST_PROXY_HOPS`) | No extra plugin or table; it already knows its own endpoints. Better Auth only trusts a single-value forwarded header, so the API resolves the IP once and passes it in `x-paw-client-ip`, which it always overwrites. Known gap: a client that calls the Railway URL directly (skipping Vercel) can pick its own IP for the limiter. Acceptable for an ops-only Google sign-in | More than one API instance (switch to `storage: 'database'`), OTP or public forms arrive (add `@fastify/rate-limit` for non-auth routes in slice 7), or the custom domain lets the API accept traffic only through the proxy |
+| D33 | **Plain `fetch` for the browser's auth calls** (`apps/web/src/lib/auth-client.ts`), not Better Auth's browser client | Only two calls are needed (start Google sign-in, sign out). The client guesses its base URL from env vars and `window`, which is easy to get wrong behind the proxy, and it would ship Better Auth and its dependencies to the browser | Slice 8 adds OTP flows, or the Expo app needs its integration |
