@@ -22,6 +22,17 @@
   },
   "Admin": {
     "title": "PAW admin",
-    "comingSoon": "Coming soon: listings, imports and review queues."
+    "comingSoon": "Coming soon: listings, imports and review queues.",
+    "signedInAs": "Signed in as {email}",
+    "signOut": "Sign out",
+    "signOutFailed": "Couldn't sign out. Try again."
+  },
+  "Login": {
+    "title": "Sign in",
+    "subtitle": "For the PAW team. Clinic accounts are coming soon.",
+    "continueWithGoogle": "Continue with Google",
+    "redirecting": "Opening Google…",
+    "noAccess": "This Google account doesn't have access to PAW admin. Sign in with a different account.",
+    "failed": "Sign-in didn't work. Try again."
   }
 }

@@ -31,3 +31,6 @@ export const priceUnit = pgEnum('price_unit', ['per_visit', 'per_session', 'per_
 export const productAvailability = pgEnum('product_availability', ['available', 'limited', 'out']);
 
 export const mediaKind = pgEnum('media_kind', ['logo', 'photo']);
+
+/** PAW-wide role. `super_admin` is PAW ops (/admin); a business's data is governed by business_member.role. */
+export const platformRole = pgEnum('platform_role', ['user', 'super_admin']);

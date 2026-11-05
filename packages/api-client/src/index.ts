@@ -6,6 +6,8 @@ export type { components, paths };
 export interface ApiClientOptions {
   /** Replaces the global fetch, e.g. to stub responses in tests. */
   fetch?: (request: Request) => Promise<Response>;
+  /** Sent with every request, e.g. the user's `cookie` header so the API sees their session. */
+  headers?: Record<string, string>;
 }
 
 /**

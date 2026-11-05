@@ -21,7 +21,9 @@ async function ruleIds(code: string): Promise<(string | null)[]> {
   return result?.messages.map((message) => message.ruleId) ?? [];
 }
 
-describe('shared ESLint config', () => {
+// Generous timeout: the first lint starts TypeScript's type checker (~3 s alone, more
+// when the whole suite runs in parallel).
+describe('shared ESLint config', { timeout: 30_000 }, () => {
   it('accepts clean code', async () => {
     expect(await ruleIds('export const add = (a: number, b: number): number => a + b;\n')).toEqual(
       [],

@@ -41,6 +41,8 @@ jobs:
 
     env:
       DATABASE_URL: postgres://paw:paw@localhost:5432/paw
+      # The web build reads it for the /v1/* rewrite (nothing is called during the build).
+      API_URL: http://localhost:4000
       TURBO_TELEMETRY_DISABLED: '1'
 
     steps:

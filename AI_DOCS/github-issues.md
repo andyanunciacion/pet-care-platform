@@ -83,7 +83,7 @@
 **Staging settings** (they live in the dashboards, not in the repo):
 - Vercel: Root Directory `apps/web`; Node 24.x; Production Branch `production`, so `develop` gets Preview deploys; `API_URL` (Preview) = the Railway API URL, with `https://`
 - Railway service `@paw/api`: root directory = repo root (the API imports `packages/db`); build `pnpm install --frozen-lockfile`; pre-deploy `pnpm db:migrate`; start `pnpm --filter @paw/api start`; watch paths `apps/api/**`, `packages/**`
-- Railway variables: `DATABASE_URL` built from the PostGIS service's private domain (`….railway.internal`, no egress fees), `HOST=::`, `NODE_ENV=production`, `CORS_ORIGINS` = the Vercel staging URL
+- Railway variables: `DATABASE_URL` built from the PostGIS service's private domain (`….railway.internal`, no egress fees), `HOST=::`, `NODE_ENV=production`, `CORS_ORIGINS` = the Vercel staging URL. Auth adds more (see P1-2a)
 
 **Done when:** the staging URL shows the home page with a live API/DB health status.
 
@@ -165,12 +165,22 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 
 ### P1-2a · Auth for PAW ops
 `backend` `ops` · Depends on: P1-1, P0-T4
-- [ ] Better Auth in the API (email OTP / magic link + Google); session cookies across web ↔ API
-- [ ] `platform_role` (`user` | `super_admin`); a script to promote your account
-- [ ] `/admin` route guard in web + API authorization in the service layer
-- [ ] Rate limits on auth endpoints
+- [x] Better Auth in the API, with Google sign-in (email/phone OTP moved to P1-8, where clinic accounts need it); session cookies across web ↔ API through the same-origin `/v1` proxy (ARCHITECTURE D31)
+- [x] `platform_role` (`user` | `super_admin`); a script to promote your account (`pnpm --filter @paw/api promote-admin --email …`)
+- [x] `/admin` route guard in web + API authorization in the service layer
+- [x] Rate limits on auth endpoints (D32)
 
 **Done when:** only a super_admin can reach `/admin` and the admin API routes, and tests prove other users get 401/403.
+
+**Staging settings** (by you, after merging to `develop`):
+- Google Cloud Console → the OAuth client → Authorized redirect URIs: add `https://<develop branch alias>.vercel.app/v1/auth/callback/google`. That's the stable alias Vercel gives the `develop` branch; per-commit preview URLs can't sign in (D31). Local: `http://localhost:3000/v1/auth/callback/google`
+- Railway service `@paw/api` variables: `BETTER_AUTH_SECRET` (new random value, 32+ characters; never reuse the local one), `BETTER_AUTH_URL` = the `develop` branch alias with `https://`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `TRUST_PROXY_HOPS` (see below)
+- Vercel: `API_URL` must now be set for every environment that builds (the `/v1` rewrite reads it at build time)
+
+**Staging follow-up** (after the settings above):
+- [ ] Sign in on staging once, then run `pnpm --filter @paw/api promote-admin --email <you>` inside the Railway API service (`railway ssh`, or the service's shell in the dashboard) and sign in again
+- [ ] Set `TRUST_PROXY_HOPS` so the rate limiter sees real client IPs. Likely `2` (Vercel, then Railway's edge), but confirm it. To check without logging any IP: (1) with the right value, 11 quick sign-in attempts from your laptop give a 429 while your phone on mobile data still gets through; (2) with too high a value, 11 attempts with a different forged `X-Forwarded-For` each never give a 429
+- [ ] Record the confirmed value here and in the Railway settings note under P0-T6
 
 ### P1-2b · Admin: businesses & branches
 `ops` · Depends on: P1-2a

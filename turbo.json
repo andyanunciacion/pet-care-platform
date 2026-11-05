@@ -4,13 +4,19 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      // Turbo hides env vars not listed here from tasks ("strict" mode). The web build
+      // reads API_URL for the /v1 rewrite, and it's part of the cache key: another URL
+      // means another build.
+      "env": ["API_URL"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**"]
     },
     "lint": {
       "dependsOn": ["^build"]
     },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      // The web typecheck runs `next typegen`, which loads next.config.ts (and its rewrites).
+      "env": ["API_URL"]
     },
     "dev": {
       "cache": false,

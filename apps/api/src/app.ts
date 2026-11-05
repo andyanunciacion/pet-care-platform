@@ -10,9 +10,12 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
 import { createDatabase } from '@paw/db';
+import { createAuth } from './auth.ts';
 import type { Env } from './env.ts';
 import { errorHandler, notFoundHandler } from './errors.ts';
 import { loggerOptions } from './logger.ts';
+import { adminRoutes } from './routes/admin/index.ts';
+import { authRoutes } from './routes/auth.ts';
 import { healthRoutes } from './routes/health.ts';
 
 export interface AppOptions {
@@ -24,7 +27,12 @@ export interface AppOptions {
  * in-process with `app.inject()` (no network, no port).
  */
 export async function buildApp({ env }: AppOptions) {
-  const app = Fastify({ logger: loggerOptions(env) }).withTypeProvider<ZodTypeProvider>();
+  const app = Fastify({
+    logger: loggerOptions(env),
+    // request.ip = the client: trust the nearest TRUST_PROXY_HOPS proxies in
+    // X-Forwarded-For (hop 0 = the socket peer). 0 = never trust the header.
+    trustProxy: (_address, hop) => hop < env.TRUST_PROXY_HOPS,
+  }).withTypeProvider<ZodTypeProvider>();
 
   // Zod schemas on routes validate requests and serialize responses.
   app.setValidatorCompiler(validatorCompiler);
@@ -39,6 +47,10 @@ export async function buildApp({ env }: AppOptions) {
     },
   });
   app.addHook('onClose', () => database.close());
+
+  // Root-level decorations, so every plugin and hook can reach them.
+  app.decorate('auth', createAuth({ env, database, log: app.log }));
+  app.decorateRequest('sessionUser', null);
 
   await app.register(helmet, {
     // The API only returns JSON, so a Content-Security-Policy protects nothing, except
@@ -57,6 +69,8 @@ export async function buildApp({ env }: AppOptions) {
   }
 
   await app.register(healthRoutes, { database });
+  await app.register(authRoutes, { auth: app.auth, publicOrigin: env.BETTER_AUTH_URL });
+  await app.register(adminRoutes, { prefix: '/v1/admin' });
 
   return app;
 }

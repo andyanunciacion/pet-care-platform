@@ -1,4 +1,5 @@
 import { index, jsonb, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { user } from './auth.ts';
 import { id, timestamps } from './columns.ts';
 
 /**
@@ -10,10 +11,11 @@ export const auditLog = pgTable(
   {
     id: id(),
     /**
-     * The user who made the change; null for scripts (e.g. a CSV import run from the
-     * command line). The foreign key to the user table is added with auth (P1-2a).
+     * The user who made the change; null for scripts (e.g. a CSV import or promote-admin
+     * run from the command line). No cascade: a user with audit history can't be deleted
+     * until we decide how to anonymize it.
      */
-    actorId: uuid(),
+    actorId: uuid().references(() => user.id),
     /** What happened, e.g. "branch.update", "hours.confirm". */
     action: text().notNull(),
     /** The table name of the changed row, e.g. "branch". */

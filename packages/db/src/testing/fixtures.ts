@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import type { Db } from '../client.ts';
-import { branch, business, psgcArea, serviceCategory, species } from '../schema/index.ts';
+import { branch, business, psgcArea, serviceCategory, species, user } from '../schema/index.ts';
 
 // Fake PSGC codes for tests ("99" is not a real region), so test rows never collide with
 // the real reference data.
@@ -93,6 +93,19 @@ export async function insertTestCategory(
   const [row] = await db
     .insert(serviceCategory)
     .values({ code: uniqueCode('category'), name: 'Test category', ...values })
+    .returning();
+  if (row === undefined) throw new Error('insert returned no row');
+  return row;
+}
+
+/** A user with a unique made-up email (`.test` is reserved, so it can never be real). */
+export async function insertTestUser(
+  db: Db,
+  values: Partial<typeof user.$inferInsert> = {},
+): Promise<typeof user.$inferSelect> {
+  const [row] = await db
+    .insert(user)
+    .values({ name: 'Test User', email: `${uniqueSlug('user')}@example.test`, ...values })
     .returning();
   if (row === undefined) throw new Error('insert returned no row');
   return row;
