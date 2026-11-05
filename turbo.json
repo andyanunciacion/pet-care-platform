@@ -4,6 +4,10 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      // Turbo hides env vars not listed here from tasks ("strict" mode). The web build
+      // reads API_URL for the /v1 rewrite, and it's part of the cache key: another URL
+      // means another build.
+      "env": ["API_URL"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "!.next/dev/**"]
     },
     "lint": {
