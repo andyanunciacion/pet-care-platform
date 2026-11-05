@@ -22,6 +22,14 @@ function problem(status: number, detail?: string): Problem {
   };
 }
 
+/**
+ * An error the client should see, e.g. `throw httpError(403, 'PAW ops only.')`.
+ * The error handler turns it into a problem+json response with `detail` = the message.
+ */
+export function httpError(status: number, detail: string): Error & { statusCode: number } {
+  return Object.assign(new Error(detail), { statusCode: status });
+}
+
 function sendProblem(reply: FastifyReply, body: Problem): FastifyReply {
   return reply.status(body.status).type('application/problem+json').send(body);
 }

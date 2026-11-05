@@ -8,6 +8,10 @@ catalog:
   '@eslint/js': ^10.0.1
   '@types/node': ^24.19.0
   '@types/pg': ^8.23.1
+  # Server in apps/api, browser client in apps/web: keep both on one version.
+  # Exact: auth is security-sensitive, so upgrades are deliberate (and Better Auth has
+  # shipped breaking changes in minor releases).
+  better-auth: 1.7.16
   # Stable line; 1.0 is still a release candidate (ARCHITECTURE D17).
   drizzle-orm: ^0.45.3
   eslint: ^10.11.0

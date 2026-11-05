@@ -2,22 +2,31 @@ import { describe, expect, it } from 'vitest';
 import { parseEnv } from './env.ts';
 
 const DATABASE_URL = 'postgres://paw:secret-password@localhost:5432/paw';
+// The variables without defaults.
+const required = {
+  DATABASE_URL,
+  BETTER_AUTH_SECRET: 'x'.repeat(32),
+  GOOGLE_CLIENT_ID: 'client-id',
+  GOOGLE_CLIENT_SECRET: 'client-secret',
+};
 
 describe('parseEnv', () => {
   it('fills in defaults', () => {
-    expect(parseEnv({ DATABASE_URL })).toEqual({
+    expect(parseEnv(required)).toEqual({
+      ...required,
       NODE_ENV: 'development',
       HOST: '127.0.0.1',
       PORT: 4000,
       LOG_LEVEL: 'info',
-      DATABASE_URL,
+      TRUST_PROXY_HOPS: 0,
       CORS_ORIGINS: ['http://localhost:3000'],
+      BETTER_AUTH_URL: 'http://localhost:3000',
     });
   });
 
   it('coerces PORT and splits CORS_ORIGINS', () => {
     const env = parseEnv({
-      DATABASE_URL,
+      ...required,
       PORT: '8080',
       CORS_ORIGINS: 'https://paw.ph, https://staging.paw.ph',
     });
@@ -26,16 +35,29 @@ describe('parseEnv', () => {
   });
 
   it('rejects a missing DATABASE_URL', () => {
-    expect(() => parseEnv({})).toThrow(/DATABASE_URL/);
+    expect(() => parseEnv({ ...required, DATABASE_URL: undefined })).toThrow(/DATABASE_URL/);
   });
 
   it('rejects a non-Postgres DATABASE_URL without echoing the value', () => {
-    const attempt = () => parseEnv({ DATABASE_URL: 'mysql://paw:secret-password@localhost/paw' });
+    const attempt = () =>
+      parseEnv({ ...required, DATABASE_URL: 'mysql://paw:secret-password@localhost/paw' });
     expect(attempt).toThrow(/DATABASE_URL/);
     expect(attempt).not.toThrow(/secret-password/);
   });
 
   it('rejects an invalid PORT', () => {
-    expect(() => parseEnv({ DATABASE_URL, PORT: '99999' })).toThrow(/PORT/);
+    expect(() => parseEnv({ ...required, PORT: '99999' })).toThrow(/PORT/);
+  });
+
+  it('rejects a short BETTER_AUTH_SECRET without echoing it', () => {
+    const attempt = () => parseEnv({ ...required, BETTER_AUTH_SECRET: 'too-short-secret' });
+    expect(attempt).toThrow(/BETTER_AUTH_SECRET/);
+    expect(attempt).not.toThrow(/too-short-secret/);
+  });
+
+  it('requires the Google OAuth client', () => {
+    expect(() => parseEnv({ ...required, GOOGLE_CLIENT_ID: undefined })).toThrow(
+      /GOOGLE_CLIENT_ID/,
+    );
   });
 });

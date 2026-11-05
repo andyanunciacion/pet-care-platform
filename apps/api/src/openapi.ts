@@ -1,5 +1,6 @@
 import { buildApp } from './app.ts';
 import { parseEnv } from './env.ts';
+import { placeholderSecrets } from './placeholder-secrets.ts';
 
 /**
  * The API's OpenAPI document, built from the routes' Zod schemas without starting
@@ -12,6 +13,7 @@ export async function openApiDocument(): Promise<Record<string, unknown>> {
       LOG_LEVEL: 'silent',
       // The connection pool is lazy: nothing connects unless a query runs.
       DATABASE_URL: 'postgres://unused@localhost:5432/unused',
+      ...placeholderSecrets,
     }),
   });
   try {
