@@ -92,7 +92,7 @@
 |---|---|
 | Web hosting | **Vercel** (Pro plan; the Hobby plan is non-commercial). Functions region: Singapore |
 | API + worker hosting | **Railway** (or Render / Fly.io), Singapore region |
-| Database | Managed **PostgreSQL 16+ with PostGIS** (Neon, Railway, or Supabase), Singapore region, with automated backups |
+| Database | Managed **PostgreSQL 16+ with PostGIS** on **Railway** (PostGIS template), in the same project as the API, Singapore region, with automated backups (D30) |
 | Object storage | **Cloudflare R2**: public bucket for photos, **private** bucket for claim documents (signed URLs only) |
 | DNS / CDN | Cloudflare |
 | Email | **Resend** (or AWS SES) |
@@ -227,7 +227,7 @@ Estimated effort: a few slices, not a rewrite.
   - Unit tests for `packages/domain` (hours logic, ranking).
   - API integration tests against a real Postgres+PostGIS (Docker). Each test run creates its own database from `template1`, applies the migrations, and drops it afterwards, so tests see exactly what production has.
   - Playwright end-to-end tests for the critical flows: search → clinic page → contact; claim → approve; edit hours.
-- **Environments:** local (docker-compose), **staging** (preview deploys plus a staging DB), production. Migrations run in CI/CD, never by hand in production.
+- **Environments:** local (docker-compose), **staging** (preview deploys plus a staging DB), production. Migrations run on deploy (Railway's pre-deploy command, before the new API version takes traffic), never by hand in production.
 
 ## 10. Cost estimate (Phase 1, pre-traction)
 
@@ -283,3 +283,4 @@ Rough figures as of late 2026. **Verify current pricing before committing.**
 | D27 | **Reference data ships as migrations** (PSGC areas, species, service categories), not a seed script | Production, staging and every test database start with exactly the same rows, and nothing re-run on deploy can overwrite later edits made in `/admin` | — |
 | D28 | **Hours rules** (`packages/domain`): an interval belongs to the day it starts (a holiday exception doesn't cut short the previous night's overnight shift); exceptions override everything, including 24h, and a "closed today" (or special hours today) shows even when regular hours are unknown; touching intervals merge into one open period | Matches how clinics think of their shifts, and lets a 24h clinic still mark closures. Merging means "closes at" is the real closing time | Clinics find the overnight rule confusing in the hours editor |
 | D29 | **Manila time via the built-in `Intl` API**, no date library; hours math in Manila wall-clock minutes | Works in Node and browsers with no dependency. Safe because the Philippines has no daylight saving time (none since 1978) | `Temporal` ships in Node and browsers, or PAW expands to a country with daylight saving time |
+| D30 | **Railway Postgres (PostGIS template)** instead of Neon, in the same Railway project as the API; the API connects over Railway's private network; migrations run as the API's pre-deploy command | One less account; private networking means no egress fees and no public database endpoint needed; a failed migration stops the deploy and the old version keeps serving | Before launch, if Railway's backups/point-in-time restore don't meet the tested-restore requirement (§9), or per-PR database branches become worth it (Neon). Moving is a `DATABASE_URL` change plus a dump/restore |
