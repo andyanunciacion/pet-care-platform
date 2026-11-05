@@ -32,7 +32,7 @@
 **Groundwork (technical)**
 - [x] Monorepo setup: pnpm + Turborepo, TS strict, lint/format, Vitest, `docker-compose` with Postgres+PostGIS.
 - [x] CI on GitHub Actions: lint, typecheck, test, build.
-- [ ] Walking skeleton: API `/health`, web home page calling the API through the typed client, deployed to **staging**.
+- [x] Walking skeleton: API `/health`, web home page calling the API through the typed client, deployed to **staging**.
 - [x] Design tokens + shadcn/ui theme in `apps/web` (placeholder brand from DESIGN.md §7.1 until the brand kit lands; §8).
 - [ ] Sentry wired into web and API.
 

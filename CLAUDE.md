@@ -15,7 +15,7 @@ If code and docs disagree, ask which is right, then update the one that's wrong.
 ## Current status
 Phase 0: validation runs in parallel with development. Only Phase 0 groundwork and Phase 1 slices 1–7 are cleared for building. Slices 8–11 wait for the validation checkpoint in ROADMAP.md.
 
-**Work queue:** `AI_DOCS/github-issues.md` breaks the roadmap into GitHub-issue-sized pieces (slice 2 → 2a–2e, 5 → 5a–5c, 11 → 11a/11b; 11a is not blocked). P0-T1 to P0-T5 (monorepo, API, database package, web skeleton, CI), P1-1 (slice 1: core schema) and P1-3 (slice 3: hours logic) are done. Next: P1-2a (auth for PAW ops) and P0-T6 (staging deploy, waiting on accounts). The founder creates the issues; branch off `develop` as `<issue#>-<slug>`. Tooling on this machine: nvm-windows, pnpm, Docker Desktop.
+**Work queue:** `AI_DOCS/github-issues.md` breaks the roadmap into GitHub-issue-sized pieces (slice 2 → 2a–2e, 5 → 5a–5c, 11 → 11a/11b; 11a is not blocked). P0-T1 to P0-T5 (monorepo, API, database package, web skeleton, CI), P0-T6 (staging deploy: web on Vercel, API + Postgres/PostGIS on Railway; settings listed in the issue), P1-1 (slice 1: core schema) and P1-3 (slice 3: hours logic) are done. Next: P1-2a (auth for PAW ops). The founder creates the issues; branch off `develop` as `<issue#>-<slug>`. Tooling on this machine: nvm-windows, pnpm, Docker Desktop.
 
 ## Commands
 Node 24 (`.nvmrc`; `pnpm install` refuses other versions) and pnpm (exact version pinned in `packageManager`). Run from the repo root.

@@ -74,11 +74,16 @@
 ### P0-T6 · Staging deploy
 `infra` · Depends on: P0-T5
 **Goal:** The walking skeleton is live on staging (the ROADMAP Phase 0 exit criterion).
-- [ ] Accounts (by you): Vercel, Railway, Neon (or Railway Postgres), Cloudflare. All in the Singapore region
-- [ ] Web → Vercel; API → Railway; DB → managed Postgres + PostGIS
-- [ ] Env vars and secrets set per environment
-- [ ] Migrations run automatically on deploy
-- [ ] `develop` deploys to staging; `production` deploys to prod (prod can stay empty for now)
+- [x] Accounts (by you): Vercel, Railway (Postgres from Railway's PostGIS template). All in the Singapore region
+- [x] Web → Vercel; API → Railway; DB → managed Postgres + PostGIS
+- [x] Env vars and secrets set per environment
+- [x] Migrations run automatically on deploy (Railway pre-deploy command `pnpm db:migrate`)
+- [x] `develop` deploys to staging; `production` deploys to prod (prod can stay empty for now)
+
+**Staging settings** (they live in the dashboards, not in the repo):
+- Vercel: Root Directory `apps/web`; Node 24.x; Production Branch `production`, so `develop` gets Preview deploys; `API_URL` (Preview) = the Railway API URL, with `https://`
+- Railway service `@paw/api`: root directory = repo root (the API imports `packages/db`); build `pnpm install --frozen-lockfile`; pre-deploy `pnpm db:migrate`; start `pnpm --filter @paw/api start`; watch paths `apps/api/**`, `packages/**`
+- Railway variables: `DATABASE_URL` built from the PostGIS service's private domain (`….railway.internal`, no egress fees), `HOST=::`, `NODE_ENV=production`, `CORS_ORIGINS` = the Vercel staging URL
 
 **Done when:** the staging URL shows the home page with a live API/DB health status.
 
@@ -193,6 +198,7 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 
 ### P1-2d · Admin: services, products & photos
 `ops` · Depends on: P1-2b
+- [ ] Account (by you): Cloudflare; R2 public bucket (location hint: Asia-Pacific) for photos (the private claim-documents bucket waits for P1-8)
 - [ ] Branch services (category, species, price range + unit, notes), with "copy to all branches"
 - [ ] Products (name, price, availability, image)
 - [ ] Photo upload to Cloudflare R2 via presigned URLs; required alt text; ordering
