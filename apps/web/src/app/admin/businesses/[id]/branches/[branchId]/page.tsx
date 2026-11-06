@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { cache } from 'react';
 import { BranchForm } from '@/components/admin/branch-form';
+import { BranchTabs } from '@/components/admin/branch-tabs';
 import { AdminFormMessages } from '@/components/admin/form-messages';
 import { adminApi, dataOrNotFound, dataOrThrow } from '@/lib/admin-api';
 import { requireAdmin } from '@/lib/admin-session';
@@ -57,6 +58,7 @@ export default async function BranchPage({ params }: Props) {
         {t('backToBusiness', { business: branch.business.name })}
       </Link>
       <h1 className="text-2xl font-bold">{branch.name}</h1>
+      <BranchTabs businessId={branch.business.id} branchId={branch.id} current="details" />
       <AdminFormMessages>
         <BranchForm
           business={branch.business}

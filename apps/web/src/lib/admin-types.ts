@@ -21,6 +21,15 @@ export type UpdateBranchBody = JsonBody<paths['/v1/admin/branches/{id}']['patch'
 export type Branch = Ok<paths['/v1/admin/branches/{id}']['get']>;
 export type ContactInput = CreateBranchBody['contacts'] extends (infer C)[] | undefined ? C : never;
 
+export type BranchHours = Ok<paths['/v1/admin/branches/{id}/hours']['get']>;
+export type ReplaceHoursBody = JsonBody<
+  paths['/v1/admin/branches/{id}/hours']['put']['requestBody']
+>;
+export type SetHoursExceptionBody = JsonBody<
+  paths['/v1/admin/branches/{id}/hours-exceptions/{date}']['put']['requestBody']
+>;
+export type HoursConfirmedBy = NonNullable<BranchHours['hoursConfirmedBy']>;
+
 export type PsgcArea = Ok<paths['/v1/admin/psgc-areas']['get']>[number];
 export type AuditLogPage = Ok<paths['/v1/admin/audit-log']['get']>;
 export type AuditEntry = AuditLogPage['items'][number];
@@ -41,6 +50,11 @@ export const CLAIM_STATUSES = [
   'pending',
   'verified',
 ] as const satisfies readonly ClaimStatus[];
+export const HOURS_CONFIRMED_BY = [
+  'clinic',
+  'paw_ops',
+  'report',
+] as const satisfies readonly HoursConfirmedBy[];
 export const CONTACT_TYPES = [
   'phone',
   'viber',

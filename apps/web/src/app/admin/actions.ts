@@ -5,6 +5,7 @@
 // signed-in user, which validates the input and checks the role again, (3) redirects or
 // refreshes on success, or returns the API's errors for the form to show.
 
+import { toManila } from '@paw/domain';
 import { refresh } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -14,13 +15,16 @@ import { requireAdmin } from '@/lib/admin-session';
 import type {
   CreateBranchBody,
   CreateBusinessBody,
+  ReplaceHoursBody,
+  SetHoursExceptionBody,
   UpdateBranchBody,
   UpdateBusinessBody,
 } from '@/lib/admin-types';
 import { formStateFromProblem, savedForm, type FormState } from '@/lib/form-errors';
 
-// Ids arrive from the browser like any other input; check them before they go in a URL.
+// Ids and dates arrive from the browser like any other input; check them before they go in a URL.
 const IdSchema = z.uuid();
+const DateSchema = z.iso.date();
 
 async function failed(error: unknown): Promise<FormState> {
   const t = await getTranslations('AdminForms');
@@ -88,6 +92,93 @@ export async function updateBranchAction(
   const { data, error } = await api.PATCH('/v1/admin/branches/{id}', {
     params: { path: { id } },
     body,
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+// ── Hours (ARCHITECTURE D35) ────────────────────────────────────────────────────────────
+
+export async function updateHoursAction(
+  branchId: string,
+  body: ReplaceHoursBody,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(branchId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.PUT('/v1/admin/branches/{id}/hours', {
+    params: { path: { id } },
+    body,
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function setHoursExceptionAction(
+  branchId: string,
+  date: string,
+  body: SetHoursExceptionBody,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(branchId);
+  if (typeof id !== 'string') return id;
+  const parsedDate = DateSchema.safeParse(date);
+  if (!parsedDate.success) {
+    const t = await getTranslations('AdminHours');
+    return { status: 'error', formError: null, fieldErrors: { date: t('pickDate') } };
+  }
+
+  const api = await adminApi();
+  const { data, error } = await api.PUT('/v1/admin/branches/{id}/hours-exceptions/{date}', {
+    params: { path: { id, date: parsedDate.data } },
+    body,
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+/** "Closed today": today is the Manila date on the server when the button is pressed. */
+export async function closedTodayAction(branchId: string, note: string): Promise<FormState> {
+  await requireAdmin();
+  return setHoursExceptionAction(branchId, toManila(new Date()).date, {
+    isClosed: true,
+    intervals: [],
+    note: note.trim() === '' ? null : note.trim(),
+  });
+}
+
+export async function deleteHoursExceptionAction(
+  branchId: string,
+  date: string,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(branchId);
+  if (typeof id !== 'string') return id;
+  const parsedDate = DateSchema.safeParse(date);
+  if (!parsedDate.success) return failed(undefined);
+
+  const api = await adminApi();
+  const { data, error } = await api.DELETE('/v1/admin/branches/{id}/hours-exceptions/{date}', {
+    params: { path: { id, date: parsedDate.data } },
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function confirmHoursAction(branchId: string): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(branchId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.POST('/v1/admin/branches/{id}/hours/confirm', {
+    params: { path: { id } },
   });
   if (data === undefined) return failed(error);
   refresh();
