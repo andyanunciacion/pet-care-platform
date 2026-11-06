@@ -23,7 +23,11 @@ const QuerySchema = z.object({
   before: z.uuid().optional().catch(undefined),
 });
 
-export default async function AuditLogPage({ searchParams }: PageProps<'/admin/audit-log'>) {
+export default async function AuditLogPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   await requireAdmin();
   const query = QuerySchema.parse(await searchParams);
   const [t, api] = await Promise.all([getTranslations('AdminAudit'), adminApi()]);

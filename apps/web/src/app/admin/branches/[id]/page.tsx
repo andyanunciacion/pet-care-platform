@@ -6,7 +6,7 @@ import { requireAdmin } from '@/lib/admin-session';
  * /admin/branches/{id} → the branch's editor under its business. Lets the audit log link
  * to a branch knowing only its id.
  */
-export default async function BranchRedirectPage({ params }: PageProps<'/admin/branches/[id]'>) {
+export default async function BranchRedirectPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin();
   const { id } = await params;
   const api = await adminApi();

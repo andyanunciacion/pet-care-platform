@@ -8,7 +8,9 @@ import { AdminFormMessages } from '@/components/admin/form-messages';
 import { adminApi, dataOrNotFound, dataOrThrow } from '@/lib/admin-api';
 import { requireAdmin } from '@/lib/admin-session';
 
-type Props = PageProps<'/admin/businesses/[id]/branches/[branchId]'>;
+interface Props {
+  params: Promise<{ id: string; branchId: string }>;
+}
 
 // cache(): generateMetadata and the page share one API call per request.
 const getBranch = cache(async (businessId: string, branchId: string) => {

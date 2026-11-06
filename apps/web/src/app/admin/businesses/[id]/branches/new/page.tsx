@@ -11,9 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('newTitle') };
 }
 
-export default async function NewBranchPage({
-  params,
-}: PageProps<'/admin/businesses/[id]/branches/new'>) {
+export default async function NewBranchPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin();
   const { id } = await params;
   const api = await adminApi();

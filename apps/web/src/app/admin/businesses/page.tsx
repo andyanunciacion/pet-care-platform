@@ -56,7 +56,11 @@ function hrefWith(filters: Filters, page: number): string {
   return query === '' ? '/admin/businesses' : `/admin/businesses?${query}`;
 }
 
-export default async function ListingsPage({ searchParams }: PageProps<'/admin/businesses'>) {
+export default async function ListingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   await requireAdmin();
   const filters = FiltersSchema.parse(await searchParams);
   const page = filters.page ?? 1;

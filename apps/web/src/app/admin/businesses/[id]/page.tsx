@@ -24,14 +24,18 @@ const getBusiness = cache(async (id: string) => {
   return dataOrNotFound(await api.GET('/v1/admin/businesses/{id}', { params: { path: { id } } }));
 });
 
-export async function generateMetadata({
-  params,
-}: PageProps<'/admin/businesses/[id]'>): Promise<Metadata> {
+// Typed by hand rather than with Next's generated PageProps: that global type only exists
+// after `next typegen`, which CI's lint job doesn't run.
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   await requireAdmin();
   return { title: (await getBusiness((await params).id)).name };
 }
 
-export default async function BusinessPage({ params }: PageProps<'/admin/businesses/[id]'>) {
+export default async function BusinessPage({ params }: Props) {
   await requireAdmin();
   const business = await getBusiness((await params).id);
   const api = await adminApi();
