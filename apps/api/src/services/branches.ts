@@ -63,7 +63,7 @@ const branchFields = {
   cityCode: PsgcCodeSchema,
   barangayCode: PsgcCodeSchema.nullable(),
   location: LocationSchema,
-  is24h: z.boolean(),
+  // "Open 24 hours" is edited with the hours (services/branch-hours.ts), not here.
   acceptsEmergencies: z.boolean(),
   listingStatus: z.enum(LISTING_STATUSES),
   /** The full list, in display order. On update it replaces the current list. */
@@ -73,7 +73,6 @@ const branchFields = {
 export const CreateBranchSchema = z.object({
   ...branchFields,
   barangayCode: branchFields.barangayCode.default(null),
-  is24h: branchFields.is24h.default(false),
   acceptsEmergencies: branchFields.acceptsEmergencies.default(false),
   listingStatus: branchFields.listingStatus.default('published'),
   contacts: branchFields.contacts.default([]),
@@ -132,13 +131,12 @@ const AUDITED_FIELDS = [
   'cityCode',
   'barangayCode',
   'location',
-  'is24h',
   'acceptsEmergencies',
   'listingStatus',
   'contacts',
 ] as const;
 
-const branchNotFound = () => httpError(404, 'No branch with that id.');
+export const branchNotFound = () => httpError(404, 'No branch with that id.');
 
 function slugTaken() {
   const message = 'Another branch of this business already uses this slug.';
@@ -186,16 +184,18 @@ async function assertAreas(tx: Tx, codes: AreaCodes): Promise<void> {
   if (errors.length > 0) throw httpError(400, 'The address areas do not match.', errors);
 }
 
-/** 24h / emergency flags are vet-only (ARCHITECTURE §5.3). */
-function assertEmergencyFlags(
+/** 24h / emergency flags are vet-only (ARCHITECTURE §5.3). Pass the flags the request sets. */
+export function assertEmergencyFlags(
   type: (typeof BUSINESS_TYPES)[number],
-  flags: { is24h: boolean; acceptsEmergencies: boolean },
+  flags: { is24h?: boolean; acceptsEmergencies?: boolean },
 ): void {
   if (BUSINESS_TYPE_RULES[type].emergencyFlags) return;
   const errors: FieldError[] = [];
   const message = 'This type of business cannot be flagged for emergencies.';
-  if (flags.is24h) errors.push({ pointer: '/is24h', message });
-  if (flags.acceptsEmergencies) errors.push({ pointer: '/acceptsEmergencies', message });
+  if (flags.is24h === true) errors.push({ pointer: '/is24h', message });
+  if (flags.acceptsEmergencies === true) {
+    errors.push({ pointer: '/acceptsEmergencies', message });
+  }
   if (errors.length > 0) throw httpError(400, message, errors);
 }
 
@@ -349,7 +349,7 @@ export async function updateBranch(
       if ('provinceCode' in diff || 'cityCode' in diff || 'barangayCode' in diff) {
         await assertAreas(tx, after);
       }
-      assertEmergencyFlags(owner.type, after);
+      assertEmergencyFlags(owner.type, { acceptsEmergencies: after.acceptsEmergencies });
 
       // Always touch updated_at: a contacts-only change still changes the branch's page.
       await tx

@@ -1,19 +1,25 @@
 import Link from 'next/link';
-import { getFormatter, getTranslations } from 'next-intl/server';
+import { getFormatter, getLocale, getTranslations } from 'next-intl/server';
 import {
   CLAIM_STATUSES,
   CONTACT_TYPES,
+  HOURS_CONFIRMED_BY,
   LISTING_STATUSES,
   type AuditEntry,
 } from '@/lib/admin-types';
 import { auditValueLines, type AuditValueLabels } from '@/lib/audit-format';
+import { weekdayLabel } from '@/lib/hours-format';
 
-// Labels exist for these; anything newer is shown as stored (e.g. "hours.confirm").
+// Labels exist for these; anything newer is shown as stored (e.g. "claim.approve").
 const ACTIONS = [
   'business.create',
   'business.update',
   'branch.create',
   'branch.update',
+  'branch.update_hours',
+  'branch.set_hours_exception',
+  'branch.delete_hours_exception',
+  'branch.confirm_hours',
   'user.set_platform_role',
 ] as const;
 const FIELDS = [
@@ -33,6 +39,10 @@ const FIELDS = [
   'is24h',
   'acceptsEmergencies',
   'contacts',
+  'weeklyHours',
+  'hoursException',
+  'hoursConfirmedAt',
+  'hoursConfirmedBy',
   'platformRole',
 ] as const;
 
@@ -54,10 +64,11 @@ function entityHref(entry: AuditEntry): string | undefined {
 
 /** A list of audit entries with their field-by-field changes. */
 export async function AuditTrail({ entries }: { entries: AuditEntry[] }) {
-  const [t, tEnums, format] = await Promise.all([
+  const [t, tEnums, format, locale] = await Promise.all([
     getTranslations('AdminAudit'),
     getTranslations('Enums'),
     getFormatter(),
+    getLocale(),
   ]);
 
   if (entries.length === 0) {
@@ -70,9 +81,15 @@ export async function AuditTrail({ entries }: { entries: AuditEntry[] }) {
     none: t('noValue'),
     yes: t('yes'),
     no: t('no'),
+    closed: t('closed'),
     contactType: (type) =>
       isOneOf(CONTACT_TYPES, type) ? tEnums(`contactType.${type}`) : undefined,
+    weekday: (day) => weekdayLabel(day, locale, 'short'),
+    dateTime: (iso) => format.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'short' }),
     enumValue: (value) => {
+      if (field === 'hoursConfirmedBy' && isOneOf(HOURS_CONFIRMED_BY, value)) {
+        return tEnums(`hoursConfirmedBy.${value}`);
+      }
       if (field === 'listingStatus' && isOneOf(LISTING_STATUSES, value)) {
         return tEnums(`listingStatus.${value}`);
       }

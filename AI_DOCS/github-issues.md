@@ -208,9 +208,11 @@ Notes for later issues: claim status is read-only in the admin (the claim flow o
 
 ### P1-2c · Admin: hours & exceptions editor
 `ops` `frontend` · Depends on: P1-2b, P1-3
-- [ ] `HoursEditor` component (DESIGN.md UX13): weekly grid, multiple intervals, copy to weekdays, overnight, exceptions calendar, live preview of how owners see it
-- [ ] "Confirm hours" action (sets `hours_confirmed_at`/`_by = paw_ops`)
-- [ ] One-tap "Closed today" action with an optional note (creates today's closed exception; shown as "Closed today" even when regular hours are unknown, UX4)
+- [x] `HoursEditor` component (DESIGN.md UX13): weekly grid, multiple intervals, copy to weekdays, overnight, exceptions list, live preview of how owners see it
+- [x] "Confirm hours" action (sets `hours_confirmed_at`/`_by = paw_ops`)
+- [x] One-tap "Closed today" action with an optional note (creates today's closed exception; shown as "Closed today" even when regular hours are unknown, UX4)
+
+Notes for later issues: the editor lives on the branch's Hours tab (`/admin/businesses/{id}/branches/{branchId}/hours`); P1-2d adds its Services / Photos tabs to `BranchTabs`. "Open 24 hours" moved from the branch form to the hours editor. The status display (`components/hours/open-status.tsx`) and `lib/hours-format.ts` are meant for reuse by P1-4, and the editor pieces by the clinic dashboard (P1-9), which needs its own (business-member) routes for the same writes.
 
 **Done when:** you can enter a clinic with a lunch break plus a holiday closure, and the preview shows the right status.
 

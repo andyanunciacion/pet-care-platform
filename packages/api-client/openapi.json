@@ -824,10 +824,6 @@
                       "lat"
                     ]
                   },
-                  "is24h": {
-                    "default": false,
-                    "type": "boolean"
-                  },
                   "acceptsEmergencies": {
                     "default": false,
                     "type": "boolean"
@@ -1488,9 +1484,6 @@
                       "lat"
                     ]
                   },
-                  "is24h": {
-                    "type": "boolean"
-                  },
                   "acceptsEmergencies": {
                     "type": "boolean"
                   },
@@ -1836,6 +1829,864 @@
                     "contacts",
                     "createdAt",
                     "updatedAt"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/branches/{id}/hours": {
+      "get": {
+        "summary": "A branch's weekly hours, upcoming exceptions and confirmation",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "branchId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "businessType": {
+                      "type": "string",
+                      "enum": [
+                        "vet_clinic"
+                      ]
+                    },
+                    "today": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                    },
+                    "is24h": {
+                      "type": "boolean"
+                    },
+                    "weekly": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "opensAt": {
+                            "type": "string"
+                          },
+                          "closesAt": {
+                            "type": "string"
+                          },
+                          "dayOfWeek": {
+                            "type": "integer",
+                            "minimum": -9007199254740991,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "opensAt",
+                          "closesAt",
+                          "dayOfWeek"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "exceptions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                          },
+                          "isClosed": {
+                            "type": "boolean"
+                          },
+                          "intervals": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "opensAt": {
+                                  "type": "string"
+                                },
+                                "closesAt": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "opensAt",
+                                "closesAt"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "note": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "date",
+                          "isClosed",
+                          "intervals",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "hoursConfirmedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                    },
+                    "hoursConfirmedBy": {
+                      "nullable": true,
+                      "type": "string",
+                      "enum": [
+                        "clinic",
+                        "paw_ops",
+                        "report"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "branchId",
+                    "businessType",
+                    "today",
+                    "is24h",
+                    "weekly",
+                    "exceptions",
+                    "hoursConfirmedAt",
+                    "hoursConfirmedBy"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Replace the weekly hours and the \"open 24 hours\" flag",
+        "tags": [
+          "admin"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "is24h": {
+                    "type": "boolean"
+                  },
+                  "weekly": {
+                    "maxItems": 28,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "opensAt": {
+                          "type": "string",
+                          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                        },
+                        "closesAt": {
+                          "type": "string",
+                          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                        },
+                        "dayOfWeek": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 7
+                        }
+                      },
+                      "required": [
+                        "opensAt",
+                        "closesAt",
+                        "dayOfWeek"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "is24h",
+                  "weekly"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "branchId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "businessType": {
+                      "type": "string",
+                      "enum": [
+                        "vet_clinic"
+                      ]
+                    },
+                    "today": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                    },
+                    "is24h": {
+                      "type": "boolean"
+                    },
+                    "weekly": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "opensAt": {
+                            "type": "string"
+                          },
+                          "closesAt": {
+                            "type": "string"
+                          },
+                          "dayOfWeek": {
+                            "type": "integer",
+                            "minimum": -9007199254740991,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "opensAt",
+                          "closesAt",
+                          "dayOfWeek"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "exceptions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                          },
+                          "isClosed": {
+                            "type": "boolean"
+                          },
+                          "intervals": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "opensAt": {
+                                  "type": "string"
+                                },
+                                "closesAt": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "opensAt",
+                                "closesAt"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "note": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "date",
+                          "isClosed",
+                          "intervals",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "hoursConfirmedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                    },
+                    "hoursConfirmedBy": {
+                      "nullable": true,
+                      "type": "string",
+                      "enum": [
+                        "clinic",
+                        "paw_ops",
+                        "report"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "branchId",
+                    "businessType",
+                    "today",
+                    "is24h",
+                    "weekly",
+                    "exceptions",
+                    "hoursConfirmedAt",
+                    "hoursConfirmedBy"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/branches/{id}/hours-exceptions/{date}": {
+      "put": {
+        "summary": "Set the hours of one date (a holiday, \"closed today\"), replacing any set before",
+        "tags": [
+          "admin"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "isClosed": {
+                    "type": "boolean"
+                  },
+                  "intervals": {
+                    "maxItems": 4,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "opensAt": {
+                          "type": "string",
+                          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                        },
+                        "closesAt": {
+                          "type": "string",
+                          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+                        }
+                      },
+                      "required": [
+                        "opensAt",
+                        "closesAt"
+                      ]
+                    }
+                  },
+                  "note": {
+                    "default": null,
+                    "nullable": true,
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "isClosed",
+                  "intervals"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            },
+            "in": "path",
+            "name": "date",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "branchId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "businessType": {
+                      "type": "string",
+                      "enum": [
+                        "vet_clinic"
+                      ]
+                    },
+                    "today": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                    },
+                    "is24h": {
+                      "type": "boolean"
+                    },
+                    "weekly": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "opensAt": {
+                            "type": "string"
+                          },
+                          "closesAt": {
+                            "type": "string"
+                          },
+                          "dayOfWeek": {
+                            "type": "integer",
+                            "minimum": -9007199254740991,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "opensAt",
+                          "closesAt",
+                          "dayOfWeek"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "exceptions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                          },
+                          "isClosed": {
+                            "type": "boolean"
+                          },
+                          "intervals": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "opensAt": {
+                                  "type": "string"
+                                },
+                                "closesAt": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "opensAt",
+                                "closesAt"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "note": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "date",
+                          "isClosed",
+                          "intervals",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "hoursConfirmedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                    },
+                    "hoursConfirmedBy": {
+                      "nullable": true,
+                      "type": "string",
+                      "enum": [
+                        "clinic",
+                        "paw_ops",
+                        "report"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "branchId",
+                    "businessType",
+                    "today",
+                    "is24h",
+                    "weekly",
+                    "exceptions",
+                    "hoursConfirmedAt",
+                    "hoursConfirmedBy"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove the exception on one date (the weekly hours apply again)",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+            },
+            "in": "path",
+            "name": "date",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "branchId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "businessType": {
+                      "type": "string",
+                      "enum": [
+                        "vet_clinic"
+                      ]
+                    },
+                    "today": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                    },
+                    "is24h": {
+                      "type": "boolean"
+                    },
+                    "weekly": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "opensAt": {
+                            "type": "string"
+                          },
+                          "closesAt": {
+                            "type": "string"
+                          },
+                          "dayOfWeek": {
+                            "type": "integer",
+                            "minimum": -9007199254740991,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "opensAt",
+                          "closesAt",
+                          "dayOfWeek"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "exceptions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                          },
+                          "isClosed": {
+                            "type": "boolean"
+                          },
+                          "intervals": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "opensAt": {
+                                  "type": "string"
+                                },
+                                "closesAt": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "opensAt",
+                                "closesAt"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "note": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "date",
+                          "isClosed",
+                          "intervals",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "hoursConfirmedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                    },
+                    "hoursConfirmedBy": {
+                      "nullable": true,
+                      "type": "string",
+                      "enum": [
+                        "clinic",
+                        "paw_ops",
+                        "report"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "branchId",
+                    "businessType",
+                    "today",
+                    "is24h",
+                    "weekly",
+                    "exceptions",
+                    "hoursConfirmedAt",
+                    "hoursConfirmedBy"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/branches/{id}/hours/confirm": {
+      "post": {
+        "summary": "Confirm the hours are still correct (by PAW ops)",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "branchId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "businessType": {
+                      "type": "string",
+                      "enum": [
+                        "vet_clinic"
+                      ]
+                    },
+                    "today": {
+                      "type": "string",
+                      "format": "date",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                    },
+                    "is24h": {
+                      "type": "boolean"
+                    },
+                    "weekly": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "opensAt": {
+                            "type": "string"
+                          },
+                          "closesAt": {
+                            "type": "string"
+                          },
+                          "dayOfWeek": {
+                            "type": "integer",
+                            "minimum": -9007199254740991,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "opensAt",
+                          "closesAt",
+                          "dayOfWeek"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "exceptions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                          },
+                          "isClosed": {
+                            "type": "boolean"
+                          },
+                          "intervals": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "opensAt": {
+                                  "type": "string"
+                                },
+                                "closesAt": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "opensAt",
+                                "closesAt"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "note": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "date",
+                          "isClosed",
+                          "intervals",
+                          "note"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "hoursConfirmedAt": {
+                      "nullable": true,
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                    },
+                    "hoursConfirmedBy": {
+                      "nullable": true,
+                      "type": "string",
+                      "enum": [
+                        "clinic",
+                        "paw_ops",
+                        "report"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "branchId",
+                    "businessType",
+                    "today",
+                    "is24h",
+                    "weekly",
+                    "exceptions",
+                    "hoursConfirmedAt",
+                    "hoursConfirmedBy"
                   ],
                   "additionalProperties": false
                 }

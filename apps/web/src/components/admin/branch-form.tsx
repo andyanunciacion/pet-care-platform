@@ -63,7 +63,6 @@ export function BranchForm({ business, branch, ...areas }: Props) {
     barangayCode: branch?.barangay?.code ?? null,
   });
   const [location, setLocation] = useState<LngLat | null>(branch?.location ?? null);
-  const [is24h, setIs24h] = useState(branch?.is24h ?? false);
   const [acceptsEmergencies, setAcceptsEmergencies] = useState(branch?.acceptsEmergencies ?? false);
   const [listingStatus, setListingStatus] = useState<ListingStatus>(
     branch?.listingStatus ?? 'published',
@@ -88,7 +87,7 @@ export function BranchForm({ business, branch, ...areas }: Props) {
       addressLine: addressLine.trim(),
       ...codes,
       location,
-      is24h: showEmergencyFlags && is24h,
+      // "Open 24 hours" is set on the Hours tab, with the weekly hours.
       acceptsEmergencies: showEmergencyFlags && acceptsEmergencies,
       listingStatus,
       contacts: sent.map((row) => ({
@@ -210,18 +209,6 @@ export function BranchForm({ business, branch, ...areas }: Props) {
         {showEmergencyFlags && (
           <fieldset className="flex flex-col gap-3">
             <legend className="mb-1 text-sm font-medium">{t('flags')}</legend>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="is24h"
-                checked={is24h}
-                onCheckedChange={(checked) => {
-                  setIs24h(checked === true);
-                }}
-              />
-              <Label htmlFor="is24h" className="font-normal">
-                {t('is24h')}
-              </Label>
-            </div>
             <div className="flex items-center gap-2">
               <Checkbox
                 id="acceptsEmergencies"

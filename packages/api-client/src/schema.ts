@@ -377,8 +377,6 @@ export interface paths {
                             lat: number;
                         };
                         /** @default false */
-                        is24h?: boolean;
-                        /** @default false */
                         acceptsEmergencies?: boolean;
                         /**
                          * @default published
@@ -592,7 +590,6 @@ export interface paths {
                             lng: number;
                             lat: number;
                         };
-                        is24h?: boolean;
                         acceptsEmergencies?: boolean;
                         /** @enum {string} */
                         listingStatus?: "published" | "hidden" | "permanently_closed";
@@ -688,6 +685,324 @@ export interface paths {
                 };
             };
         };
+        trace?: never;
+    };
+    "/v1/admin/branches/{id}/hours": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A branch's weekly hours, upcoming exceptions and confirmation */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            branchId: string;
+                            /** @enum {string} */
+                            businessType: "vet_clinic";
+                            /** Format: date */
+                            today: string;
+                            is24h: boolean;
+                            weekly: {
+                                opensAt: string;
+                                closesAt: string;
+                                dayOfWeek: number;
+                            }[];
+                            exceptions: {
+                                /** Format: date */
+                                date: string;
+                                isClosed: boolean;
+                                intervals: {
+                                    opensAt: string;
+                                    closesAt: string;
+                                }[];
+                                note: string | null;
+                            }[];
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                        };
+                    };
+                };
+            };
+        };
+        /** Replace the weekly hours and the "open 24 hours" flag */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        is24h: boolean;
+                        weekly: {
+                            opensAt: string;
+                            closesAt: string;
+                            dayOfWeek: number;
+                        }[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            branchId: string;
+                            /** @enum {string} */
+                            businessType: "vet_clinic";
+                            /** Format: date */
+                            today: string;
+                            is24h: boolean;
+                            weekly: {
+                                opensAt: string;
+                                closesAt: string;
+                                dayOfWeek: number;
+                            }[];
+                            exceptions: {
+                                /** Format: date */
+                                date: string;
+                                isClosed: boolean;
+                                intervals: {
+                                    opensAt: string;
+                                    closesAt: string;
+                                }[];
+                                note: string | null;
+                            }[];
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                        };
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/branches/{id}/hours-exceptions/{date}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Set the hours of one date (a holiday, "closed today"), replacing any set before */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    date: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        isClosed: boolean;
+                        intervals: {
+                            opensAt: string;
+                            closesAt: string;
+                        }[];
+                        /** @default null */
+                        note?: string | null;
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            branchId: string;
+                            /** @enum {string} */
+                            businessType: "vet_clinic";
+                            /** Format: date */
+                            today: string;
+                            is24h: boolean;
+                            weekly: {
+                                opensAt: string;
+                                closesAt: string;
+                                dayOfWeek: number;
+                            }[];
+                            exceptions: {
+                                /** Format: date */
+                                date: string;
+                                isClosed: boolean;
+                                intervals: {
+                                    opensAt: string;
+                                    closesAt: string;
+                                }[];
+                                note: string | null;
+                            }[];
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                        };
+                    };
+                };
+            };
+        };
+        post?: never;
+        /** Remove the exception on one date (the weekly hours apply again) */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                    date: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            branchId: string;
+                            /** @enum {string} */
+                            businessType: "vet_clinic";
+                            /** Format: date */
+                            today: string;
+                            is24h: boolean;
+                            weekly: {
+                                opensAt: string;
+                                closesAt: string;
+                                dayOfWeek: number;
+                            }[];
+                            exceptions: {
+                                /** Format: date */
+                                date: string;
+                                isClosed: boolean;
+                                intervals: {
+                                    opensAt: string;
+                                    closesAt: string;
+                                }[];
+                                note: string | null;
+                            }[];
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                        };
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/branches/{id}/hours/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Confirm the hours are still correct (by PAW ops) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            branchId: string;
+                            /** @enum {string} */
+                            businessType: "vet_clinic";
+                            /** Format: date */
+                            today: string;
+                            is24h: boolean;
+                            weekly: {
+                                opensAt: string;
+                                closesAt: string;
+                                dayOfWeek: number;
+                            }[];
+                            exceptions: {
+                                /** Format: date */
+                                date: string;
+                                isClosed: boolean;
+                                intervals: {
+                                    opensAt: string;
+                                    closesAt: string;
+                                }[];
+                                note: string | null;
+                            }[];
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/v1/admin/psgc-areas": {

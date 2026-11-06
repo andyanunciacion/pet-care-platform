@@ -5,7 +5,10 @@ const labels: AuditValueLabels = {
   none: '—',
   yes: 'Yes',
   no: 'No',
+  closed: 'Closed',
   contactType: (type) => ({ phone: 'Phone', viber: 'Viber' })[type],
+  weekday: (day) => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][day - 1] ?? String(day),
+  dateTime: (iso) => `at ${iso.slice(0, 10)}`,
   enumValue: (value) => ({ hidden: 'Hidden' })[value],
 };
 
@@ -39,6 +42,45 @@ describe('auditValueLines', () => {
         labels,
       ),
     ).toEqual(['Phone: +639171234567 (Globe)', 'Viber: +639177654321', 'fax: 123']);
+  });
+
+  it('lists weekly hours one interval per line', () => {
+    expect(
+      auditValueLines(
+        [
+          { dayOfWeek: 1, opensAt: '08:00', closesAt: '12:00' },
+          { dayOfWeek: 6, opensAt: '20:00', closesAt: '02:00' },
+        ],
+        labels,
+      ),
+    ).toEqual(['Mon 08:00–12:00', 'Sat 20:00–02:00']);
+  });
+
+  it('shows an hours exception on one line', () => {
+    expect(
+      auditValueLines(
+        { date: '2026-12-25', isClosed: true, intervals: [], note: 'Christmas' },
+        labels,
+      ),
+    ).toEqual(['2026-12-25: Closed (Christmas)']);
+    expect(
+      auditValueLines(
+        {
+          date: '2026-12-24',
+          isClosed: false,
+          intervals: [
+            { opensAt: '09:00', closesAt: '12:00' },
+            { opensAt: '13:00', closesAt: '15:00' },
+          ],
+          note: null,
+        },
+        labels,
+      ),
+    ).toEqual(['2026-12-24: 09:00–12:00, 13:00–15:00']);
+  });
+
+  it('formats timestamps', () => {
+    expect(auditValueLines('2026-11-06T04:30:00.000Z', labels)).toEqual(['at 2026-11-06']);
   });
 
   it('falls back to JSON for anything else', () => {

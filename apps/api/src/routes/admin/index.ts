@@ -3,6 +3,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { PLATFORM_ROLES } from '../../auth.ts';
 import { requirePlatformRole, sessionUserOf } from '../../authz.ts';
+import { adminBranchHoursRoutes } from './branch-hours.ts';
 import { adminBranchRoutes } from './branches.ts';
 import { adminBusinessRoutes } from './businesses.ts';
 import { adminReferenceRoutes } from './reference.ts';
@@ -40,5 +41,6 @@ export const adminRoutes: FastifyPluginAsyncZod<{ database: Database }> = async 
 
   await app.register(adminBusinessRoutes, { database });
   await app.register(adminBranchRoutes, { database });
+  await app.register(adminBranchHoursRoutes, { database });
   await app.register(adminReferenceRoutes, { database });
 };
