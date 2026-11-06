@@ -27,7 +27,71 @@
     "signOutFailed": "Couldn't sign out. Try again.",
     "navLabel": "Admin sections",
     "nav": {
-      "listings": "Listings"
+      "listings": "Listings",
+      "auditLog": "Audit log"
+    }
+  },
+  "AdminAudit": {
+    "title": "Audit log",
+    "subtitle": "Every change made in the admin, newest first.",
+    "history": "History",
+    "fullHistory": "Full history",
+    "empty": "No changes recorded yet.",
+    "filtersLabel": "Filter the audit log",
+    "entityType": "Record type",
+    "anyEntity": "All records",
+    "entityTypes": {
+      "business": "Businesses",
+      "branch": "Branches",
+      "user": "Users"
+    },
+    "apply": "Filter",
+    "newest": "Newest",
+    "older": "Older",
+    "pagination": "Pages",
+    "filteredToBusiness": "Showing one business and its branches.",
+    "showAll": "Show all",
+    "script": "Script",
+    "by": "by {actor}",
+    "open": "Open",
+    "noValue": "—",
+    "yes": "Yes",
+    "no": "No",
+    "change": "Field changes",
+    "field": "Field",
+    "from": "Before",
+    "to": "After",
+    "actions": {
+      "business": {
+        "create": "Business created",
+        "update": "Business edited"
+      },
+      "branch": {
+        "create": "Branch added",
+        "update": "Branch edited"
+      },
+      "user": {
+        "set_platform_role": "User role changed"
+      }
+    },
+    "fields": {
+      "name": "Name",
+      "slug": "URL slug",
+      "type": "Type",
+      "description": "Description",
+      "dataSource": "Data source",
+      "claimStatus": "Claim status",
+      "listingStatus": "Listing status",
+      "businessId": "Business",
+      "addressLine": "Street address",
+      "provinceCode": "Province (PSGC)",
+      "cityCode": "City / municipality (PSGC)",
+      "barangayCode": "Barangay (PSGC)",
+      "location": "Map pin",
+      "is24h": "Open 24 hours",
+      "acceptsEmergencies": "Accepts emergencies",
+      "contacts": "Contacts",
+      "platformRole": "Platform role"
     }
   },
   "Enums": {

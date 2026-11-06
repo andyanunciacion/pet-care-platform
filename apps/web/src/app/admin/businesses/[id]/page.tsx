@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { cache } from 'react';
+import { AuditTrail } from '@/components/admin/audit-trail';
 import { BusinessForm } from '@/components/admin/business-form';
 import { AdminFormMessages } from '@/components/admin/form-messages';
 import { ListingStatusBadge } from '@/components/admin/status-badges';
@@ -14,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { adminApi, dataOrNotFound } from '@/lib/admin-api';
+import { adminApi, dataOrNotFound, dataOrThrow } from '@/lib/admin-api';
 import { requireAdmin } from '@/lib/admin-session';
 
 // cache(): generateMetadata and the page share one API call per request.
@@ -33,10 +34,16 @@ export async function generateMetadata({
 export default async function BusinessPage({ params }: PageProps<'/admin/businesses/[id]'>) {
   await requireAdmin();
   const business = await getBusiness((await params).id);
-  const [t, tEnums, format] = await Promise.all([
+  const api = await adminApi();
+  const [t, tAudit, tEnums, format, history] = await Promise.all([
     getTranslations('AdminBusiness'),
+    getTranslations('AdminAudit'),
     getTranslations('Enums'),
     getFormatter(),
+    // The business and all its branches, newest first.
+    api
+      .GET('/v1/admin/audit-log', { params: { query: { businessId: business.id, limit: 10 } } })
+      .then(dataOrThrow),
   ]);
 
   return (
@@ -103,6 +110,23 @@ export default async function BusinessPage({ params }: PageProps<'/admin/busines
             </TableBody>
           </Table>
         )}
+      </section>
+
+      <section aria-labelledby="history" className="flex flex-col gap-4">
+        <div className="flex items-center justify-between gap-4">
+          <h2 id="history" className="text-xl font-semibold">
+            {tAudit('history')}
+          </h2>
+          {history.nextBefore !== null && (
+            <Link
+              href={`/admin/audit-log?businessId=${business.id}`}
+              className="text-sm text-primary hover:underline"
+            >
+              {tAudit('fullHistory')}
+            </Link>
+          )}
+        </div>
+        <AuditTrail entries={history.items} />
       </section>
     </div>
   );

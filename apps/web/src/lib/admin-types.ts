@@ -22,6 +22,8 @@ export type Branch = Ok<paths['/v1/admin/branches/{id}']['get']>;
 export type ContactInput = CreateBranchBody['contacts'] extends (infer C)[] | undefined ? C : never;
 
 export type PsgcArea = Ok<paths['/v1/admin/psgc-areas']['get']>[number];
+export type AuditLogPage = Ok<paths['/v1/admin/audit-log']['get']>;
+export type AuditEntry = AuditLogPage['items'][number];
 
 export type ListingStatus = BusinessDetail['listingStatus'];
 export type ClaimStatus = BusinessDetail['claimStatus'];

@@ -190,10 +190,11 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 
 ### P1-2b · Admin: businesses & branches
 `ops` · Depends on: P1-2a
-- [ ] Listings table (search, filter by city / claim status / listing status)
-- [ ] Create/edit business + branches (address with PSGC picker, map pin, contact channels, 24h/emergency flags)
-- [ ] Every write records an `audit_log` entry; audit log viewer
+- [x] Listings table (search, filter by city / claim status / listing status)
+- [x] Create/edit business + branches (address with PSGC picker, map pin, contact channels, 24h/emergency flags)
+- [x] Every write records an `audit_log` entry; audit log viewer
 
+Notes for later issues: claim status is read-only in the admin (the claim flow owns it, P1-8); there's no delete (hide instead); the audit log shows PSGC codes, not names; search doesn't ignore accents ("pena" ≠ "Peña"; `unaccent` fits P1-5a).
 
 **Done when:** you can create a full business with 2 branches by hand, and see the audit trail.
 
