@@ -22,12 +22,27 @@ function problem(status: number, detail?: string): Problem {
   };
 }
 
+/** A problem with one input field: `pointer` is a JSON Pointer into the body, e.g. "/slug". */
+export interface FieldError {
+  pointer: string;
+  message: string;
+}
+
+type HttpError = Error & { statusCode: number; fieldErrors?: FieldError[] };
+
 /**
  * An error the client should see, e.g. `throw httpError(403, 'PAW ops only.')`.
  * The error handler turns it into a problem+json response with `detail` = the message.
+ * Pass `fieldErrors` when the problem is with specific body fields (e.g. a slug that's
+ * taken), so forms can show the message next to the field, like schema validation errors.
  */
-export function httpError(status: number, detail: string): Error & { statusCode: number } {
-  return Object.assign(new Error(detail), { statusCode: status });
+export function httpError(status: number, detail: string, fieldErrors?: FieldError[]): HttpError {
+  return Object.assign(new Error(detail), { statusCode: status, fieldErrors });
+}
+
+function fieldErrorsOf(error: unknown): FieldError[] | undefined {
+  if (typeof error !== 'object' || error === null || !('fieldErrors' in error)) return undefined;
+  return Array.isArray(error.fieldErrors) ? (error.fieldErrors as FieldError[]) : undefined;
 }
 
 function sendProblem(reply: FastifyReply, body: Problem): FastifyReply {
@@ -56,7 +71,13 @@ export function errorHandler(
     request.log.error({ err: error }, 'request failed');
     return sendProblem(reply, problem(500));
   }
-  return sendProblem(reply, problem(status, error.message));
+  const fieldErrors = fieldErrorsOf(error);
+  return sendProblem(reply, {
+    ...problem(status, error.message),
+    ...(fieldErrors !== undefined && {
+      errors: fieldErrors.map((field) => ({ location: 'body', ...field })),
+    }),
+  });
 }
 
 export function notFoundHandler(request: FastifyRequest, reply: FastifyReply): FastifyReply {

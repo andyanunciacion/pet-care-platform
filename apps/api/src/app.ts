@@ -70,7 +70,7 @@ export async function buildApp({ env }: AppOptions) {
 
   await app.register(healthRoutes, { database });
   await app.register(authRoutes, { auth: app.auth, publicOrigin: env.BETTER_AUTH_URL });
-  await app.register(adminRoutes, { prefix: '/v1/admin' });
+  await app.register(adminRoutes, { prefix: '/v1/admin', database });
 
   return app;
 }

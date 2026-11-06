@@ -22,10 +22,197 @@
   },
   "Admin": {
     "title": "PAW admin",
-    "comingSoon": "Coming soon: listings, imports and review queues.",
     "signedInAs": "Signed in as {email}",
     "signOut": "Sign out",
-    "signOutFailed": "Couldn't sign out. Try again."
+    "signOutFailed": "Couldn't sign out. Try again.",
+    "navLabel": "Admin sections",
+    "nav": {
+      "listings": "Listings",
+      "auditLog": "Audit log"
+    }
+  },
+  "AdminAudit": {
+    "title": "Audit log",
+    "subtitle": "Every change made in the admin, newest first.",
+    "history": "History",
+    "fullHistory": "Full history",
+    "empty": "No changes recorded yet.",
+    "filtersLabel": "Filter the audit log",
+    "entityType": "Record type",
+    "anyEntity": "All records",
+    "entityTypes": {
+      "business": "Businesses",
+      "branch": "Branches",
+      "user": "Users"
+    },
+    "apply": "Filter",
+    "newest": "Newest",
+    "older": "Older",
+    "pagination": "Pages",
+    "filteredToBusiness": "Showing one business and its branches.",
+    "showAll": "Show all",
+    "script": "Script",
+    "by": "by {actor}",
+    "open": "Open",
+    "noValue": "—",
+    "yes": "Yes",
+    "no": "No",
+    "change": "Field changes",
+    "field": "Field",
+    "from": "Before",
+    "to": "After",
+    "actions": {
+      "business": {
+        "create": "Business created",
+        "update": "Business edited"
+      },
+      "branch": {
+        "create": "Branch added",
+        "update": "Branch edited"
+      },
+      "user": {
+        "set_platform_role": "User role changed"
+      }
+    },
+    "fields": {
+      "name": "Name",
+      "slug": "URL slug",
+      "type": "Type",
+      "description": "Description",
+      "dataSource": "Data source",
+      "claimStatus": "Claim status",
+      "listingStatus": "Listing status",
+      "businessId": "Business",
+      "addressLine": "Street address",
+      "provinceCode": "Province (PSGC)",
+      "cityCode": "City / municipality (PSGC)",
+      "barangayCode": "Barangay (PSGC)",
+      "location": "Map pin",
+      "is24h": "Open 24 hours",
+      "acceptsEmergencies": "Accepts emergencies",
+      "contacts": "Contacts",
+      "platformRole": "Platform role"
+    }
+  },
+  "Enums": {
+    "businessType": {
+      "vet_clinic": "Vet clinic"
+    },
+    "claimStatus": {
+      "unclaimed": "Unclaimed",
+      "pending": "Claim pending",
+      "verified": "Verified"
+    },
+    "listingStatus": {
+      "published": "Published",
+      "hidden": "Hidden",
+      "permanently_closed": "Permanently closed"
+    },
+    "contactType": {
+      "phone": "Phone",
+      "viber": "Viber",
+      "messenger": "Messenger",
+      "email": "Email"
+    }
+  },
+  "AdminListings": {
+    "title": "Listings",
+    "newBusiness": "New business",
+    "filtersLabel": "Filter listings",
+    "search": "Search",
+    "searchPlaceholder": "Business or branch name",
+    "city": "City / municipality",
+    "anyCity": "Any city",
+    "claimStatus": "Claim status",
+    "listingStatus": "Listing status",
+    "any": "Any",
+    "apply": "Filter",
+    "clear": "Clear filters",
+    "results": "{total, plural, =0 {No businesses} one {# business} other {# businesses}}",
+    "empty": "No businesses match these filters.",
+    "columns": {
+      "name": "Business",
+      "cities": "Cities",
+      "branches": "Branches",
+      "claim": "Claim",
+      "listing": "Listing",
+      "updated": "Updated"
+    },
+    "noBranches": "No branches yet",
+    "pagination": "Pages",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} of {pages}"
+  },
+  "AdminBusiness": {
+    "newTitle": "New business",
+    "backToListings": "All listings",
+    "branches": "Branches",
+    "addBranch": "Add branch",
+    "noBranches": "No branches yet. A business needs at least one branch (with an address and map pin) to appear on PAW.",
+    "columns": {
+      "name": "Branch",
+      "address": "Address",
+      "listing": "Listing",
+      "updated": "Updated"
+    }
+  },
+  "AdminBranch": {
+    "newTitle": "New branch",
+    "backToBusiness": "Back to {business}"
+  },
+  "AdminForms": {
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved.",
+    "create": "Create",
+    "saveFailed": "Couldn't save. Try again.",
+    "fixErrors": "Fix the highlighted fields, then save again.",
+    "optional": "optional",
+    "name": "Name",
+    "slug": "URL slug",
+    "slugHint": "Used in the page address. Lowercase letters, digits and hyphens. Changing it later breaks old links.",
+    "type": "Type",
+    "description": "Description",
+    "dataSource": "Data source",
+    "dataSourceHint": "Where this information came from, e.g. \"Clinic visit, Nov 2026\" or \"Facebook page\".",
+    "listingStatus": "Listing status",
+    "businessListingHint": "New businesses start hidden. Publish once a branch has an address, pin and contacts.",
+    "branchName": "Branch name",
+    "branchNameHint": "e.g. \"Main\" or the area, like \"Balibago\".",
+    "addressLine": "Street address",
+    "addressLineHint": "Street, building, landmark. The barangay and city come from the pickers below.",
+    "province": "Province",
+    "city": "City / municipality",
+    "barangay": "Barangay",
+    "pickProvince": "Pick a province",
+    "pickCity": "Pick a city or municipality",
+    "noBarangay": "Not set",
+    "loadingAreas": "Loading…",
+    "areasFailed": "Couldn't load the list. Pick again to retry.",
+    "location": "Map pin",
+    "locationHint": "Click the map to drop the pin, then drag it to the exact spot. Or paste coordinates from Google Maps (right-click the place → click the numbers to copy them).",
+    "pasteCoordinates": "Coordinates (latitude, longitude)",
+    "coordinatesInvalid": "Paste two numbers, latitude first, e.g. 15.1450, 120.5887.",
+    "coordinatesOutside": "That's outside the Philippines. Check that latitude comes first.",
+    "pinMissing": "Drop a pin on the map or paste coordinates.",
+    "mapLabel": "Map for placing the branch pin",
+    "mapFailed": "The map couldn't load. Paste coordinates instead.",
+    "flags": "Emergency care",
+    "is24h": "Open 24 hours",
+    "acceptsEmergencies": "Accepts emergencies",
+    "branchListingHint": "Hide or close one branch without touching the rest of the business.",
+    "contacts": "Contacts",
+    "contactsHint": "Phone numbers can be typed as clinics write them (0917 123 4567, (045) 888 1234). They're saved in international format.",
+    "contactType": "Type",
+    "contactValue": "Number, link or address",
+    "contactLabel": "Label",
+    "contactLabelPlaceholder": "e.g. Globe, Landline",
+    "addContact": "Add contact",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "remove": "Remove",
+    "noContacts": "No contacts yet."
   },
   "Login": {
     "title": "Sign in",

@@ -1,5 +1,5 @@
 import { fromNodeHeaders } from 'better-auth/node';
-import type { FastifyRequest, preHandlerAsyncHookHandler } from 'fastify';
+import type { FastifyRequest, onRequestAsyncHookHandler } from 'fastify';
 import type { Auth, PlatformRole } from './auth.ts';
 import { httpError } from './errors.ts';
 
@@ -33,15 +33,24 @@ export async function getSessionUser(
 }
 
 /**
- * A preHandler that lets a request through only for a signed-in user with this platform
- * role: 401 without a valid session, 403 with the wrong role. Authorization lives here in
- * the API (CLAUDE.md), whatever the web app shows.
+ * An onRequest hook that lets a request through only for a signed-in user with this
+ * platform role: 401 without a valid session, 403 with the wrong role. Authorization lives
+ * here in the API (CLAUDE.md), whatever the web app shows.
+ *
+ * onRequest is the first step of Fastify's request lifecycle, before the body is parsed and
+ * validated, so strangers get a 401 instead of validation details about admin routes.
  */
-export function requirePlatformRole(role: PlatformRole): preHandlerAsyncHookHandler {
+export function requirePlatformRole(role: PlatformRole): onRequestAsyncHookHandler {
   return async function (request) {
     const user = await getSessionUser(this.auth, request);
     if (user === null) throw httpError(401, 'Sign in to continue.');
     if (user.platformRole !== role) throw httpError(403, 'You do not have access to this.');
     request.sessionUser = user;
   };
+}
+
+/** The signed-in user, on routes behind requirePlatformRole(). */
+export function sessionUserOf(request: FastifyRequest): SessionUser {
+  if (request.sessionUser === null) throw new Error('route is missing requirePlatformRole()');
+  return request.sessionUser;
 }

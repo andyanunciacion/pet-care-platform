@@ -1,10 +1,11 @@
+import { SLUG_PATTERN } from '@paw/domain';
 import { sql } from 'drizzle-orm';
 import { check, pgTable, text } from 'drizzle-orm/pg-core';
 import { id, timestamps } from './columns.ts';
 import { businessType, claimStatus, listingStatus } from './enums.ts';
 
-/** URL-safe lowercase words joined by single hyphens, e.g. "paw-vet-clinic". */
-export const slugPattern = '^[a-z0-9]+(-[a-z0-9]+)*$';
+/** URL-safe lowercase words joined by single hyphens (defined in @paw/domain, shared with forms). */
+export const slugPattern = SLUG_PATTERN;
 
 /** A brand or owner. Most public data hangs off its branches (ARCHITECTURE D9). */
 export const business = pgTable(

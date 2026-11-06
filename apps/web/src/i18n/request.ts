@@ -1,3 +1,4 @@
+import { TIME_ZONE } from '@paw/domain';
 import { getRequestConfig } from 'next-intl/server';
 import { defaultLocale, type Locale } from './config';
 
@@ -11,5 +12,10 @@ const messages = {
 // way to pick the locale, not touching every page.
 export default getRequestConfig(async () => {
   const locale = defaultLocale;
-  return { locale, messages: (await messages[locale]()).default };
+  return {
+    locale,
+    messages: (await messages[locale]()).default,
+    // Dates and times always show in Manila time, wherever the server or browser runs.
+    timeZone: TIME_ZONE,
+  };
 });

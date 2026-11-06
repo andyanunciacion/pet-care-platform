@@ -81,9 +81,11 @@
 - [x] `develop` deploys to staging; `production` deploys to prod (prod can stay empty for now)
 
 **Staging settings** (they live in the dashboards, not in the repo):
-- Vercel: Root Directory `apps/web`; Node 24.x; Production Branch `production`, so `develop` gets Preview deploys; `API_URL` (Preview) = the Railway API URL, with `https://`
+- Vercel: Root Directory `apps/web`; Node 24.x; Production Branch `production`, so `develop` gets Preview deploys; `API_URL` (Preview **and** Production: the `/v1` rewrite reads it at build time) = the Railway API URL, with `https://`, no trailing slash. Staging lives at the `develop` branch alias, `https://pet-care-platform-git-develop-a-creates.vercel.app`
+- Vercel Deployment Protection (Vercel Authentication) is on for previews: only browsers logged into the Vercel team reach staging. Scripts and `curl` get a 302 to Vercel's login page unless they send the header `x-vercel-protection-bypass: <token>` (Settings → Deployment Protection → Protection Bypass for Automation; regenerate the token after use)
 - Railway service `@paw/api`: root directory = repo root (the API imports `packages/db`); build `pnpm install --frozen-lockfile`; pre-deploy `pnpm db:migrate`; start `pnpm --filter @paw/api start`; watch paths `apps/api/**`, `packages/**`
 - Railway variables: `DATABASE_URL` built from the PostGIS service's private domain (`….railway.internal`, no egress fees), `HOST=::`, `NODE_ENV=production`, `CORS_ORIGINS` = the Vercel staging URL. Auth adds more (see P1-2a)
+- One-off scripts on Railway (e.g. `promote-admin`): `railway ssh` into `@paw/api` opens a shell in `/app`, but `node` and `pnpm` aren't on its `PATH` (Railpack installs them with mise, and only the start command gets them). Find Node with `find / -maxdepth 6 -type f -name node -path '*/bin/*' 2>/dev/null`, `export PATH="<that bin folder>:$PATH"`, then run the script with `node` from its package folder (e.g. `cd /app/apps/api && node scripts/promote-admin.ts --email …`). `DATABASE_URL` is already set in that shell
 
 **Done when:** the staging URL shows the home page with a live API/DB health status.
 
@@ -178,15 +180,21 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 - Vercel: `API_URL` must now be set for every environment that builds (the `/v1` rewrite reads it at build time)
 
 **Staging follow-up** (after the settings above):
-- [ ] Sign in on staging once, then run `pnpm --filter @paw/api promote-admin --email <you>` inside the Railway API service (`railway ssh`, or the service's shell in the dashboard) and sign in again
-- [ ] Set `TRUST_PROXY_HOPS` so the rate limiter sees real client IPs. Likely `2` (Vercel, then Railway's edge), but confirm it. To check without logging any IP: (1) with the right value, 11 quick sign-in attempts from your laptop give a 429 while your phone on mobile data still gets through; (2) with too high a value, 11 attempts with a different forged `X-Forwarded-For` each never give a 429
-- [ ] Record the confirmed value here and in the Railway settings note under P0-T6
+- [x] Sign in on staging once, run `promote-admin` inside the Railway API service (see the P0-T6 note on `railway ssh`), sign in again: `/admin` works, sign-out works
+- [x] `TRUST_PROXY_HOPS=2` is set on staging (Vercel, then Railway's edge). **Not confirmed yet**: deferred to P1-12, and required before P1-8 ships (OTP sends paid SMS, so the limiter must see real client IPs). Low risk until then: staging is behind Vercel Authentication and sign-in is Google-only
+
+**Confirming `TRUST_PROXY_HOPS`** (no IPs are logged; requests need the Vercel bypass header while previews are protected):
+1. With the right value, 11 quick `POST /v1/auth/sign-in/social` calls from your laptop end in a 429, while your phone on mobile data can still start Google sign-in within that minute. If the phone is blocked too, the value is too low
+2. A minute later, 11 calls with a different forged `X-Forwarded-For` each still end in a 429. If all 11 succeed, the value is too high
+3. Record the confirmed value here and in the P0-T6 Railway settings
 
 ### P1-2b · Admin: businesses & branches
 `ops` · Depends on: P1-2a
-- [ ] Listings table (search, filter by city / claim status / listing status)
-- [ ] Create/edit business + branches (address with PSGC picker, map pin, contact channels, 24h/emergency flags)
-- [ ] Every write records an `audit_log` entry; audit log viewer
+- [x] Listings table (search, filter by city / claim status / listing status)
+- [x] Create/edit business + branches (address with PSGC picker, map pin, contact channels, 24h/emergency flags)
+- [x] Every write records an `audit_log` entry; audit log viewer
+
+Notes for later issues: claim status is read-only in the admin (the claim flow owns it, P1-8); there's no delete (hide instead); the audit log shows PSGC codes, not names; search doesn't ignore accents ("pena" ≠ "Peña"; `unaccent` fits P1-5a).
 
 **Done when:** you can create a full business with 2 branches by hand, and see the audit trail.
 
@@ -288,7 +296,7 @@ Answer the checkpoint questions in ROADMAP.md, update the PRD, DESIGN.md §6, an
 > **🛑 Validation checkpoint (P0-V6).** The issues below are drafts. Label them `blocked` and re-scope them after the checkpoint.
 
 ### P1-8 · Clinic accounts + claim flow `blocked`
-Phone/email OTP for clinic users, `business_member`, phone verification of the listed number, PRC number + permit upload (private R2 bucket, signed URLs), admin claims queue, verified badge.
+Phone/email OTP for clinic users, `business_member`, phone verification of the listed number, PRC number + permit upload (private R2 bucket, signed URLs), admin claims queue, verified badge. Before it ships: confirm `TRUST_PROXY_HOPS` (see P1-2a) and add OTP rate limits per phone and per IP.
 
 ### P1-9 · Clinic dashboard `blocked`
 Mobile-first `/dashboard`: overview (with "Confirm hours" and "Closed today" buttons), profile, branches, hours editor (reuses P1-2c), services, products, photos, correction reports.
@@ -301,4 +309,4 @@ Monthly report to claimed clinics (content decided at the checkpoint).
 
 ### P1-12 · Launch hardening
 `infra` · Depends on: everything above
-Privacy/terms pages, rate-limit review, backups + a tested restore, Playwright end-to-end tests for the critical flows, a performance pass on a real mid-range Android, production deploy.
+Privacy/terms pages, rate-limit review (including `TRUST_PROXY_HOPS` on the production proxy chain, see P1-2a), backups + a tested restore, Playwright end-to-end tests for the critical flows, a performance pass on a real mid-range Android, production deploy.

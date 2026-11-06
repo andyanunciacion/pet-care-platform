@@ -18,6 +18,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@paw/domain": "workspace:*",
     "drizzle-orm": "catalog:",
     "pg": "catalog:",
     "zod": "catalog:"
