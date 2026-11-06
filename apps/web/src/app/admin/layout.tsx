@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { SignOutButton } from '@/components/sign-out-button';
@@ -19,7 +20,14 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <>
       <header className="border-b">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-6">
-          <Wordmark />
+          <div className="flex items-center gap-6">
+            <Wordmark />
+            <nav aria-label={t('navLabel')} className="flex gap-4 text-sm font-medium">
+              <Link href="/admin/businesses" className="hover:text-primary">
+                {t('nav.listings')}
+              </Link>
+            </nav>
+          </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span>{t('signedInAs', { email: admin.email })}</span>
             <SignOutButton label={t('signOut')} errorLabel={t('signOutFailed')} />

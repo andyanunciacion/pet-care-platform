@@ -5,7 +5,7 @@ import { apiRewrites } from './src/lib/rewrites';
 
 const nextConfig: NextConfig = {
   // Workspace packages ship TypeScript source; Next.js compiles them with the app.
-  transpilePackages: ['@paw/api-client'],
+  transpilePackages: ['@paw/api-client', '@paw/domain'],
   // Read when the server starts (and at build time), so API_URL must be set for builds too.
   rewrites: () => Promise.resolve(apiRewrites(serverEnv().API_URL)),
 };
