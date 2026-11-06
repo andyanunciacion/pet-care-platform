@@ -104,6 +104,702 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/businesses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search and filter businesses (the listings table) */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                    cityCode?: string;
+                    claimStatus?: "unclaimed" | "pending" | "verified";
+                    listingStatus?: "published" | "hidden" | "permanently_closed";
+                    page?: number;
+                    pageSize?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            items: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                slug: string;
+                                /** @enum {string} */
+                                type: "vet_clinic";
+                                /** @enum {string} */
+                                claimStatus: "unclaimed" | "pending" | "verified";
+                                /** @enum {string} */
+                                listingStatus: "published" | "hidden" | "permanently_closed";
+                                /** Format: date-time */
+                                updatedAt: string;
+                                branchCount: number;
+                                cities: {
+                                    code: string;
+                                    name: string;
+                                }[];
+                            }[];
+                            total: number;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Create a business (starts hidden) */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name: string;
+                        slug: string;
+                        /** @default null */
+                        description?: string | null;
+                        /** @default null */
+                        dataSource?: string | null;
+                        /**
+                         * @default hidden
+                         * @enum {string}
+                         */
+                        listingStatus?: "published" | "hidden" | "permanently_closed";
+                        /** @enum {string} */
+                        type: "vet_clinic";
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            slug: string;
+                            /** @enum {string} */
+                            type: "vet_clinic";
+                            description: string | null;
+                            /** @enum {string} */
+                            claimStatus: "unclaimed" | "pending" | "verified";
+                            /** @enum {string} */
+                            listingStatus: "published" | "hidden" | "permanently_closed";
+                            dataSource: string | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/businesses/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A business with its branches */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            slug: string;
+                            /** @enum {string} */
+                            type: "vet_clinic";
+                            description: string | null;
+                            /** @enum {string} */
+                            claimStatus: "unclaimed" | "pending" | "verified";
+                            /** @enum {string} */
+                            listingStatus: "published" | "hidden" | "permanently_closed";
+                            dataSource: string | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                            branches: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                slug: string;
+                                addressLine: string;
+                                city: {
+                                    code: string;
+                                    name: string;
+                                };
+                                /** @enum {string} */
+                                listingStatus: "published" | "hidden" | "permanently_closed";
+                                /** Format: date-time */
+                                updatedAt: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Edit a business (only the fields sent change) */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name?: string;
+                        slug?: string;
+                        description?: string | null;
+                        dataSource?: string | null;
+                        /** @enum {string} */
+                        listingStatus?: "published" | "hidden" | "permanently_closed";
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            name: string;
+                            slug: string;
+                            /** @enum {string} */
+                            type: "vet_clinic";
+                            description: string | null;
+                            /** @enum {string} */
+                            claimStatus: "unclaimed" | "pending" | "verified";
+                            /** @enum {string} */
+                            listingStatus: "published" | "hidden" | "permanently_closed";
+                            dataSource: string | null;
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/v1/admin/businesses/{id}/branches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add a branch to a business */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name: string;
+                        slug: string;
+                        addressLine: string;
+                        provinceCode: string;
+                        cityCode: string;
+                        /** @default null */
+                        barangayCode?: string | null;
+                        location: {
+                            lng: number;
+                            lat: number;
+                        };
+                        /** @default false */
+                        is24h?: boolean;
+                        /** @default false */
+                        acceptsEmergencies?: boolean;
+                        /**
+                         * @default published
+                         * @enum {string}
+                         */
+                        listingStatus?: "published" | "hidden" | "permanently_closed";
+                        /** @default [] */
+                        contacts?: ({
+                            /** @enum {string} */
+                            type: "phone";
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        } | {
+                            /** @enum {string} */
+                            type: "viber";
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        } | {
+                            /** @enum {string} */
+                            type: "messenger";
+                            /** Format: uri */
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        } | {
+                            /** @enum {string} */
+                            type: "email";
+                            /** Format: email */
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        })[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            business: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                slug: string;
+                                /** @enum {string} */
+                                type: "vet_clinic";
+                            };
+                            name: string;
+                            slug: string;
+                            addressLine: string;
+                            province: {
+                                code: string;
+                                name: string;
+                            };
+                            city: {
+                                code: string;
+                                name: string;
+                            };
+                            barangay: {
+                                code: string;
+                                name: string;
+                            } | null;
+                            location: {
+                                lng: number;
+                                lat: number;
+                            };
+                            is24h: boolean;
+                            acceptsEmergencies: boolean;
+                            /** @enum {string} */
+                            listingStatus: "published" | "hidden" | "permanently_closed";
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                            contacts: {
+                                /** Format: uuid */
+                                id: string;
+                                /** @enum {string} */
+                                type: "phone" | "messenger" | "viber" | "email";
+                                value: string;
+                                label: string | null;
+                            }[];
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/branches/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A branch with its contacts and address areas */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            business: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                slug: string;
+                                /** @enum {string} */
+                                type: "vet_clinic";
+                            };
+                            name: string;
+                            slug: string;
+                            addressLine: string;
+                            province: {
+                                code: string;
+                                name: string;
+                            };
+                            city: {
+                                code: string;
+                                name: string;
+                            };
+                            barangay: {
+                                code: string;
+                                name: string;
+                            } | null;
+                            location: {
+                                lng: number;
+                                lat: number;
+                            };
+                            is24h: boolean;
+                            acceptsEmergencies: boolean;
+                            /** @enum {string} */
+                            listingStatus: "published" | "hidden" | "permanently_closed";
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                            contacts: {
+                                /** Format: uuid */
+                                id: string;
+                                /** @enum {string} */
+                                type: "phone" | "messenger" | "viber" | "email";
+                                value: string;
+                                label: string | null;
+                            }[];
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Edit a branch (only the fields sent change; contacts replace the list) */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name?: string;
+                        slug?: string;
+                        addressLine?: string;
+                        provinceCode?: string;
+                        cityCode?: string;
+                        barangayCode?: string | null;
+                        location?: {
+                            lng: number;
+                            lat: number;
+                        };
+                        is24h?: boolean;
+                        acceptsEmergencies?: boolean;
+                        /** @enum {string} */
+                        listingStatus?: "published" | "hidden" | "permanently_closed";
+                        contacts?: ({
+                            /** @enum {string} */
+                            type: "phone";
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        } | {
+                            /** @enum {string} */
+                            type: "viber";
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        } | {
+                            /** @enum {string} */
+                            type: "messenger";
+                            /** Format: uri */
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        } | {
+                            /** @enum {string} */
+                            type: "email";
+                            /** Format: email */
+                            value: string;
+                            /** @default null */
+                            label?: string | null;
+                        })[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            business: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                slug: string;
+                                /** @enum {string} */
+                                type: "vet_clinic";
+                            };
+                            name: string;
+                            slug: string;
+                            addressLine: string;
+                            province: {
+                                code: string;
+                                name: string;
+                            };
+                            city: {
+                                code: string;
+                                name: string;
+                            };
+                            barangay: {
+                                code: string;
+                                name: string;
+                            } | null;
+                            location: {
+                                lng: number;
+                                lat: number;
+                            };
+                            is24h: boolean;
+                            acceptsEmergencies: boolean;
+                            /** @enum {string} */
+                            listingStatus: "published" | "hidden" | "permanently_closed";
+                            /** Format: date-time */
+                            hoursConfirmedAt: string | null;
+                            /** @enum {string|null} */
+                            hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                            contacts: {
+                                /** Format: uuid */
+                                id: string;
+                                /** @enum {string} */
+                                type: "phone" | "messenger" | "viber" | "email";
+                                value: string;
+                                label: string | null;
+                            }[];
+                            /** Format: date-time */
+                            createdAt: string;
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/v1/admin/psgc-areas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** PSGC areas under a parent (provinces when no parent is given) */
+        get: {
+            parameters: {
+                query?: {
+                    parentCode?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            code: string;
+                            name: string;
+                            /** @enum {string} */
+                            level: "province" | "city" | "municipality" | "barangay";
+                        }[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/audit-log": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Audit log entries, newest first */
+        get: {
+            parameters: {
+                query?: {
+                    entityType?: string;
+                    entityId?: string;
+                    businessId?: string;
+                    before?: string;
+                    limit?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            items: {
+                                /** Format: uuid */
+                                id: string;
+                                action: string;
+                                entityType: string;
+                                /** Format: uuid */
+                                entityId: string;
+                                diff: {
+                                    [key: string]: {
+                                        from: unknown;
+                                        to: unknown;
+                                    };
+                                } | null;
+                                actor: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    name: string;
+                                    email: string;
+                                } | null;
+                                /** Format: date-time */
+                                createdAt: string;
+                            }[];
+                            /** Format: uuid */
+                            nextBefore: string | null;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {

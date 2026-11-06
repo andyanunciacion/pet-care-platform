@@ -79,3 +79,53 @@ describe('/v1/admin/* (super admins only)', () => {
     expect(app.swagger().paths?.['/v1/admin/me']?.get?.responses).toHaveProperty('200');
   });
 });
+
+describe('every /v1/admin route', () => {
+  // Every admin route in the spec, e.g. ["PATCH", "/v1/admin/branches/<uuid>"]. A route
+  // registered outside the admin plugin (and so unguarded) would fail these tests.
+  const adminRoutes = () =>
+    Object.entries(app.swagger().paths ?? {})
+      .filter(([path]) => path.startsWith('/v1/admin/'))
+      .flatMap(([path, item]) =>
+        ['get', 'post', 'patch', 'put', 'delete']
+          .filter((method) => item !== undefined && method in item)
+          .map((method) => ({
+            method: method.toUpperCase() as 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE',
+            url: path.replace(/\{[^}]+\}/g, crypto.randomUUID()),
+          })),
+      );
+
+  const call = (route: ReturnType<typeof adminRoutes>[number], cookie?: string) =>
+    app.inject({
+      ...route,
+      headers: {
+        ...(cookie !== undefined && { cookie }),
+        ...(route.method !== 'GET' && { 'content-type': 'application/json' }),
+      },
+      ...(route.method !== 'GET' && { payload: '{}' }),
+    });
+
+  it('covers the routes this test expects to find', () => {
+    expect(adminRoutes().length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('answers 401 when signed out, before validating the request', async () => {
+    for (const route of adminRoutes()) {
+      expect({ ...route, status: (await call(route)).statusCode }).toEqual({
+        ...route,
+        status: 401,
+      });
+    }
+  });
+
+  it('answers 403 for a signed-in user who is not a super admin', async () => {
+    const user = await insertTestUser(database.db);
+    const cookie = await sessionCookie(app, user.id);
+    for (const route of adminRoutes()) {
+      expect({ ...route, status: (await call(route, cookie)).statusCode }).toEqual({
+        ...route,
+        status: 403,
+      });
+    }
+  });
+});

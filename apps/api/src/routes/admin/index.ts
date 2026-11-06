@@ -1,7 +1,11 @@
+import type { Database } from '@paw/db';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { PLATFORM_ROLES } from '../../auth.ts';
-import { requirePlatformRole } from '../../authz.ts';
+import { requirePlatformRole, sessionUserOf } from '../../authz.ts';
+import { adminBranchRoutes } from './branches.ts';
+import { adminBusinessRoutes } from './businesses.ts';
+import { adminReferenceRoutes } from './reference.ts';
 
 const AdminMeSchema = z.object({
   id: z.uuid(),
@@ -12,11 +16,15 @@ const AdminMeSchema = z.object({
 
 /**
  * PAW ops routes (/v1/admin/*). The hook below runs before EVERY route registered in this
- * plugin, so a new admin route is protected without remembering to add a check (Fastify
- * encapsulation: hooks added inside a plugin apply only to that plugin's routes).
+ * plugin, including the child plugins registered after it (Fastify encapsulation: hooks
+ * added inside a plugin apply to that plugin and its children, never to its siblings), so a
+ * new admin route is protected without remembering to add a check.
  */
-export const adminRoutes: FastifyPluginAsyncZod = async (app) => {
-  app.addHook('preHandler', requirePlatformRole('super_admin'));
+export const adminRoutes: FastifyPluginAsyncZod<{ database: Database }> = async (
+  app,
+  { database },
+) => {
+  app.addHook('onRequest', requirePlatformRole('super_admin'));
 
   app.get(
     '/me',
@@ -27,10 +35,10 @@ export const adminRoutes: FastifyPluginAsyncZod = async (app) => {
         response: { 200: AdminMeSchema },
       },
     },
-    (request) => {
-      // The preHandler above guarantees a super admin here.
-      if (request.sessionUser === null) throw new Error('admin route without a session user');
-      return request.sessionUser;
-    },
+    (request) => sessionUserOf(request),
   );
+
+  await app.register(adminBusinessRoutes, { database });
+  await app.register(adminBranchRoutes, { database });
+  await app.register(adminReferenceRoutes, { database });
 };

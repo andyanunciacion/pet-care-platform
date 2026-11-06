@@ -8,9 +8,12 @@ export const testArea = {
   province: '9900000000',
   city: '9900100000',
   barangay: '9900100001',
+  /** A second municipality in the same province, for "barangay not in this city" tests. */
+  otherCity: '9900200000',
+  otherBarangay: '9900200001',
 } as const;
 
-/** Inserts the fake province → city → barangay (safe to call from every test file). */
+/** Inserts the fake province → cities → barangays (safe to call from every test file). */
 export async function insertTestAreas(db: Db): Promise<void> {
   await db
     .insert(psgcArea)
@@ -22,6 +25,18 @@ export async function insertTestAreas(db: Db): Promise<void> {
         name: 'Test Barangay',
         level: 'barangay',
         parentCode: testArea.city,
+      },
+      {
+        code: testArea.otherCity,
+        name: 'Other Test Town',
+        level: 'municipality',
+        parentCode: testArea.province,
+      },
+      {
+        code: testArea.otherBarangay,
+        name: 'Other Test Barangay',
+        level: 'barangay',
+        parentCode: testArea.otherCity,
       },
     ])
     .onConflictDoNothing();
