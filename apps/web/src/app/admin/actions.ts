@@ -13,12 +13,17 @@ import { z } from 'zod';
 import { adminApi } from '@/lib/admin-api';
 import { requireAdmin } from '@/lib/admin-session';
 import type {
+  CopyServiceResult,
   CreateBranchBody,
   CreateBusinessBody,
+  CreateProductBody,
+  CreateServiceBody,
   ReplaceHoursBody,
   SetHoursExceptionBody,
   UpdateBranchBody,
   UpdateBusinessBody,
+  UpdateProductBody,
+  UpdateServiceBody,
 } from '@/lib/admin-types';
 import { formStateFromProblem, savedForm, type FormState } from '@/lib/form-errors';
 
@@ -181,6 +186,148 @@ export async function confirmHoursAction(branchId: string): Promise<FormState> {
     params: { path: { id } },
   });
   if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+// ── Services and species treated (ARCHITECTURE D36, D37) ────────────────────────────────
+// Deletes answer 204 No Content, so they check `response.ok` instead of `data`.
+
+export async function setSpeciesTreatedAction(
+  branchId: string,
+  speciesIds: string[],
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(branchId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.PUT('/v1/admin/branches/{id}/species', {
+    params: { path: { id } },
+    body: { speciesIds },
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function createServiceAction(
+  branchId: string,
+  body: CreateServiceBody,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(branchId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.POST('/v1/admin/branches/{id}/services', {
+    params: { path: { id } },
+    body,
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function updateServiceAction(
+  serviceId: string,
+  body: UpdateServiceBody,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(serviceId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.PATCH('/v1/admin/services/{id}', {
+    params: { path: { id } },
+    body,
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function deleteServiceAction(serviceId: string): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(serviceId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { error, response } = await api.DELETE('/v1/admin/services/{id}', {
+    params: { path: { id } },
+  });
+  if (!response.ok) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+/** With `dryRun`, only reports which branches would get the service added or updated. */
+export async function copyServiceAction(
+  serviceId: string,
+  dryRun: boolean,
+): Promise<{ state: FormState; result: CopyServiceResult | null }> {
+  await requireAdmin();
+  const id = await checkedId(serviceId);
+  if (typeof id !== 'string') return { state: id, result: null };
+
+  const api = await adminApi();
+  const { data, error } = await api.POST('/v1/admin/services/{id}/copy-to-branches', {
+    params: { path: { id } },
+    body: { dryRun },
+  });
+  if (data === undefined) return { state: await failed(error), result: null };
+  if (!dryRun) refresh();
+  return { state: savedForm, result: data };
+}
+
+// ── Products ────────────────────────────────────────────────────────────────────────────
+
+export async function createProductAction(
+  businessId: string,
+  body: CreateProductBody,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(businessId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.POST('/v1/admin/businesses/{id}/products', {
+    params: { path: { id } },
+    body,
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function updateProductAction(
+  productId: string,
+  body: UpdateProductBody,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(productId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.PATCH('/v1/admin/products/{id}', {
+    params: { path: { id } },
+    body,
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function deleteProductAction(productId: string): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(productId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { error, response } = await api.DELETE('/v1/admin/products/{id}', {
+    params: { path: { id } },
+  });
+  if (!response.ok) return failed(error);
   refresh();
   return savedForm;
 }

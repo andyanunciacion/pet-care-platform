@@ -1005,6 +1005,561 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/branches/{id}/services": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A branch's services, the species it treats and the business's other branches */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            branchId: string;
+                            /** Format: uuid */
+                            businessId: string;
+                            otherBranches: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                            }[];
+                            speciesTreated: string[];
+                            services: {
+                                /** Format: uuid */
+                                id: string;
+                                /** Format: uuid */
+                                branchId: string;
+                                category: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    name: string;
+                                    groupName: string | null;
+                                };
+                                name: string;
+                                description: string | null;
+                                priceMin: number | null;
+                                priceMax: number | null;
+                                /** @enum {string} */
+                                priceUnit: "per_visit" | "per_session" | "per_night" | "per_day";
+                                priceNote: string | null;
+                                speciesIds: string[];
+                                /** Format: date-time */
+                                updatedAt: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Add a service to a branch */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        categoryId: string;
+                        name: string;
+                        /** @default null */
+                        description?: string | null;
+                        /** @default null */
+                        priceMin?: number | null;
+                        /** @default null */
+                        priceMax?: number | null;
+                        /**
+                         * @default per_visit
+                         * @enum {string}
+                         */
+                        priceUnit?: "per_visit" | "per_session" | "per_night" | "per_day";
+                        /** @default null */
+                        priceNote?: string | null;
+                        /** @default [] */
+                        speciesIds?: string[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            branchId: string;
+                            category: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                groupName: string | null;
+                            };
+                            name: string;
+                            description: string | null;
+                            priceMin: number | null;
+                            priceMax: number | null;
+                            /** @enum {string} */
+                            priceUnit: "per_visit" | "per_session" | "per_night" | "per_day";
+                            priceNote: string | null;
+                            speciesIds: string[];
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/branches/{id}/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Replace the species a branch treats */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        speciesIds: string[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            branchId: string;
+                            /** Format: uuid */
+                            businessId: string;
+                            otherBranches: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                            }[];
+                            speciesTreated: string[];
+                            services: {
+                                /** Format: uuid */
+                                id: string;
+                                /** Format: uuid */
+                                branchId: string;
+                                category: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    name: string;
+                                    groupName: string | null;
+                                };
+                                name: string;
+                                description: string | null;
+                                priceMin: number | null;
+                                priceMax: number | null;
+                                /** @enum {string} */
+                                priceUnit: "per_visit" | "per_session" | "per_night" | "per_day";
+                                priceNote: string | null;
+                                speciesIds: string[];
+                                /** Format: date-time */
+                                updatedAt: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/services/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove a service */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": null;
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        /** Edit a service (only the fields sent change; speciesIds replaces the list) */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        categoryId?: string;
+                        name?: string;
+                        description?: string | null;
+                        priceMin?: number | null;
+                        priceMax?: number | null;
+                        /** @enum {string} */
+                        priceUnit?: "per_visit" | "per_session" | "per_night" | "per_day";
+                        priceNote?: string | null;
+                        speciesIds?: string[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            branchId: string;
+                            category: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                groupName: string | null;
+                            };
+                            name: string;
+                            description: string | null;
+                            priceMin: number | null;
+                            priceMax: number | null;
+                            /** @enum {string} */
+                            priceUnit: "per_visit" | "per_session" | "per_night" | "per_day";
+                            priceNote: string | null;
+                            speciesIds: string[];
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
+    "/v1/admin/services/{id}/copy-to-branches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Copy a service to the business's other branches, overwriting a same-named one in the same category */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        dryRun: boolean;
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            dryRun: boolean;
+                            added: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                speciesAdded: string[];
+                            }[];
+                            updated: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                speciesAdded: string[];
+                            }[];
+                            unchanged: {
+                                /** Format: uuid */
+                                id: string;
+                                name: string;
+                                speciesAdded: string[];
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/businesses/{id}/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A business's products, by category then name */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            businessId: string;
+                            name: string;
+                            category: string | null;
+                            price: number | null;
+                            /** @enum {string} */
+                            availability: "available" | "limited" | "out";
+                            /** Format: date-time */
+                            updatedAt: string;
+                        }[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** Add a product to a business */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name: string;
+                        /** @default null */
+                        category?: string | null;
+                        /** @default null */
+                        price?: number | null;
+                        /**
+                         * @default available
+                         * @enum {string}
+                         */
+                        availability?: "available" | "limited" | "out";
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            businessId: string;
+                            name: string;
+                            category: string | null;
+                            price: number | null;
+                            /** @enum {string} */
+                            availability: "available" | "limited" | "out";
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/products/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove a product */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": null;
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        /** Edit a product (only the fields sent change) */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name?: string;
+                        category?: string | null;
+                        price?: number | null;
+                        /** @enum {string} */
+                        availability?: "available" | "limited" | "out";
+                    };
+                };
+            };
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            id: string;
+                            /** Format: uuid */
+                            businessId: string;
+                            name: string;
+                            category: string | null;
+                            price: number | null;
+                            /** @enum {string} */
+                            availability: "available" | "limited" | "out";
+                            /** Format: date-time */
+                            updatedAt: string;
+                        };
+                    };
+                };
+            };
+        };
+        trace?: never;
+    };
     "/v1/admin/psgc-areas": {
         parameters: {
             query?: never;
@@ -1036,6 +1591,61 @@ export interface paths {
                             /** @enum {string} */
                             level: "province" | "city" | "municipality" | "barangay";
                         }[];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/taxonomy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Species and service categories (groups with their subcategories) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            species: {
+                                /** Format: uuid */
+                                id: string;
+                                code: string;
+                                name: string;
+                            }[];
+                            categories: {
+                                /** Format: uuid */
+                                id: string;
+                                code: string;
+                                name: string;
+                                children: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    code: string;
+                                    name: string;
+                                }[];
+                            }[];
+                        };
                     };
                 };
             };

@@ -218,10 +218,16 @@ Notes for later issues: the editor lives on the branch's Hours tab (`/admin/busi
 
 ### P1-2d · Admin: services, products & photos
 `ops` · Depends on: P1-2b
-- [ ] Account (by you): Cloudflare; R2 public bucket (location hint: Asia-Pacific) for photos (the private claim-documents bucket waits for P1-8)
-- [ ] Branch services (category, species, price range + unit, notes), with "copy to all branches"
-- [ ] Products (name, price, availability, image)
+Shipped as two PRs: services, species treated and products first (no images), then everything on R2.
+- [ ] Account (by you): Cloudflare; R2 public bucket (location hint: Asia-Pacific) for photos (the private claim-documents bucket waits for P1-8). Also a separate dev bucket for local work
+- [x] Species treated per branch (`branch_species`), on the branch's Services tab
+- [x] Branch services (category, species, price range + unit, notes), with "copy to all branches" (overwrites a same-named service in the same category, after a dry run, and adds the service's species to each branch's species treated; ARCHITECTURE D37)
+- [x] Products (name, category, price, availability), on the business page
+- [ ] Product image (one per product)
+- [ ] Business logo (one per business)
 - [ ] Photo upload to Cloudflare R2 via presigned URLs; required alt text; ordering
+
+Notes for later issues: services and products are audited on their parent branch or business (D36). `lib/price-format.ts` + `lib/price-labels.ts` turn prices into the UX10 labels and are meant for reuse by P1-4. Services only use subcategories (the API rejects a top-level group). Services have no reorder yet: they're listed by category, then in the order they were added.
 
 **Done when:** a listing can be fully filled in from the admin, including photos.
 

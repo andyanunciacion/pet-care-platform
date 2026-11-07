@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { cn } from '@/lib/utils';
 
-const TABS = ['details', 'hours'] as const;
+const TABS = ['details', 'hours', 'services'] as const;
 type Tab = (typeof TABS)[number];
 
-/** "Details | Hours" links between a branch's admin pages. P1-2d adds Services and Photos. */
+/** "Details | Hours | Services" links between a branch's admin pages. Photos come next. */
 export async function BranchTabs({
   businessId,
   branchId,
@@ -20,6 +20,7 @@ export async function BranchTabs({
   const tabs = {
     details: { href: base, label: t('tabDetails') },
     hours: { href: `${base}/hours`, label: t('tabHours') },
+    services: { href: `${base}/services`, label: t('tabServices') },
   } satisfies Record<Tab, { href: string; label: string }>;
 
   return (

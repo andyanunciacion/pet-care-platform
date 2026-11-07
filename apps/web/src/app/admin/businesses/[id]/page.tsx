@@ -5,6 +5,7 @@ import { cache } from 'react';
 import { AuditTrail } from '@/components/admin/audit-trail';
 import { BusinessForm } from '@/components/admin/business-form';
 import { AdminFormMessages } from '@/components/admin/form-messages';
+import { ProductsEditor } from '@/components/admin/products-editor';
 import { ListingStatusBadge } from '@/components/admin/status-badges';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,11 +40,14 @@ export default async function BusinessPage({ params }: Props) {
   await requireAdmin();
   const business = await getBusiness((await params).id);
   const api = await adminApi();
-  const [t, tAudit, tEnums, format, history] = await Promise.all([
+  const [t, tAudit, tEnums, format, products, history] = await Promise.all([
     getTranslations('AdminBusiness'),
     getTranslations('AdminAudit'),
     getTranslations('Enums'),
     getFormatter(),
+    api
+      .GET('/v1/admin/businesses/{id}/products', { params: { path: { id: business.id } } })
+      .then(dataOrThrow),
     // The business and all its branches, newest first.
     api
       .GET('/v1/admin/audit-log', { params: { query: { businessId: business.id, limit: 10 } } })
@@ -115,6 +119,10 @@ export default async function BusinessPage({ params }: Props) {
           </Table>
         )}
       </section>
+
+      <AdminFormMessages extra={['AdminProducts', 'Prices']}>
+        <ProductsEditor businessId={business.id} products={products} />
+      </AdminFormMessages>
 
       <section aria-labelledby="history" className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-4">

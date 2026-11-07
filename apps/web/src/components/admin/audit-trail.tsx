@@ -5,21 +5,32 @@ import {
   CONTACT_TYPES,
   HOURS_CONFIRMED_BY,
   LISTING_STATUSES,
+  PRODUCT_AVAILABILITIES,
   type AuditEntry,
 } from '@/lib/admin-types';
 import { auditValueLines, type AuditValueLabels } from '@/lib/audit-format';
 import { weekdayLabel } from '@/lib/hours-format';
+import { servicePriceLabel } from '@/lib/price-format';
+import { priceLabels } from '@/lib/price-labels';
 
 // Labels exist for these; anything newer is shown as stored (e.g. "claim.approve").
 const ACTIONS = [
   'business.create',
   'business.update',
+  'business.create_product',
+  'business.update_product',
+  'business.delete_product',
   'branch.create',
   'branch.update',
   'branch.update_hours',
   'branch.set_hours_exception',
   'branch.delete_hours_exception',
   'branch.confirm_hours',
+  'branch.update_species',
+  'branch.create_service',
+  'branch.update_service',
+  'branch.delete_service',
+  'branch.copy_service',
   'user.set_platform_role',
 ] as const;
 const FIELDS = [
@@ -43,6 +54,9 @@ const FIELDS = [
   'hoursException',
   'hoursConfirmedAt',
   'hoursConfirmedBy',
+  'speciesTreated',
+  'service',
+  'product',
   'platformRole',
 ] as const;
 
@@ -64,12 +78,14 @@ function entityHref(entry: AuditEntry): string | undefined {
 
 /** A list of audit entries with their field-by-field changes. */
 export async function AuditTrail({ entries }: { entries: AuditEntry[] }) {
-  const [t, tEnums, format, locale] = await Promise.all([
+  const [t, tEnums, tPrices, format, locale] = await Promise.all([
     getTranslations('AdminAudit'),
     getTranslations('Enums'),
+    getTranslations('Prices'),
     getFormatter(),
     getLocale(),
   ]);
+  const prices = priceLabels(tPrices);
 
   if (entries.length === 0) {
     return (
@@ -97,8 +113,13 @@ export async function AuditTrail({ entries }: { entries: AuditEntry[] }) {
         return tEnums(`claimStatus.${value}`);
       }
       if (field === 'type' && value === 'vet_clinic') return tEnums('businessType.vet_clinic');
+      if (field === 'product' && isOneOf(PRODUCT_AVAILABILITIES, value)) {
+        return tEnums(`productAvailability.${value}`);
+      }
       return undefined;
     },
+    servicePrice: (price) => servicePriceLabel(price, prices),
+    productPrice: prices.productPrice,
   });
 
   return (

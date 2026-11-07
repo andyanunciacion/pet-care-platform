@@ -154,8 +154,11 @@ async function weeklyRows(db: Pick<Db, 'select'>, branchId: string): Promise<Wee
   return rows.map((row) => ({ ...row, opensAt: hhmm(row.opensAt), closesAt: hhmm(row.closesAt) }));
 }
 
-/** Locks the branch row (a concurrent save waits, so audit "from" values are accurate). */
-async function lockBranch(tx: Tx, branchId: string) {
+/**
+ * Locks the branch row (a concurrent save waits, so audit "from" values are accurate). Writes
+ * to a branch's child rows (hours, services, species) lock it too, so they queue up per branch.
+ */
+export async function lockBranch(tx: Tx, branchId: string) {
   const [row] = await tx
     .select({ branch, businessType: business.type })
     .from(branch)

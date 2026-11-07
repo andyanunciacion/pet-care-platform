@@ -30,6 +30,23 @@ export type SetHoursExceptionBody = JsonBody<
 >;
 export type HoursConfirmedBy = NonNullable<BranchHours['hoursConfirmedBy']>;
 
+export type Taxonomy = Ok<paths['/v1/admin/taxonomy']['get']>;
+export type BranchServices = Ok<paths['/v1/admin/branches/{id}/services']['get']>;
+export type BranchService = BranchServices['services'][number];
+export type CreateServiceBody = JsonBody<
+  paths['/v1/admin/branches/{id}/services']['post']['requestBody']
+>;
+export type UpdateServiceBody = JsonBody<paths['/v1/admin/services/{id}']['patch']['requestBody']>;
+export type CopyServiceResult = Ok<paths['/v1/admin/services/{id}/copy-to-branches']['post']>;
+export type PriceUnit = BranchService['priceUnit'];
+
+export type Product = Ok<paths['/v1/admin/businesses/{id}/products']['get']>[number];
+export type CreateProductBody = JsonBody<
+  paths['/v1/admin/businesses/{id}/products']['post']['requestBody']
+>;
+export type UpdateProductBody = JsonBody<paths['/v1/admin/products/{id}']['patch']['requestBody']>;
+export type ProductAvailability = Product['availability'];
+
 export type PsgcArea = Ok<paths['/v1/admin/psgc-areas']['get']>[number];
 export type AuditLogPage = Ok<paths['/v1/admin/audit-log']['get']>;
 export type AuditEntry = AuditLogPage['items'][number];
@@ -61,3 +78,14 @@ export const CONTACT_TYPES = [
   'messenger',
   'email',
 ] as const satisfies readonly ContactType[];
+export const PRICE_UNITS = [
+  'per_visit',
+  'per_session',
+  'per_night',
+  'per_day',
+] as const satisfies readonly PriceUnit[];
+export const PRODUCT_AVAILABILITIES = [
+  'available',
+  'limited',
+  'out',
+] as const satisfies readonly ProductAvailability[];
