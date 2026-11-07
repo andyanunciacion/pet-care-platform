@@ -65,7 +65,10 @@
     "actions": {
       "business": {
         "create": "Business created",
-        "update": "Business edited"
+        "update": "Business edited",
+        "create_product": "Product added",
+        "update_product": "Product edited",
+        "delete_product": "Product removed"
       },
       "branch": {
         "create": "Branch added",
@@ -73,7 +76,12 @@
         "update_hours": "Hours edited",
         "set_hours_exception": "Hours exception set",
         "delete_hours_exception": "Hours exception removed",
-        "confirm_hours": "Hours confirmed"
+        "confirm_hours": "Hours confirmed",
+        "update_species": "Species treated edited",
+        "create_service": "Service added",
+        "update_service": "Service edited",
+        "delete_service": "Service removed",
+        "copy_service": "Service copied from another branch"
       },
       "user": {
         "set_platform_role": "User role changed"
@@ -100,6 +108,9 @@
       "hoursException": "Exception",
       "hoursConfirmedAt": "Hours confirmed at",
       "hoursConfirmedBy": "Hours confirmed by",
+      "speciesTreated": "Species treated",
+      "service": "Service",
+      "product": "Product",
       "platformRole": "Platform role"
     }
   },
@@ -127,6 +138,29 @@
       "clinic": "The clinic",
       "paw_ops": "PAW",
       "report": "A report"
+    },
+    "priceUnit": {
+      "per_visit": "Per visit",
+      "per_session": "Per session",
+      "per_night": "Per night",
+      "per_day": "Per day"
+    },
+    "productAvailability": {
+      "available": "Available",
+      "limited": "Limited stock",
+      "out": "Out of stock"
+    }
+  },
+  "Prices": {
+    "amount": "₱{amount}",
+    "range": "₱{min}–₱{max}",
+    "from": "From ₱{min}",
+    "callForPrice": "Call for price",
+    "askForPrice": "Ask for price",
+    "unitSuffix": {
+      "per_session": "/session",
+      "per_night": "/night",
+      "per_day": "/day"
     }
   },
   "Hours": {
@@ -153,6 +187,7 @@
     "tabsLabel": "Branch sections",
     "tabDetails": "Details",
     "tabHours": "Hours",
+    "tabServices": "Services",
     "weeklyTitle": "Weekly hours",
     "weeklyHint": "Manila time. Add a second interval for a lunch break. A closing time earlier than the opening time runs past midnight into the next day.",
     "is24h": "Open 24 hours",
@@ -205,6 +240,71 @@
     "confirmHint": "Press after checking with the clinic that these hours are still right.",
     "confirmSaveFirst": "Save your changes first.",
     "confirmNeedsHours": "Save weekly hours (or “Open 24 hours”) first."
+  },
+  "AdminServices": {
+    "speciesTitle": "Species treated",
+    "speciesHint": "Shown on the clinic page, and used by the species filter in search.",
+    "noSpeciesWarning": "No species yet: owners filtering by species won't find this branch.",
+    "saveSpecies": "Save species",
+    "servicesTitle": "Services and prices",
+    "servicesHint": "Prices are estimates; the clinic page says so. Owners see “₱500–₱800”, “From ₱500” or “Call for price”.",
+    "noServices": "No services yet.",
+    "addService": "Add service",
+    "category": "Service type",
+    "pickCategory": "Pick a service type",
+    "name": "Name shown to owners",
+    "nameHint": "e.g. “Kapon (cat)” or “Anti-rabies vaccine”. Starts as the service type.",
+    "species": "Species",
+    "speciesServiceHint": "The animals this service is for. Starts as the species the branch treats.",
+    "noSpeciesYet": "Set the species this branch treats first (above).",
+    "priceMin": "Lowest price (₱)",
+    "priceMax": "Highest price (₱)",
+    "priceHint": "Both: a range. Only the lowest: “From ₱…”. Neither: “Call for price”.",
+    "priceInvalid": "Enter an amount in pesos, e.g. 1,500 or 1500.50.",
+    "priceUnit": "Price is",
+    "priceNote": "Price note",
+    "priceNotePlaceholder": "e.g. Depends on weight",
+    "description": "Description",
+    "saveService": "Save service",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Remove",
+    "removeFailed": "Couldn't remove it. Try again.",
+    "copy": "Copy to all branches",
+    "copyChecking": "Checking the other branches…",
+    "copyAdds": "Adds a copy to:",
+    "copyUpdates": "Replaces the same service at:",
+    "copyUnchanged": "Already the same at:",
+    "copySpeciesAdded": "also adds {species} to species treated",
+    "copyNothing": "Every other branch already has this service with the same details and species.",
+    "copyConfirm": "Copy",
+    "copyDone": "Copied to the other branches.",
+    "copyFailed": "Couldn't copy. Try again."
+  },
+  "AdminProducts": {
+    "title": "Products",
+    "hint": "Shown read-only on the business page: name, price and availability. No stock counts.",
+    "empty": "No products yet.",
+    "add": "Add product",
+    "name": "Name",
+    "category": "Category",
+    "categoryPlaceholder": "e.g. Food, Accessories",
+    "price": "Price (₱)",
+    "priceHint": "Leave empty to show “Ask for price”.",
+    "priceInvalid": "Enter an amount in pesos, e.g. 450 or 1,299.50.",
+    "availability": "Availability",
+    "save": "Save product",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Remove",
+    "removeFailed": "Couldn't remove it. Try again.",
+    "columns": {
+      "name": "Product",
+      "category": "Category",
+      "price": "Price",
+      "availability": "Availability",
+      "actions": "Actions"
+    }
   },
   "AdminListings": {
     "title": "Listings",

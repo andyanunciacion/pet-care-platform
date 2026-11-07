@@ -1,6 +1,8 @@
 // Turns the values in an audit_log diff ({ field: { from, to } }) into readable lines.
 // The diff is stored as JSON, so values arrive untyped and are narrowed here.
 
+import type { ServicePrice } from './price-format';
+
 export interface AuditValueLabels {
   none: string;
   yes: string;
@@ -15,6 +17,10 @@ export interface AuditValueLabels {
   dateTime: (iso: string) => string;
   /** An enum value's label for this field ("hidden" → "Hidden"), if it is one. */
   enumValue?: (value: string) => string | undefined;
+  /** A service's price as owners see it (lib/price-format): "₱500–₱800", "Call for price". */
+  servicePrice: (price: ServicePrice) => string;
+  /** A product's price: "₱450", or "Ask for price" when there is none. */
+  productPrice: (centavos: number | null) => string;
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -53,7 +59,48 @@ function exceptionLine(value: Record<string, unknown>, labels: AuditValueLabels)
   return `${value.date}: ${hours}${note}`;
 }
 
+const nullableNumber = (value: unknown): number | null | undefined =>
+  value === null ? null : typeof value === 'number' ? value : undefined;
+
+/**
+ * A branch service (services/branch-services.ts in the API): "Spay / neuter: Kapon", then
+ * the price (with its note), the species and the description, one per line.
+ */
+function serviceLines(value: Record<string, unknown>, labels: AuditValueLabels) {
+  const { category, name, priceMin, priceMax, priceUnit, priceNote, species, description } = value;
+  const min = nullableNumber(priceMin);
+  const max = nullableNumber(priceMax);
+  if (typeof name !== 'string' || typeof priceUnit !== 'string') return undefined;
+  if (min === undefined || max === undefined || !Array.isArray(species)) return undefined;
+
+  const note = typeof priceNote === 'string' && priceNote !== '' ? ` (${priceNote})` : '';
+  const lines = [
+    typeof category === 'string' ? `${category}: ${name}` : name,
+    `${labels.servicePrice({ priceMin: min, priceMax: max, priceUnit })}${note}`,
+  ];
+  const speciesNames = species.filter((s): s is string => typeof s === 'string');
+  if (speciesNames.length > 0) lines.push(speciesNames.join(', '));
+  if (typeof description === 'string' && description !== '') lines.push(description);
+  return lines;
+}
+
+/** A product: "Kibble 1 kg (Food)", then "₱450 · Available". */
+function productLines(value: Record<string, unknown>, labels: AuditValueLabels) {
+  const { name, category, price, availability } = value;
+  const amount = nullableNumber(price);
+  if (typeof name !== 'string' || typeof availability !== 'string' || amount === undefined) {
+    return undefined;
+  }
+  const inCategory = typeof category === 'string' && category !== '' ? ` (${category})` : '';
+  return [
+    `${name}${inCategory}`,
+    `${labels.productPrice(amount)} · ${labels.enumValue?.(availability) ?? availability}`,
+  ];
+}
+
 function listItemLine(item: unknown, labels: AuditValueLabels): string {
+  // Plain names, e.g. the species a branch treats.
+  if (typeof item === 'string') return item;
   if (!isRecord(item)) return JSON.stringify(item);
   return contactLine(item, labels) ?? weeklyLine(item, labels) ?? JSON.stringify(item);
 }
@@ -78,6 +125,8 @@ export function auditValueLines(value: unknown, labels: AuditValueLabels): strin
   if (isRecord(value)) {
     const line = exceptionLine(value, labels);
     if (line !== undefined) return [line];
+    const lines = serviceLines(value, labels) ?? productLines(value, labels);
+    if (lines !== undefined) return lines;
   }
   return [JSON.stringify(value)];
 }
