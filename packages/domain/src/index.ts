@@ -30,5 +30,6 @@ export {
 export { addDays, formatTime, isoWeekday, TIME_ZONE, toManila } from './local-time.ts';
 export { SLUG_PATTERN, slugify } from './slug.ts';
 export { normalizePhPhone } from './phone.ts';
+export { formatPesos, MAX_PRICE_CENTAVOS, parsePesos } from './money.ts';
 export { isInPhilippines, parseLatLng, PHILIPPINES_BOUNDS, type LngLat } from './location.ts';
 export { BUSINESS_TYPE_RULES, type BusinessType, type BusinessTypeRules } from './business-type.ts';

@@ -63,6 +63,42 @@ describe('GET /v1/admin/psgc-areas', () => {
   });
 });
 
+describe('GET /v1/admin/taxonomy', () => {
+  interface Item {
+    id: string;
+    code: string;
+    name: string;
+  }
+  interface Taxonomy {
+    species: Item[];
+    categories: (Item & { children: Item[] })[];
+  }
+
+  it('lists the species and the category groups with their subcategories', async () => {
+    const response = await get('/v1/admin/taxonomy');
+    expect(response.statusCode).toBe(200);
+    const body = response.json<Taxonomy>();
+
+    // The real reference data (migration 0005), skipping rows other test files add.
+    const real = <T extends Item>(items: T[]) =>
+      items.filter((item) => !/^(species|category)_/.test(item.code));
+    expect(
+      real(body.species)
+        .map((s) => s.code)
+        .slice(0, 2),
+    ).toEqual(['dog', 'cat']);
+    const surgery = body.categories.find((c) => c.code === 'surgery');
+    expect(real(surgery?.children ?? []).map((c) => c.code)).toEqual([
+      'spay_neuter',
+      'general_surgery',
+      'dental',
+    ]);
+    // Subcategories only appear under their group.
+    const topLevel = body.categories.map((c) => c.code);
+    expect(topLevel).not.toContain('spay_neuter');
+  });
+});
+
 describe('GET /v1/admin/audit-log', () => {
   interface Page {
     items: { action: string; entityId: string; actor: { email: string } | null }[];
