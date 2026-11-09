@@ -28,7 +28,7 @@ export interface FieldError {
   message: string;
 }
 
-type HttpError = Error & { statusCode: number; fieldErrors?: FieldError[] };
+type HttpError = Error & { statusCode: number; fieldErrors?: FieldError[]; expose: true };
 
 /**
  * An error the client should see, e.g. `throw httpError(403, 'PAW ops only.')`.
@@ -37,7 +37,16 @@ type HttpError = Error & { statusCode: number; fieldErrors?: FieldError[] };
  * taken), so forms can show the message next to the field, like schema validation errors.
  */
 export function httpError(status: number, detail: string, fieldErrors?: FieldError[]): HttpError {
-  return Object.assign(new Error(detail), { statusCode: status, fieldErrors });
+  return Object.assign(new Error(detail), {
+    statusCode: status,
+    fieldErrors,
+    expose: true as const,
+  });
+}
+
+/** Errors made with httpError() are written for clients, even a 5xx (e.g. a 503). */
+function isExposed(error: unknown): boolean {
+  return typeof error === 'object' && error !== null && 'expose' in error && error.expose === true;
 }
 
 function fieldErrorsOf(error: unknown): FieldError[] | undefined {
@@ -66,7 +75,7 @@ export function errorHandler(
   }
 
   const status = error.statusCode ?? 500;
-  if (status < 400 || status >= 500) {
+  if (status < 400 || (status >= 500 && !isExposed(error))) {
     // Log the real cause, but never send internals to the client.
     request.log.error({ err: error }, 'request failed');
     return sendProblem(reply, problem(500));

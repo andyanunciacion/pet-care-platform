@@ -15,15 +15,17 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1164.0",
+    "@aws-sdk/s3-request-presigner": "^3.1164.0",
     "@fastify/cors": "^11.3.0",
     "@fastify/helmet": "^13.1.1",
     "@fastify/swagger": "^9.9.0",
     "@fastify/swagger-ui": "^6.1.1",
-    "fastify": "^5.12.5",
     "@paw/db": "workspace:*",
     "@paw/domain": "workspace:*",
     "better-auth": "catalog:",
     "drizzle-orm": "catalog:",
+    "fastify": "^5.12.5",
     "fastify-type-provider-zod": "^7.0.0",
     "zod": "catalog:"
   },

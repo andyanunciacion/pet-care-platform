@@ -11,22 +11,32 @@ import {
 } from 'fastify-type-provider-zod';
 import { createDatabase } from '@paw/db';
 import { createAuth } from './auth.ts';
-import type { Env } from './env.ts';
+import { r2Config, type Env } from './env.ts';
 import { errorHandler, notFoundHandler } from './errors.ts';
 import { loggerOptions } from './logger.ts';
 import { adminRoutes } from './routes/admin/index.ts';
 import { authRoutes } from './routes/auth.ts';
 import { healthRoutes } from './routes/health.ts';
+import { createR2Storage, type PhotoStorage } from './storage.ts';
 
 export interface AppOptions {
   env: Env;
+  /**
+   * Photo storage. Defaults to the R2 bucket in env, or none (the media routes answer 503).
+   * Tests pass an in-memory one (createMemoryStorage).
+   */
+  storage?: PhotoStorage | null;
 }
 
 /**
  * Builds the Fastify app without starting to listen, so tests can call it
  * in-process with `app.inject()` (no network, no port).
  */
-export async function buildApp({ env }: AppOptions) {
+export async function buildApp({ env, storage: storageOption }: AppOptions) {
+  const r2 = r2Config(env);
+  const storage =
+    storageOption !== undefined ? storageOption : r2 === null ? null : createR2Storage(r2);
+
   const app = Fastify({
     logger: loggerOptions(env),
     // request.ip = the client: trust the nearest TRUST_PROXY_HOPS proxies in
@@ -70,7 +80,7 @@ export async function buildApp({ env }: AppOptions) {
 
   await app.register(healthRoutes, { database });
   await app.register(authRoutes, { auth: app.auth, publicOrigin: env.BETTER_AUTH_URL });
-  await app.register(adminRoutes, { prefix: '/v1/admin', database });
+  await app.register(adminRoutes, { prefix: '/v1/admin', database, storage });
 
   return app;
 }
