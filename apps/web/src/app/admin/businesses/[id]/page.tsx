@@ -5,6 +5,7 @@ import { cache } from 'react';
 import { AuditTrail } from '@/components/admin/audit-trail';
 import { BusinessForm } from '@/components/admin/business-form';
 import { AdminFormMessages } from '@/components/admin/form-messages';
+import { LogoEditor } from '@/components/admin/logo-editor';
 import { ProductsEditor } from '@/components/admin/products-editor';
 import { ListingStatusBadge } from '@/components/admin/status-badges';
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { adminApi, dataOrNotFound, dataOrThrow } from '@/lib/admin-api';
+import { adminApi, dataOrNotFound, dataOrStorageOff, dataOrThrow } from '@/lib/admin-api';
 import { requireAdmin } from '@/lib/admin-session';
 
 // cache(): generateMetadata and the page share one API call per request.
@@ -40,14 +41,19 @@ export default async function BusinessPage({ params }: Props) {
   await requireAdmin();
   const business = await getBusiness((await params).id);
   const api = await adminApi();
-  const [t, tAudit, tEnums, format, products, history] = await Promise.all([
+  const [t, tAudit, tEnums, tPhotos, format, products, media, history] = await Promise.all([
     getTranslations('AdminBusiness'),
     getTranslations('AdminAudit'),
     getTranslations('Enums'),
+    getTranslations('AdminPhotos'),
     getFormatter(),
     api
       .GET('/v1/admin/businesses/{id}/products', { params: { path: { id: business.id } } })
       .then(dataOrThrow),
+    // The logo and product images; null when photo storage isn't set up.
+    api
+      .GET('/v1/admin/businesses/{id}/media', { params: { path: { id: business.id } } })
+      .then(dataOrStorageOff),
     // The business and all its branches, newest first.
     api
       .GET('/v1/admin/audit-log', { params: { query: { businessId: business.id, limit: 10 } } })
@@ -66,6 +72,19 @@ export default async function BusinessPage({ params }: Props) {
       <AdminFormMessages>
         <BusinessForm business={business} />
       </AdminFormMessages>
+
+      {media === null ? (
+        <section aria-labelledby="logo-heading" className="flex flex-col gap-2">
+          <h2 id="logo-heading" className="text-xl font-semibold">
+            {tPhotos('logoTitle')}
+          </h2>
+          <p className="text-sm text-muted-foreground">{tPhotos('storageOff')}</p>
+        </section>
+      ) : (
+        <AdminFormMessages extra={['AdminPhotos']}>
+          <LogoEditor businessId={business.id} logo={media.logo} />
+        </AdminFormMessages>
+      )}
 
       <section aria-labelledby="branches" className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-4">
@@ -120,8 +139,12 @@ export default async function BusinessPage({ params }: Props) {
         )}
       </section>
 
-      <AdminFormMessages extra={['AdminProducts', 'Prices']}>
-        <ProductsEditor businessId={business.id} products={products} />
+      <AdminFormMessages extra={['AdminProducts', 'AdminPhotos', 'Prices']}>
+        <ProductsEditor
+          businessId={business.id}
+          products={products}
+          images={media === null ? null : media.productImages}
+        />
       </AdminFormMessages>
 
       <section aria-labelledby="history" className="flex flex-col gap-4">

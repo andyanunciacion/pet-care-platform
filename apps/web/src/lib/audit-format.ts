@@ -85,6 +85,16 @@ function serviceLines(value: Record<string, unknown>, labels: AuditValueLabels) 
 }
 
 /** A product: "Kibble 1 kg (Food)", then "₱450 · Available". */
+/** An image: "Front of the clinic (1600×1200)", prefixed with its product for product images. */
+function imageLine(value: Record<string, unknown>): string | undefined {
+  const { alt, width, height, product } = value;
+  if (typeof alt !== 'string' || typeof width !== 'number' || typeof height !== 'number') {
+    return undefined;
+  }
+  const line = `${alt} (${String(width)}×${String(height)})`;
+  return typeof product === 'string' ? `${product}: ${line}` : line;
+}
+
 function productLines(value: Record<string, unknown>, labels: AuditValueLabels) {
   const { name, category, price, availability } = value;
   const amount = nullableNumber(price);
@@ -127,6 +137,8 @@ export function auditValueLines(value: unknown, labels: AuditValueLabels): strin
     if (line !== undefined) return [line];
     const lines = serviceLines(value, labels) ?? productLines(value, labels);
     if (lines !== undefined) return lines;
+    const image = imageLine(value);
+    if (image !== undefined) return [image];
   }
   return [JSON.stringify(value)];
 }

@@ -1,13 +1,19 @@
 'use client';
 
 // A business's products (read-only on its page: name, price, availability; no stock counts).
-// Each product saves on its own. Images come with the photo uploads.
+// Each product saves on its own; its image is uploaded from its edit form.
 
 import { formatPesos, parsePesos } from '@paw/domain';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useState, useTransition, type SubmitEvent } from 'react';
-import { createProductAction, deleteProductAction, updateProductAction } from '@/app/admin/actions';
+import {
+  createProductAction,
+  deleteMediaAction,
+  deleteProductAction,
+  updateProductAction,
+} from '@/app/admin/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { NativeSelect, NativeSelectOption } from '@/components/ui/native-select';
@@ -19,17 +25,27 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { PRODUCT_AVAILABILITIES, type Product, type ProductAvailability } from '@/lib/admin-types';
+import {
+  PRODUCT_AVAILABILITIES,
+  type Media,
+  type Product,
+  type ProductAvailability,
+} from '@/lib/admin-types';
 import { errorAt, idleForm, type FormState } from '@/lib/form-errors';
 import { priceLabels } from '@/lib/price-labels';
 import { describedBy, FormField, FormStatus } from './form-field';
+import { ImageUpload } from './image-upload';
 
 interface Props {
   businessId: string;
   products: Product[];
+  /** Each product's image; null when photo storage isn't set up. */
+  images: { productId: string; image: Media }[] | null;
 }
 
-export function ProductsEditor({ businessId, products }: Props) {
+export function ProductsEditor({ businessId, products, images }: Props) {
+  const imageOf = (productId: string) =>
+    images?.find((entry) => entry.productId === productId)?.image ?? null;
   const t = useTranslations('AdminProducts');
   const tEnums = useTranslations('Enums');
   const prices = priceLabels(useTranslations('Prices'));
@@ -70,12 +86,24 @@ export function ProductsEditor({ businessId, products }: Props) {
               editing === product.id ? (
                 <TableRow key={product.id}>
                   <TableCell colSpan={5} className="whitespace-normal">
-                    <ProductForm businessId={businessId} product={product} onDone={close} />
+                    <div className="flex flex-col gap-6">
+                      <ProductForm businessId={businessId} product={product} onDone={close} />
+                      <ProductImageField
+                        productId={product.id}
+                        image={imageOf(product.id)}
+                        storageReady={images !== null}
+                      />
+                    </div>
                   </TableCell>
                 </TableRow>
               ) : (
                 <TableRow key={product.id}>
-                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                      <Thumbnail image={imageOf(product.id)} />
+                      {product.name}
+                    </div>
+                  </TableCell>
                   <TableCell className="text-muted-foreground">{product.category ?? ''}</TableCell>
                   <TableCell>{prices.productPrice(product.price)}</TableCell>
                   <TableCell>{tEnums(`productAvailability.${product.availability}`)}</TableCell>
@@ -137,6 +165,79 @@ export function ProductsEditor({ businessId, products }: Props) {
             {t('add')}
           </Button>
         </div>
+      )}
+    </section>
+  );
+}
+
+function Thumbnail({ image }: { image: Media | null }) {
+  if (image === null) return <span aria-hidden className="size-10 shrink-0 rounded-md bg-muted" />;
+  return (
+    <Image
+      src={image.url}
+      alt={image.alt}
+      width={image.width}
+      height={image.height}
+      unoptimized
+      className="size-10 shrink-0 rounded-md bg-muted object-cover"
+    />
+  );
+}
+
+/** A product's one image: shown with its alt text, replaced by uploading, or deleted. */
+function ProductImageField({
+  productId,
+  image,
+  storageReady,
+}: {
+  productId: string;
+  image: Media | null;
+  storageReady: boolean;
+}) {
+  const t = useTranslations('AdminPhotos');
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  return (
+    <section aria-label={t('productImage')} className="flex flex-col gap-3 border-t pt-4">
+      <h3 className="text-sm font-medium">{t('productImage')}</h3>
+      {!storageReady ? (
+        <p className="text-sm text-muted-foreground">{t('storageOff')}</p>
+      ) : (
+        <>
+          {image !== null && (
+            <div className="flex flex-wrap items-center gap-3">
+              <Thumbnail image={image} />
+              <span className="text-sm">{image.alt}</span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                disabled={pending}
+                onClick={() => {
+                  setError(null);
+                  startTransition(async () => {
+                    const result = await deleteMediaAction(image.id);
+                    if (result.status === 'error') setError(t('removeFailed'));
+                  });
+                }}
+              >
+                <Trash2 aria-hidden />
+                {t('remove')}
+              </Button>
+            </div>
+          )}
+          {error !== null && (
+            <p role="alert" className="text-sm text-destructive">
+              {error}
+            </p>
+          )}
+          <ImageUpload
+            purpose="product_image"
+            ownerId={productId}
+            submitLabel={image === null ? t('addImage') : t('replaceImage')}
+          />
+        </>
       )}
     </section>
   );

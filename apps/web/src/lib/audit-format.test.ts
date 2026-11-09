@@ -132,6 +132,15 @@ describe('auditValueLines', () => {
     ).toEqual(['Leash', 'Ask for price · limited']);
   });
 
+  it('shows an image as its description and size, with its product if any', () => {
+    expect(auditValueLines({ alt: 'Clinic front', width: 1600, height: 1200 }, labels)).toEqual([
+      'Clinic front (1600×1200)',
+    ]);
+    expect(
+      auditValueLines({ product: 'Kibble', alt: 'Bag front', width: 1200, height: 900 }, labels),
+    ).toEqual(['Kibble: Bag front (1200×900)']);
+  });
+
   it('formats timestamps', () => {
     expect(auditValueLines('2026-11-06T04:30:00.000Z', labels)).toEqual(['at 2026-11-06']);
   });
