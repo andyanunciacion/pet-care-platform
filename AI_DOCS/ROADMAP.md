@@ -26,7 +26,7 @@
 - [ ] Clickable prototype of the P1 owner screens (home, results list/map, clinic page, emergency view, report sheet). Use it in owner interviews.
 - [ ] Clinic-side prototype screens ("your free page", hours editor, For clinics page). Use them in clinic interviews.
 - [ ] Brand kit: logo, palette, fonts (freelancer or DIY). Blocked on the brand name.
-- [ ] Design tooling: Impeccable (design skill for Claude Code) set up with PAW's docs and tokens as context, before the first owner-facing page (slice 4).
+- [x] Design tooling: Impeccable (design skill for Claude Code) set up with PAW's docs and tokens as context, before the first owner-facing page (slice 4).
 - [ ] Update `DESIGN.md` §6 with what the prototype tests showed.
 
 **Groundwork (technical)**
