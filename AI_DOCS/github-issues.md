@@ -123,12 +123,13 @@
 ### P0-D4 · Design tooling: Impeccable
 `design` `infra` · Depends on: P0-T4 · Do before P1-4 (the first owner-facing page)
 **Goal:** Claude reviews and polishes UI with [Impeccable](https://impeccable.style/) (free, Apache 2.0), using PAW's own docs and tokens as its context.
-- [ ] Install the plugin (by you): `/plugin marketplace add pbakaus/impeccable`, then install it from `/plugin`. Optional: its anti-pattern check hook (`npx impeccable install`), which lives in the gitignored `.claude/settings.local.json`
-- [ ] Run `/impeccable init` on this issue's branch, answering from what PRD.md and DESIGN.md already decide
-- [ ] Review what it wrote (`PRODUCT.md`, `DESIGN.md`, `.impeccable/`). Fold anything new into `AI_DOCS/DESIGN.md` (likely a "Voice & tone" section), and keep the root `PRODUCT.md` / `DESIGN.md` as short summaries pointing at `AI_DOCS`, so there's one source of truth
-- [ ] `.gitignore`: add its ignore block (`# impeccable-ignore-start/end`); commit `.impeccable/config.json` and `design.json`, not `config.local.json`
-- [ ] CLAUDE.md: when to use it, and which commands. Use `critique`, `audit`, `polish`, `typeset`, `layout`, `clarify`, `harden`, `adapt`, `optimize`. Avoid `bolder`, `overdrive`, `delight`, `animate` unless a design decision calls for them: they work against "light on data", "calm in emergencies" and the performance budget (DESIGN §2, §9)
-- [ ] ARCHITECTURE decision log: record the tool, and when to revisit it
+- [x] Install the plugin (by you): `/plugin marketplace add pbakaus/impeccable`, then install it from `/plugin` (project scope: `.claude/settings.json`, committed, with the marketplace listed so a fresh clone can install it). v4.8 bundles its own design-check hooks (after edits, at session start, at the end of a turn), so there's no separate `npx impeccable install`. On first use it downloads its engine binary to `~/.impeccable/bin/`; on this machine that needs Windows' curl first on `PATH` (D40)
+- [x] Run `/impeccable init` on this issue's branch, answering from what PRD.md and DESIGN.md already decide. In v4.8 `init` writes only `PRODUCT.md`; `/impeccable document` writes the root `DESIGN.md` and `.impeccable/design.json`
+- [x] Review what it wrote (`PRODUCT.md`, `DESIGN.md`, `.impeccable/`). Fold anything new into `AI_DOCS/DESIGN.md` (new: §2.1 "Voice & tone", the north star and component feel in §7, the control-size rule in §8), and keep the root `PRODUCT.md` / `DESIGN.md` as short summaries pointing at `AI_DOCS`, so there's one source of truth
+- [x] `.gitignore`: root block (`# impeccable-ignore-start/end`) for `config.local.json` and `hook.cache.json`. Live mode writes its own block (`# impeccable-live-ignore-start/end`) to `apps/web/.gitignore` on first boot; keep it. Commit `design.json` and the live `config.json` (and the root `config.json` once a shared setting exists)
+- [x] CLAUDE.md: when to use it, and which commands. Use `critique`, `audit`, `polish`, `typeset`, `layout`, `clarify`, `harden`, `adapt`, `optimize`. Avoid `bolder`, `overdrive`, `delight`, `animate` unless a design decision calls for them: they work against "light on data", "calm in emergencies" and the performance budget (DESIGN §2, §9)
+- [x] ARCHITECTURE decision log: record the tool, and when to revisit it (D40)
+- [x] Live mode: `apps/web/.impeccable/live/config.json` (injects into `src/app/layout.tsx` during a session; no CSP to patch). Smoke-tested: inject, page loads the helper script, stop restores the layout
 
 **Done when:** `/impeccable critique` on the home page gives feedback that uses PAW's tokens and principles, and `AI_DOCS/` is still the only source of truth for product and design decisions.
 

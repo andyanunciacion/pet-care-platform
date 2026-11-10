@@ -15,6 +15,8 @@ We have no dedicated designer, so the approach is **prototype-first and design-i
 
 Figma is optional. Inspiration screenshots go in `AI_DOCS/design/inspiration/`; Claude can read images.
 
+Claude reviews and polishes UI with **Impeccable**, a design plugin for Claude Code (ARCHITECTURE D40; the commands to use are in CLAUDE.md). It reads the root `PRODUCT.md` and `DESIGN.md`, which are short summaries of this file and the PRD. Decisions are made here and the summaries follow: after changing this file or the tokens, update them (`/impeccable document` refreshes the root `DESIGN.md` and `.impeccable/design.json`).
+
 ## 2. UX principles
 
 1. **"Can I go there now?" in 3 seconds.** Open status, distance, and a way to call are visible without scrolling or tapping.
@@ -25,6 +27,18 @@ Figma is optional. Inspiration screenshots go in `AI_DOCS/design/inspiration/`; 
 6. **Plain words, icons with labels.** Short English copy that is friendly to Taglish readers. Icons never stand alone.
 7. **Calm in emergencies.** The emergency flow removes everything except open-now, distance, and **Call**.
 8. **Clinic tools are forgiving.** Receptionists aren't tech users: big controls, previews of how owners will see changes, no dead ends.
+
+### 2.1 Voice & tone
+
+PAW sounds like **a calm, plain neighbor** who already called around and tells you straight.
+
+- **Short, warm, direct English.** Everyday words a Taglish reader knows; no idioms or slang. Use the Filipino terms owners search with (*kapon*, *bakuna*, *purga*) next to the English name where it helps.
+- **Reassuring, never cute.** No pet puns, no emoji, no hype ("best", "amazing", "#1"). No exclamation marks in status, error or emergency text.
+- **Say what's true, then what to do.** "Hours unknown — call ahead." "May have changed. Call ahead." Never make a guess sound confirmed (principle 4).
+- **Emergencies: facts and actions only.** "Open 24 hours · 2.1 km · Call". "Call before going." No reassurance padding.
+- **Errors in plain words:** what happened and what to do next, never blaming the user ("We couldn't send your report. Check your signal and try again.").
+- **To clinics:** respectful and practical; talk about "your page" and what owners see, not features or jargon.
+- **Formats:** times as "6 PM", "8 AM tomorrow"; prices as "₱500–₱800", "From ₱500", "Call for price" (UX10).
 
 ## 3. Users & contexts
 
@@ -149,6 +163,10 @@ All text colors above meet WCAG AA contrast (≥ 4.5:1) on white (lowest: slate-
 
 **Direction:** warm, friendly, trustworthy. Clean like a good clinic, not childish or cartoonish. It should reassure a worried owner at 9 PM and look professional to a vet.
 
+- **North star: "The Neighbor Who Knows".** The local who already called around and knows which clinic is open, which one sees rabbits, and roughly what a *kapon* costs. Warm and local, but every fact is exact and dated.
+- **Components are soft and friendly:** generous rounding (the radius token), tinted `muted` / `accent` surfaces to group and highlight content, and depth from tint before shadow. Shadows only on things that float (bottom sheets, popovers, the sticky contact bar). Friendliness comes from shape, tint and words, never from mascots or cartoons.
+- These hold for the placeholder brand too. Until the brand kit lands, design work stays inside the §7.1 tokens and doesn't propose new palettes, fonts or logos.
+
 **How to get it:**
 - **(Recommended)** Hire a freelance designer for a one-off brand kit. Give them this section plus the PRD summary.
 - Or do it yourself with Claude: pick a font and palette, and use a text logo until later.
@@ -163,6 +181,7 @@ All text colors above meet WCAG AA contrast (≥ 4.5:1) on white (lowest: slate-
 **Other foundations:**
 - **Type:** the brand font is self-hosted via `next/font` (no layout shift, no Google request at runtime). Minimum body text is 16px.
 - **Icons:** lucide (shadcn's default). Species icons may need a small custom set.
+- **Control size:** shadcn's default buttons and inputs are 32–36px tall, which suits `/admin`'s density only. Owner pages and `/dashboard` use controls at least 44px tall (§10), with 16px text in inputs (which also stops iOS zooming in on focus).
 
 **PAW components** (built on shadcn primitives, living in `apps/web/components` until there's a reason to share them):
 - **Search:** `SearchBar`, `QuickChips`, `FilterSheet`, `ResultCard`, `MapView` (lazy), `EmptyState`
