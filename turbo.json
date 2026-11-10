@@ -1,6 +1,10 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
+  // Passed to every task without changing cache keys. NODE_EXTRA_CA_CERTS: antivirus or
+  // company proxies that re-sign HTTPS (e.g. Avast's Web Shield) add their root here, or
+  // the API can't reach Cloudflare R2 ("unable to verify the first certificate").
+  "globalPassThroughEnv": ["NODE_EXTRA_CA_CERTS"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

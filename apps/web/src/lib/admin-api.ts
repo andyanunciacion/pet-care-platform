@@ -22,6 +22,15 @@ export function dataOrNotFound<T>(result: { data?: T; response: Response }): T {
   throw new Error(`Unexpected response from the API: ${String(result.response.status)}`);
 }
 
+/**
+ * For the image routes: the data, or null when photo storage isn't set up on the API (503),
+ * so the page can say so instead of failing. Otherwise like dataOrNotFound.
+ */
+export function dataOrStorageOff<T>(result: { data?: T; response: Response }): T | null {
+  if (result.data === undefined && result.response.status === 503) return null;
+  return dataOrNotFound(result);
+}
+
 /** The response data; anything else is an outage, so the error page shows. */
 export function dataOrThrow<T>(result: { data?: T; response: Response }): T {
   if (result.data !== undefined) return result.data;

@@ -31,5 +31,16 @@ export { addDays, formatTime, isoWeekday, TIME_ZONE, toManila } from './local-ti
 export { SLUG_PATTERN, slugify } from './slug.ts';
 export { normalizePhPhone } from './phone.ts';
 export { formatPesos, MAX_PRICE_CENTAVOS, parsePesos } from './money.ts';
+export {
+  fitWithin,
+  IMAGE_MAX_EDGE,
+  MAX_PHOTOS_PER_BRANCH,
+  MAX_UPLOAD_BYTES,
+  UPLOAD_CONTENT_TYPES,
+  UPLOAD_EXTENSIONS,
+  UPLOAD_PURPOSES,
+  type UploadContentType,
+  type UploadPurpose,
+} from './media.ts';
 export { isInPhilippines, parseLatLng, PHILIPPINES_BOUNDS, type LngLat } from './location.ts';
 export { BUSINESS_TYPE_RULES, type BusinessType, type BusinessTypeRules } from './business-type.ts';

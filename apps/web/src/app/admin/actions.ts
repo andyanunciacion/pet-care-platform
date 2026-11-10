@@ -18,12 +18,15 @@ import type {
   CreateBusinessBody,
   CreateProductBody,
   CreateServiceBody,
+  CreateUploadBody,
+  FinalizeUploadBody,
   ReplaceHoursBody,
   SetHoursExceptionBody,
   UpdateBranchBody,
   UpdateBusinessBody,
   UpdateProductBody,
   UpdateServiceBody,
+  UploadPurpose,
 } from '@/lib/admin-types';
 import { formStateFromProblem, savedForm, type FormState } from '@/lib/form-errors';
 
@@ -325,6 +328,90 @@ export async function deleteProductAction(productId: string): Promise<FormState>
 
   const api = await adminApi();
   const { error, response } = await api.DELETE('/v1/admin/products/{id}', {
+    params: { path: { id } },
+  });
+  if (!response.ok) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+// ── Images (ARCHITECTURE D38) ───────────────────────────────────────────────────────────
+// Upload: requestUploadAction → the browser PUTs the file to the returned URL → the
+// finalize action for its owner (photo, logo or product image) records it.
+
+export async function requestUploadAction(
+  body: CreateUploadBody,
+): Promise<{ state: FormState; upload: { uploadUrl: string; storageKey: string } | null }> {
+  await requireAdmin();
+  const ownerId = await checkedId(body.ownerId);
+  if (typeof ownerId !== 'string') return { state: ownerId, upload: null };
+
+  const api = await adminApi();
+  const { data, error } = await api.POST('/v1/admin/uploads', { body: { ...body, ownerId } });
+  if (data === undefined) return { state: await failed(error), upload: null };
+  return { state: savedForm, upload: { uploadUrl: data.uploadUrl, storageKey: data.storageKey } };
+}
+
+/** Records an uploaded image for its owner: a branch photo, the logo, or a product image. */
+export async function finalizeUploadAction(
+  purpose: UploadPurpose,
+  ownerId: string,
+  body: FinalizeUploadBody,
+): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(ownerId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const params = { params: { path: { id } }, body };
+  const { data, error } =
+    purpose === 'branch_photo'
+      ? await api.POST('/v1/admin/branches/{id}/photos', params)
+      : purpose === 'business_logo'
+        ? await api.PUT('/v1/admin/businesses/{id}/logo', params)
+        : await api.PUT('/v1/admin/products/{id}/image', params);
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function updateMediaAltAction(mediaId: string, alt: string): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(mediaId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.PATCH('/v1/admin/media/{id}', {
+    params: { path: { id } },
+    body: { alt },
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function reorderPhotosAction(branchId: string, ids: string[]): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(branchId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { data, error } = await api.PUT('/v1/admin/branches/{id}/photos/order', {
+    params: { path: { id } },
+    body: { ids },
+  });
+  if (data === undefined) return failed(error);
+  refresh();
+  return savedForm;
+}
+
+export async function deleteMediaAction(mediaId: string): Promise<FormState> {
+  await requireAdmin();
+  const id = await checkedId(mediaId);
+  if (typeof id !== 'string') return id;
+
+  const api = await adminApi();
+  const { error, response } = await api.DELETE('/v1/admin/media/{id}', {
     params: { path: { id } },
   });
   if (!response.ok) return failed(error);

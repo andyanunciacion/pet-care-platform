@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseEnv } from './env.ts';
+import { parseEnv, r2Config } from './env.ts';
 
 const DATABASE_URL = 'postgres://paw:secret-password@localhost:5432/paw';
 // The variables without defaults.
@@ -59,5 +59,37 @@ describe('parseEnv', () => {
     expect(() => parseEnv({ ...required, GOOGLE_CLIENT_ID: undefined })).toThrow(
       /GOOGLE_CLIENT_ID/,
     );
+  });
+});
+
+describe('R2 photo storage settings', () => {
+  const r2 = {
+    R2_ACCOUNT_ID: 'account-id',
+    R2_ACCESS_KEY_ID: 'access-key-id',
+    R2_SECRET_ACCESS_KEY: 'r2-secret-value',
+    R2_BUCKET: 'paw-photos-dev',
+    R2_PUBLIC_URL: 'https://pub-example.r2.dev/',
+  };
+
+  it('is off when none are set, or when they are empty (a copied .env.example)', () => {
+    expect(r2Config(parseEnv(required))).toBeNull();
+    const empty = Object.fromEntries(Object.keys(r2).map((name) => [name, '']));
+    expect(r2Config(parseEnv({ ...required, ...empty }))).toBeNull();
+  });
+
+  it('is on when all are set, with the public URL trimmed of its trailing slash', () => {
+    expect(r2Config(parseEnv({ ...required, ...r2 }))).toEqual({
+      accountId: 'account-id',
+      accessKeyId: 'access-key-id',
+      secretAccessKey: 'r2-secret-value',
+      bucket: 'paw-photos-dev',
+      publicUrl: 'https://pub-example.r2.dev',
+    });
+  });
+
+  it('names the missing ones when only some are set, without echoing the secret', () => {
+    const attempt = () => parseEnv({ ...required, ...r2, R2_BUCKET: undefined });
+    expect(attempt).toThrow(/R2_BUCKET/);
+    expect(attempt).not.toThrow(/r2-secret-value/);
   });
 });

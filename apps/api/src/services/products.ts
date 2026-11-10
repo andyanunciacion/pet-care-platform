@@ -85,8 +85,11 @@ const auditProduct = ({ name, category, price, availability }: ProductRow) => ({
   availability,
 });
 
-/** Locks the business row, so writes to its products queue up (accurate audit "from" values). */
-async function lockBusiness(tx: Tx, businessId: string) {
+/**
+ * Locks the business row, so writes to its products and images queue up (accurate audit
+ * "from" values).
+ */
+export async function lockBusiness(tx: Tx, businessId: string) {
   const [row] = await tx
     .select({ id: business.id })
     .from(business)
@@ -96,7 +99,7 @@ async function lockBusiness(tx: Tx, businessId: string) {
 }
 
 /** Locks the product's business, then reads the product for a write. */
-async function lockProduct(tx: Tx, productId: string): Promise<ProductRow> {
+export async function lockProduct(tx: Tx, productId: string): Promise<ProductRow> {
   const [found] = await tx
     .select({ businessId: product.businessId })
     .from(product)

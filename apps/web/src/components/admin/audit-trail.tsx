@@ -20,6 +20,12 @@ const ACTIONS = [
   'business.create_product',
   'business.update_product',
   'business.delete_product',
+  'business.set_logo',
+  'business.update_logo',
+  'business.delete_logo',
+  'business.set_product_image',
+  'business.update_product_image',
+  'business.delete_product_image',
   'branch.create',
   'branch.update',
   'branch.update_hours',
@@ -31,6 +37,10 @@ const ACTIONS = [
   'branch.update_service',
   'branch.delete_service',
   'branch.copy_service',
+  'branch.add_photo',
+  'branch.update_photo',
+  'branch.delete_photo',
+  'branch.reorder_photos',
   'user.set_platform_role',
 ] as const;
 const FIELDS = [
@@ -57,6 +67,10 @@ const FIELDS = [
   'speciesTreated',
   'service',
   'product',
+  'photo',
+  'photoOrder',
+  'logo',
+  'productImage',
   'platformRole',
 ] as const;
 

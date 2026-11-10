@@ -47,6 +47,15 @@ export type CreateProductBody = JsonBody<
 export type UpdateProductBody = JsonBody<paths['/v1/admin/products/{id}']['patch']['requestBody']>;
 export type ProductAvailability = Product['availability'];
 
+export type CreateUploadBody = JsonBody<paths['/v1/admin/uploads']['post']['requestBody']>;
+export type UploadPurpose = CreateUploadBody['purpose'];
+export type FinalizeUploadBody = JsonBody<
+  paths['/v1/admin/branches/{id}/photos']['post']['requestBody']
+>;
+export type BranchPhotos = Ok<paths['/v1/admin/branches/{id}/photos']['get']>;
+export type Media = BranchPhotos['photos'][number];
+export type BusinessMedia = Ok<paths['/v1/admin/businesses/{id}/media']['get']>;
+
 export type PsgcArea = Ok<paths['/v1/admin/psgc-areas']['get']>[number];
 export type AuditLogPage = Ok<paths['/v1/admin/audit-log']['get']>;
 export type AuditEntry = AuditLogPage['items'][number];

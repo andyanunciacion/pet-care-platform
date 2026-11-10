@@ -219,15 +219,26 @@ Notes for later issues: the editor lives on the branch's Hours tab (`/admin/busi
 ### P1-2d · Admin: services, products & photos
 `ops` · Depends on: P1-2b
 Shipped as two PRs: services, species treated and products first (no images), then everything on R2.
-- [ ] Account (by you): Cloudflare; R2 public bucket (location hint: Asia-Pacific) for photos (the private claim-documents bucket waits for P1-8). Also a separate dev bucket for local work
+- [x] Account (by you): Cloudflare; R2 dev bucket `paw-photos-dev` for local work (the private claim-documents bucket waits for P1-8). Staging bucket: see the follow-up below
 - [x] Species treated per branch (`branch_species`), on the branch's Services tab
 - [x] Branch services (category, species, price range + unit, notes), with "copy to all branches" (overwrites a same-named service in the same category, after a dry run, and adds the service's species to each branch's species treated; ARCHITECTURE D37)
 - [x] Products (name, category, price, availability), on the business page
-- [ ] Product image (one per product)
-- [ ] Business logo (one per business)
-- [ ] Photo upload to Cloudflare R2 via presigned URLs; required alt text; ordering
+- [x] Product image (one per product), from the product's edit form
+- [x] Business logo (one per business), on the business page
+- [x] Photo upload to Cloudflare R2 via presigned URLs; required alt text; ordering (branch Photos tab, up to 20 per branch; ARCHITECTURE D38)
 
-Notes for later issues: services and products are audited on their parent branch or business (D36). `lib/price-format.ts` + `lib/price-labels.ts` turn prices into the UX10 labels and are meant for reuse by P1-4. Services only use subcategories (the API rejects a top-level group). Services have no reorder yet: they're listed by category, then in the order they were added.
+**R2 bucket setup** (Cloudflare dashboard; one bucket per environment):
+1. R2 → **Purchase R2 Plan** (free tier; Cloudflare asks for a card or PayPal). Optional: Billing → Notifications for a usage alert.
+2. Create the bucket (`paw-photos-dev`, `paw-photos-staging`, later production): location Automatic with the **Asia-Pacific** hint, storage class **Standard** (the free tier only covers Standard).
+3. Public access: dev uses the bucket's **Public Development URL (r2.dev)** (Settings → Allow). Staging and production need a **custom domain** instead (Settings → Custom Domains → `photos-staging.<domain>` / `photos.<domain>`), which needs the domain's DNS on Cloudflare: `r2.dev` is rate-limited and was unreachable from Philippine networks in testing (it works through Cloudflare WARP, which is fine for dev).
+4. Settings → **CORS policy**: `[{"AllowedOrigins":["<web origin>"],"AllowedMethods":["PUT"],"AllowedHeaders":["content-type"],"MaxAgeSeconds":3600}]` with `http://localhost:3000` (dev) or the staging URL.
+5. Settings → **Object lifecycle rules**: prefix `tmp/`, delete objects after 1 day (abandoned uploads).
+6. R2 → Manage API tokens → **Account API token** with Object Read & Write on **that bucket only** (one token per environment). Keep the Access Key ID, Secret Access Key (shown once) and the Account ID.
+7. Set `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_PUBLIC_URL` in `apps/api/.env` (dev) or Railway's `@paw/api` variables (staging). All five or none: without them the API runs and the image routes answer 503.
+
+**Staging follow-up (by you):** buy the domain (once the brand name is settled) and put its DNS on Cloudflare; then create `paw-photos-staging` with the custom domain `photos-staging.<domain>`, steps 4–6, and the Railway variables. Until then, staging shows "Photo storage isn't set up" on the image screens.
+
+Notes for later issues: services and products are audited on their parent branch or business (D36), and so are images. `lib/price-format.ts` + `lib/price-labels.ts` turn prices into the UX10 labels and are meant for reuse by P1-4. Services only use subcategories (the API rejects a top-level group). Services have no reorder yet: they're listed by category, then in the order they were added. For P1-4: image URLs come from the API (`url`), stored files are already resized WebP/JPEG; public pages should use `next/image` with `images.remotePatterns` for the photos domain. The clinic dashboard (P1-9) can reuse `ImageUpload` but needs business-member routes for the same writes.
 
 **Done when:** a listing can be fully filled in from the admin, including photos.
 

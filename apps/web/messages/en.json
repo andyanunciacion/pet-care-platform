@@ -68,7 +68,13 @@
         "update": "Business edited",
         "create_product": "Product added",
         "update_product": "Product edited",
-        "delete_product": "Product removed"
+        "delete_product": "Product removed",
+        "set_logo": "Logo set",
+        "update_logo": "Logo description edited",
+        "delete_logo": "Logo deleted",
+        "set_product_image": "Product image set",
+        "update_product_image": "Product image description edited",
+        "delete_product_image": "Product image deleted"
       },
       "branch": {
         "create": "Branch added",
@@ -81,7 +87,11 @@
         "create_service": "Service added",
         "update_service": "Service edited",
         "delete_service": "Service removed",
-        "copy_service": "Service copied from another branch"
+        "copy_service": "Service copied from another branch",
+        "add_photo": "Photo added",
+        "update_photo": "Photo description edited",
+        "delete_photo": "Photo deleted",
+        "reorder_photos": "Photos reordered"
       },
       "user": {
         "set_platform_role": "User role changed"
@@ -111,6 +121,10 @@
       "speciesTreated": "Species treated",
       "service": "Service",
       "product": "Product",
+      "photo": "Photo",
+      "photoOrder": "Photo order",
+      "logo": "Logo",
+      "productImage": "Product image",
       "platformRole": "Platform role"
     }
   },
@@ -188,6 +202,7 @@
     "tabDetails": "Details",
     "tabHours": "Hours",
     "tabServices": "Services",
+    "tabPhotos": "Photos",
     "weeklyTitle": "Weekly hours",
     "weeklyHint": "Manila time. Add a second interval for a lunch break. A closing time earlier than the opening time runs past midnight into the next day.",
     "is24h": "Open 24 hours",
@@ -305,6 +320,41 @@
       "availability": "Availability",
       "actions": "Actions"
     }
+  },
+  "AdminPhotos": {
+    "title": "Photos",
+    "hint": "Shown on the clinic page in this order; the first one is the main photo.",
+    "count": "{count} of {limit} photos.",
+    "empty": "No photos yet.",
+    "addPhoto": "Add a photo",
+    "full": "This branch has the most photos allowed. Delete one to add another.",
+    "storageOff": "Photo storage isn't set up yet. Add the R2_* variables to the API (see apps/api/.env.example) and restart it.",
+    "chooseImage": "Image",
+    "chooseHint": "JPG, PNG or WebP. It's resized before uploading (up to {size} pixels on the longest side).",
+    "alt": "Describe the image",
+    "altHint": "Read aloud to people who can't see it, e.g. “Front of the clinic with the blue sign”.",
+    "altRequired": "Describe the image first.",
+    "pickFile": "Pick an image first.",
+    "upload": "Upload",
+    "uploading": "Uploading…",
+    "uploaded": "Uploaded.",
+    "unreadable": "Couldn't read this image. Use a JPG, PNG or WebP (export iPhone HEIC photos as JPG first).",
+    "tooBig": "This image is still over 2 MB after resizing. Try a smaller one.",
+    "uploadFailed": "The upload didn't go through. Check your connection, and that the bucket's CORS rule allows this site.",
+    "editAlt": "Edit description",
+    "saveAlt": "Save",
+    "cancel": "Cancel",
+    "moveUpLabel": "Move “{alt}” up",
+    "moveDownLabel": "Move “{alt}” down",
+    "reorderFailed": "Couldn't reorder. Reload the page and try again.",
+    "remove": "Delete",
+    "removeFailed": "Couldn't delete it. Try again.",
+    "logoTitle": "Logo",
+    "logoHint": "Square works best. Shown next to the business name.",
+    "replaceLogo": "Replace logo",
+    "productImage": "Product image",
+    "addImage": "Add image",
+    "replaceImage": "Replace image"
   },
   "AdminListings": {
     "title": "Listings",
