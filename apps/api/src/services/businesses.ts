@@ -123,7 +123,7 @@ type BusinessRow = typeof business.$inferSelect;
 export type Business = z.infer<typeof BusinessSchema>;
 
 /** The fields audit_log records for a business. */
-const AUDITED_FIELDS = [
+export const BUSINESS_AUDITED_FIELDS = [
   'name',
   'slug',
   'type',
@@ -284,7 +284,7 @@ export async function createBusiness(
         action: 'business.create',
         entityType: 'business',
         entityId: row.id,
-        diff: diffFields(null, row, AUDITED_FIELDS),
+        diff: diffFields(null, row, BUSINESS_AUDITED_FIELDS),
       });
       return toBusiness(row);
     });
@@ -312,7 +312,7 @@ export async function updateBusiness(
       const [before] = await tx.select().from(business).where(eq(business.id, id)).for('update');
       if (before === undefined) throw businessNotFound();
 
-      const diff = diffFields(before, { ...before, ...changes }, AUDITED_FIELDS);
+      const diff = diffFields(before, { ...before, ...changes }, BUSINESS_AUDITED_FIELDS);
       if (Object.keys(diff).length === 0) return toBusiness(before);
 
       const [row] = await tx.update(business).set(changes).where(eq(business.id, id)).returning();

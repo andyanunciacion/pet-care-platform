@@ -24,6 +24,7 @@
     "@paw/db": "workspace:*",
     "@paw/domain": "workspace:*",
     "better-auth": "catalog:",
+    "csv-parse": "^7.0.3",
     "drizzle-orm": "catalog:",
     "fastify": "^5.12.5",
     "fastify-type-provider-zod": "^7.0.0",

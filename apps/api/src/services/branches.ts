@@ -81,7 +81,7 @@ export const CreateBranchSchema = z.object({
 /** Only the fields sent are changed. */
 export const UpdateBranchSchema = z.object(branchFields).partial();
 
-type CreateBranchInput = z.infer<typeof CreateBranchSchema>;
+export type CreateBranchInput = z.infer<typeof CreateBranchSchema>;
 type UpdateBranchInput = z.infer<typeof UpdateBranchSchema>;
 type ContactInput = CreateBranchInput['contacts'][number];
 
@@ -122,7 +122,7 @@ export const BranchSchema = z.object({
 export type Branch = z.infer<typeof BranchSchema>;
 
 /** The fields audit_log records for a branch (contacts as one list). */
-const AUDITED_FIELDS = [
+export const BRANCH_AUDITED_FIELDS = [
   'businessId',
   'name',
   'slug',
@@ -143,7 +143,9 @@ function slugTaken() {
   return httpError(409, message, [{ pointer: '/slug', message }]);
 }
 
-function auditContacts(contacts: readonly { type: string; value: string; label: string | null }[]) {
+export function auditContacts(
+  contacts: readonly { type: string; value: string; label: string | null }[],
+) {
   return contacts.map(({ type, value, label }) => ({ type, value, label: emptyToNull(label) }));
 }
 
@@ -199,7 +201,7 @@ export function assertEmergencyFlags(
   if (errors.length > 0) throw httpError(400, message, errors);
 }
 
-async function replaceContacts(tx: Tx, branchId: string, contacts: readonly ContactInput[]) {
+export async function replaceContacts(tx: Tx, branchId: string, contacts: readonly ContactInput[]) {
   await tx.delete(branchContact).where(eq(branchContact.branchId, branchId));
   if (contacts.length === 0) return;
   await tx.insert(branchContact).values(
@@ -305,7 +307,11 @@ export async function createBranch(
         action: 'branch.create',
         entityType: 'branch',
         entityId: row.id,
-        diff: diffFields(null, { ...row, contacts: auditContacts(contacts) }, AUDITED_FIELDS),
+        diff: diffFields(
+          null,
+          { ...row, contacts: auditContacts(contacts) },
+          BRANCH_AUDITED_FIELDS,
+        ),
       });
       return getBranch(tx, row.id);
     });
@@ -342,7 +348,7 @@ export async function updateBranch(
       const diff = diffFields(
         { ...before, contacts: auditContacts(beforeContacts) },
         { ...after, contacts: auditContacts(contacts ?? beforeContacts) },
-        AUDITED_FIELDS,
+        BRANCH_AUDITED_FIELDS,
       );
       if (Object.keys(diff).length === 0) return getBranch(tx, id);
 
