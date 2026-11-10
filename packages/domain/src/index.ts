@@ -20,6 +20,7 @@ export {
   type HoursIssue,
   type HoursIssueCode,
 } from './hours-validation.ts';
+export { parseDayHours, type DayHoursText, type DayHoursTextIssue } from './hours-text.ts';
 export {
   AGING_MAX_DAYS,
   freshness,
