@@ -4,6 +4,11 @@ pnpm-lock.yaml
 AI_DOCS/
 CLAUDE.md
 
+# Design summaries for the Impeccable plugin, rewritten by `/impeccable document` (D40).
+PRODUCT.md
+DESIGN.md
+.impeccable/
+
 # Written by tools (turbo, next), which re-add their own content.
 AGENTS.md
 

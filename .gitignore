@@ -32,3 +32,12 @@ Thumbs.db
 
 # Claude Code personal settings
 .claude/settings.local.json
+
+# impeccable-ignore-start
+# Impeccable design plugin: commit .impeccable/design.json, apps/web/.impeccable/live/config.json
+# (and config.json once a setting is shared); per-developer settings and the hook cache stay
+# local. Its runtime folders (questions/, mocks/, review/, critique snapshots) ignore
+# themselves; live mode keeps its own block in apps/web/.gitignore, written by the tool.
+**/.impeccable/config.local.json
+**/.impeccable/hook.cache.json
+# impeccable-ignore-end

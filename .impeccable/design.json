@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-10T11:38:53.423Z",
+  "title": "Design System: PAW",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Clinic Teal",
+        "canonical": "oklch(0.511 0.086 186.4)",
+        "tonalRamp": [
+          "oklch(0.150 0.023 186.4)",
+          "oklch(0.264 0.041 186.4)",
+          "oklch(0.379 0.059 186.4)",
+          "oklch(0.493 0.077 186.4)",
+          "oklch(0.607 0.077 186.4)",
+          "oklch(0.721 0.059 186.4)",
+          "oklch(0.836 0.041 186.4)",
+          "oklch(0.950 0.023 186.4)"
+        ]
+      },
+      "primary-foreground": {
+        "role": "neutral",
+        "displayName": "On-Teal White",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": [
+          "oklch(0.150 0.000 0)",
+          "oklch(0.264 0.000 0)",
+          "oklch(0.379 0.000 0)",
+          "oklch(0.493 0.000 0)",
+          "oklch(0.607 0.000 0)",
+          "oklch(0.721 0.000 0)",
+          "oklch(0.836 0.000 0)",
+          "oklch(0.950 0.000 0)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Clean White",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": [
+          "oklch(0.150 0.000 0)",
+          "oklch(0.264 0.000 0)",
+          "oklch(0.379 0.000 0)",
+          "oklch(0.493 0.000 0)",
+          "oklch(0.607 0.000 0)",
+          "oklch(0.721 0.000 0)",
+          "oklch(0.836 0.000 0)",
+          "oklch(0.950 0.000 0)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Deep Slate Ink",
+        "canonical": "oklch(0.208 0.04 265.8)",
+        "tonalRamp": [
+          "oklch(0.150 0.011 265.8)",
+          "oklch(0.264 0.019 265.8)",
+          "oklch(0.379 0.028 265.8)",
+          "oklch(0.493 0.036 265.8)",
+          "oklch(0.607 0.036 265.8)",
+          "oklch(0.721 0.028 265.8)",
+          "oklch(0.836 0.019 265.8)",
+          "oklch(0.950 0.011 265.8)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Soft Slate Wash",
+        "canonical": "oklch(0.968 0.007 247.9)",
+        "tonalRamp": [
+          "oklch(0.150 0.002 247.9)",
+          "oklch(0.264 0.003 247.9)",
+          "oklch(0.379 0.005 247.9)",
+          "oklch(0.493 0.006 247.9)",
+          "oklch(0.607 0.006 247.9)",
+          "oklch(0.721 0.005 247.9)",
+          "oklch(0.836 0.003 247.9)",
+          "oklch(0.950 0.002 247.9)"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Quiet Slate",
+        "canonical": "oklch(0.554 0.041 257.4)",
+        "tonalRamp": [
+          "oklch(0.150 0.011 257.4)",
+          "oklch(0.264 0.020 257.4)",
+          "oklch(0.379 0.028 257.4)",
+          "oklch(0.493 0.037 257.4)",
+          "oklch(0.607 0.037 257.4)",
+          "oklch(0.721 0.028 257.4)",
+          "oklch(0.836 0.020 257.4)",
+          "oklch(0.950 0.011 257.4)"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Warm Amber Wash",
+        "canonical": "oklch(0.962 0.058 95.6)",
+        "tonalRamp": [
+          "oklch(0.150 0.016 95.6)",
+          "oklch(0.264 0.028 95.6)",
+          "oklch(0.379 0.040 95.6)",
+          "oklch(0.493 0.052 95.6)",
+          "oklch(0.607 0.052 95.6)",
+          "oklch(0.721 0.040 95.6)",
+          "oklch(0.836 0.028 95.6)",
+          "oklch(0.950 0.016 95.6)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline Slate",
+        "canonical": "oklch(0.929 0.013 255.5)",
+        "tonalRamp": [
+          "oklch(0.150 0.004 255.5)",
+          "oklch(0.264 0.006 255.5)",
+          "oklch(0.379 0.009 255.5)",
+          "oklch(0.493 0.012 255.5)",
+          "oklch(0.607 0.012 255.5)",
+          "oklch(0.721 0.009 255.5)",
+          "oklch(0.836 0.006 255.5)",
+          "oklch(0.950 0.004 255.5)"
+        ]
+      },
+      "destructive": {
+        "role": "semantic",
+        "displayName": "Destructive Red",
+        "canonical": "oklch(0.505 0.19 27.5)",
+        "tonalRamp": [
+          "oklch(0.150 0.052 27.5)",
+          "oklch(0.264 0.091 27.5)",
+          "oklch(0.379 0.131 27.5)",
+          "oklch(0.493 0.170 27.5)",
+          "oklch(0.607 0.170 27.5)",
+          "oklch(0.721 0.131 27.5)",
+          "oklch(0.836 0.091 27.5)",
+          "oklch(0.950 0.052 27.5)"
+        ]
+      },
+      "status-open": {
+        "role": "semantic",
+        "displayName": "Open Green",
+        "canonical": "oklch(0.527 0.137 150.1)",
+        "tonalRamp": [
+          "oklch(0.150 0.037 150.1)",
+          "oklch(0.264 0.066 150.1)",
+          "oklch(0.379 0.094 150.1)",
+          "oklch(0.493 0.123 150.1)",
+          "oklch(0.607 0.123 150.1)",
+          "oklch(0.721 0.094 150.1)",
+          "oklch(0.836 0.066 150.1)",
+          "oklch(0.950 0.037 150.1)"
+        ]
+      },
+      "status-closing": {
+        "role": "semantic",
+        "displayName": "Closing Amber",
+        "canonical": "oklch(0.555 0.146 49)",
+        "tonalRamp": [
+          "oklch(0.150 0.040 49)",
+          "oklch(0.264 0.070 49)",
+          "oklch(0.379 0.100 49)",
+          "oklch(0.493 0.131 49)",
+          "oklch(0.607 0.131 49)",
+          "oklch(0.721 0.100 49)",
+          "oklch(0.836 0.070 49)",
+          "oklch(0.950 0.040 49)"
+        ]
+      },
+      "status-closed": {
+        "role": "semantic",
+        "displayName": "Closed Red",
+        "canonical": "oklch(0.505 0.19 27.5)",
+        "tonalRamp": [
+          "oklch(0.150 0.052 27.5)",
+          "oklch(0.264 0.091 27.5)",
+          "oklch(0.379 0.131 27.5)",
+          "oklch(0.493 0.170 27.5)",
+          "oklch(0.607 0.170 27.5)",
+          "oklch(0.721 0.131 27.5)",
+          "oklch(0.836 0.091 27.5)",
+          "oklch(0.950 0.052 27.5)"
+        ]
+      },
+      "status-unknown": {
+        "role": "semantic",
+        "displayName": "Unknown Slate",
+        "canonical": "oklch(0.554 0.041 257.4)",
+        "tonalRamp": [
+          "oklch(0.150 0.011 257.4)",
+          "oklch(0.264 0.020 257.4)",
+          "oklch(0.379 0.028 257.4)",
+          "oklch(0.493 0.037 257.4)",
+          "oklch(0.607 0.037 257.4)",
+          "oklch(0.721 0.028 257.4)",
+          "oklch(0.836 0.020 257.4)",
+          "oklch(0.950 0.011 257.4)"
+        ]
+      },
+      "stale": {
+        "role": "semantic",
+        "displayName": "Stale Amber",
+        "canonical": "oklch(0.555 0.146 49)",
+        "tonalRamp": [
+          "oklch(0.150 0.040 49)",
+          "oklch(0.264 0.070 49)",
+          "oklch(0.379 0.100 49)",
+          "oklch(0.493 0.131 49)",
+          "oklch(0.607 0.131 49)",
+          "oklch(0.721 0.100 49)",
+          "oklch(0.836 0.070 49)",
+          "oklch(0.950 0.040 49)"
+        ]
+      },
+      "verified": {
+        "role": "semantic",
+        "displayName": "Verified Blue",
+        "canonical": "oklch(0.546 0.215 262.9)",
+        "tonalRamp": [
+          "oklch(0.150 0.059 262.9)",
+          "oklch(0.264 0.103 262.9)",
+          "oklch(0.379 0.148 262.9)",
+          "oklch(0.493 0.193 262.9)",
+          "oklch(0.607 0.193 262.9)",
+          "oklch(0.721 0.148 262.9)",
+          "oklch(0.836 0.103 262.9)",
+          "oklch(0.950 0.059 262.9)"
+        ]
+      },
+      "emergency": {
+        "role": "semantic",
+        "displayName": "Emergency Red",
+        "canonical": "oklch(0.577 0.215 27.3)",
+        "tonalRamp": [
+          "oklch(0.150 0.059 27.3)",
+          "oklch(0.264 0.103 27.3)",
+          "oklch(0.379 0.148 27.3)",
+          "oklch(0.493 0.193 27.3)",
+          "oklch(0.607 0.193 27.3)",
+          "oklch(0.721 0.148 27.3)",
+          "oklch(0.836 0.103 27.3)",
+          "oklch(0.950 0.059 27.3)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page title: the clinic name or page heading."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card and section titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "All reading text; never below 16px."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Secondary lines, form labels, freshness notes."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "state-change",
+        "value": "150ms ease",
+        "purpose": "Hover and focus color changes only; reduced motion respected."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "base",
+        "value": "360px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "container",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (owner size)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main action on a screen, e.g. Call. 44px minimum height on owner and clinic screens.",
+      "html": "<button class=\"ds-btn-primary\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/></svg>Call</button>",
+      "css": ".ds-btn-primary { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; background: var(--primary); color: var(--primary-foreground); border: 1px solid transparent; border-radius: 0.75rem; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 150ms; } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary) 80%, transparent); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary actions next to the primary one (Messenger, Directions).",
+      "html": "<button class=\"ds-btn-outline\">Directions</button>",
+      "css": ".ds-btn-outline { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: 0.75rem; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 150ms; } .ds-btn-outline:hover { background: var(--muted); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); } .ds-btn-outline:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Form field with a visible label; 16px text so iOS does not zoom.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Clinic name</span><input class=\"ds-input\" placeholder=\"e.g. Sunrise Vet Clinic\" /></label>",
+      "css": ".ds-field { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 6px; } .ds-field-label { font-size: 0.875rem; font-weight: 500; color: var(--foreground); } .ds-input { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; height: 44px; padding: 0 12px; font-size: 1rem; color: var(--foreground); background: transparent; border: 1px solid var(--border); border-radius: 0.75rem; transition: border-color 150ms; } .ds-input::placeholder { color: var(--muted-foreground); } .ds-input:focus-visible { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); }"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "White surface with a hairline ring; tint (muted/accent) groups content before any shadow.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Services</div><p class=\"ds-card-body\">Kapon (cat) · ₱1,500–₱2,500</p></div>",
+      "css": ".ds-card { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 8px; padding: 16px; background: var(--background); color: var(--foreground); border-radius: 1.05rem; box-shadow: 0 0 0 1px color-mix(in oklch, var(--foreground) 10%, transparent); } .ds-card-title { font-size: 1rem; font-weight: 500; } .ds-card-body { margin: 0; font-size: 1rem; }"
+    },
+    {
+      "name": "Quick Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Search shortcut on home and results (Open now, Kapon, Bakuna, species).",
+      "html": "<button class=\"ds-chip\">Kapon</button>",
+      "css": ".ds-chip { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; background: var(--muted); color: var(--foreground); border: 1px solid transparent; border-radius: 9999px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 150ms; } .ds-chip:hover { background: var(--border); } .ds-chip:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); }"
+    },
+    {
+      "name": "Emergency Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Always-visible entry to the emergency view (UX7). The only use of the emergency color besides that view.",
+      "html": "<button class=\"ds-chip-emergency\">Emergency</button>",
+      "css": ".ds-chip-emergency { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; background: var(--emergency); color: var(--primary-foreground); border: 1px solid transparent; border-radius: 9999px; font-size: 1rem; font-weight: 600; cursor: pointer; } .ds-chip-emergency:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--emergency) 50%, transparent); }"
+    },
+    {
+      "name": "Open Status",
+      "kind": "custom",
+      "refersTo": "status-open",
+      "description": "OpenStatusText + HoursFreshness: status as icon + text + color, with the freshness line underneath (UX4, UX5).",
+      "html": "<div class=\"ds-status\"><p class=\"ds-status-line\"><span class=\"ds-status-icon\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg></span><strong class=\"ds-status-label\">Open</strong><span>· closes 6 PM</span></p><p class=\"ds-status-fresh\">Hours confirmed 5 days ago by the clinic</p></div>",
+      "css": ".ds-status { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 2px; color: var(--foreground); font-size: 1rem; } .ds-status-line { margin: 0; display: flex; align-items: center; gap: 6px; } .ds-status-icon { display: inline-flex; color: var(--status-open); } .ds-status-label { font-weight: 600; color: var(--status-open); } .ds-status-fresh { margin: 0; font-size: 0.875rem; color: var(--muted-foreground); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Neighbor Who Knows",
+    "overview": "PAW is the local who has already called around: they know which clinic is open right now, which one sees rabbits, and roughly what a kapon costs, and they tell you plainly. Warm, local and word-of-mouth in feel, but the facts are exact and dated. Friendliness comes from soft shapes, warm tints and plain words, never from cartoons, mascots or jokes.\n\nDensity depends on the audience (UX14). Owner pages are mobile-first at 360 px and say one thing at a time: status, distance, Call. The clinic dashboard has big forgiving controls, one task per screen. /admin is dense and desktop-first, with shadcn defaults. In an emergency the warmth steps back and only the facts and actions remain.",
+    "keyCharacteristics": [
+      "Status first: open / closing / closed / unknown, always as text + icon + color.",
+      "Freshness is always visible (\"Hours confirmed 5 days ago by the clinic\").",
+      "Soft, rounded, friendly surfaces on a white page; color is kept for status and actions.",
+      "Light: the system font, no decorative images, a map only when asked for."
+    ],
+    "rules": [
+      {
+        "name": "The Meaning-Only Color Rule",
+        "body": "Status, stale, verified and emergency colors mean exactly one thing each. Never use them for decoration, and never show status by color alone (UX4).",
+        "section": "colors"
+      },
+      {
+        "name": "The Token-Only Rule",
+        "body": "Components use the Tailwind classes these tokens produce (bg-primary, text-status-open), never raw values. Changing the brand is an edit to globals.css only.",
+        "section": "colors"
+      },
+      {
+        "name": "The 16px Floor Rule",
+        "body": "Owner-facing body text is never below 1rem. text-sm is for secondary lines only, and never for a phone number, a price or a status.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tint-Before-Shadow Rule",
+        "body": "To group or lift content, use a tinted surface first. A shadow is only for something that really floats above the page.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do show status as text + icon + color, and freshness with its source, wherever hours appear.",
+      "Do keep the main action (Call) primary-colored, in the thumb zone, and at least 44px tall on owner and clinic screens.",
+      "Do use muted / accent tints to group content before reaching for borders or shadows.",
+      "Do pair every icon with a visible label (DESIGN §2, principle 6)."
+    ],
+    "donts": [
+      "Don't use raw color values, or status colors for decoration.",
+      "Don't add mascots, cartoon illustrations, pet puns or emoji: friendly, not childish (DESIGN §7).",
+      "Don't add motion, hero images or extra client JavaScript to owner pages without a reason; the performance budget (DESIGN §9) is for mid-range Android on mobile data.",
+      "Don't put anything in the emergency view except open-now, distance and Call (UX7)."
+    ]
+  }
+}
