@@ -20,6 +20,8 @@ import type {
   CreateServiceBody,
   CreateUploadBody,
   FinalizeUploadBody,
+  ImportCsvBody,
+  ImportResult,
   ReplaceHoursBody,
   SetHoursExceptionBody,
   UpdateBranchBody,
@@ -280,6 +282,23 @@ export async function copyServiceAction(
   });
   if (data === undefined) return { state: await failed(error), result: null };
   if (!dryRun) refresh();
+  return { state: savedForm, result: data };
+}
+
+// ── CSV import (ARCHITECTURE D39) ───────────────────────────────────────────────────────
+
+/**
+ * With `dryRun`, only checks the file. Otherwise imports the businesses that pass, plus the
+ * likely duplicates whose keys are in `importAnyway`. The API checks everything again.
+ */
+export async function importCsvAction(
+  body: ImportCsvBody,
+): Promise<{ state: FormState; result: ImportResult | null }> {
+  await requireAdmin();
+  const api = await adminApi();
+  const { data, error } = await api.POST('/v1/admin/imports', { body });
+  if (data === undefined) return { state: await failed(error), result: null };
+  if (!body.dryRun) refresh();
   return { state: savedForm, result: data };
 }
 

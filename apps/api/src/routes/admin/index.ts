@@ -8,6 +8,7 @@ import { adminBranchServiceRoutes } from './branch-services.ts';
 import { adminBranchRoutes } from './branches.ts';
 import type { PhotoStorage } from '../../storage.ts';
 import { adminBusinessRoutes } from './businesses.ts';
+import { adminImportRoutes } from './imports.ts';
 import { adminMediaRoutes } from './media.ts';
 import { adminProductRoutes } from './products.ts';
 import { adminReferenceRoutes } from './reference.ts';
@@ -51,4 +52,5 @@ export const adminRoutes: FastifyPluginAsyncZod<{
   await app.register(adminProductRoutes, { database });
   await app.register(adminMediaRoutes, { database, storage });
   await app.register(adminReferenceRoutes, { database });
+  await app.register(adminImportRoutes, { database });
 };

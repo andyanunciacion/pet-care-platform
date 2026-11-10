@@ -141,7 +141,7 @@
 ### P0-V2 · Pet owner interviews (15+)
 `business` · Uses `pitch/pet-owners.md`. Notes go in the §10 template.
 ### P0-V3 · Seed list spreadsheet
-`business` · Every vet clinic in Angeles / Mabalacat / Clark: source, services, hours, contacts, date confirmed. Its columns should match the CSV import format (P1-2e).
+`business` · Every vet clinic in Angeles / Mabalacat / Clark: source, services, hours, contacts, date confirmed. Use the columns of the CSV import format ([csv-import.md](csv-import.md)); start from the template on `/admin/import`.
 ### P0-V4 · Brand name + domain
 `business` · Decide the name, check the domain and social handles are free, register the domain.
 ### P0-V5 · Privacy notice + terms (draft)
@@ -244,10 +244,15 @@ Notes for later issues: services and products are audited on their parent branch
 
 ### P1-2e · Admin: CSV import
 `ops` · Depends on: P1-2b, P1-2c, P1-2d
-- [ ] CSV format documented (matches the P0-V3 spreadsheet columns)
-- [ ] Upload → Zod validation → row-by-row preview with errors → confirm import
-- [ ] Duplicate detection (name + distance / phone match)
-- [ ] Imported rows record their data source + confirmation date
+- [x] CSV format documented ([csv-import.md](csv-import.md), with a template on `/admin/import`; the P0-V3 sheet uses these columns)
+- [x] Upload → Zod validation → row-by-row preview with errors → confirm import (ARCHITECTURE D39)
+- [x] Duplicate detection (similar name within 250 m / same phone or Viber number)
+- [x] Imported rows record their data source + confirmation date (`confirmed_on` → hours confirmed by PAW)
+
+Notes for later issues:
+- **What the import doesn't do:** add branches to an existing business (it flags them as duplicates; add those by hand), take prices, or take species per service (services come in as "Call for price").
+- **Hours text:** `parseDayHours` (`packages/domain`) reads typed hours ("8am-12nn, 1pm-5pm"). It could serve a paste-hours box in the hours editor or the clinic dashboard (P1-9).
+- **Unchecked so far:** the 250 m / 0.3 duplicate thresholds haven't met real data yet; revisit them after the first seed import.
 
 **Done when:** you can import your seed spreadsheet and fix any flagged rows.
 

@@ -5261,6 +5261,242 @@
           }
         }
       }
+    },
+    "/v1/admin/imports": {
+      "post": {
+        "summary": "Check a CSV of listings (dryRun: true), or import the businesses that pass (dryRun: false)",
+        "tags": [
+          "admin"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "csv": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500000
+                  },
+                  "dryRun": {
+                    "type": "boolean"
+                  },
+                  "importAnyway": {
+                    "default": [],
+                    "maxItems": 1000,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "maxLength": 300
+                    }
+                  }
+                },
+                "required": [
+                  "csv",
+                  "dryRun"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "dryRun": {
+                      "type": "boolean"
+                    },
+                    "fileErrors": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "warnings": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "businesses": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "new",
+                              "duplicate",
+                              "invalid",
+                              "imported",
+                              "skipped"
+                            ]
+                          },
+                          "businessId": {
+                            "nullable": true,
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "errors": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "column": {
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "message": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "column",
+                                "message"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "duplicates": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "reason": {
+                                  "type": "string",
+                                  "enum": [
+                                    "phone",
+                                    "name_nearby"
+                                  ]
+                                },
+                                "businessId": {
+                                  "nullable": true,
+                                  "type": "string",
+                                  "format": "uuid",
+                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                                },
+                                "businessName": {
+                                  "type": "string"
+                                },
+                                "branchName": {
+                                  "type": "string"
+                                },
+                                "row": {
+                                  "nullable": true,
+                                  "type": "integer",
+                                  "minimum": -9007199254740991,
+                                  "maximum": 9007199254740991
+                                },
+                                "distanceMeters": {
+                                  "nullable": true,
+                                  "type": "integer",
+                                  "minimum": -9007199254740991,
+                                  "maximum": 9007199254740991
+                                },
+                                "phone": {
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "reason",
+                                "businessId",
+                                "businessName",
+                                "branchName",
+                                "row",
+                                "distanceMeters",
+                                "phone"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "rows": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "row": {
+                                  "type": "integer",
+                                  "minimum": -9007199254740991,
+                                  "maximum": 9007199254740991
+                                },
+                                "branch": {
+                                  "type": "string"
+                                },
+                                "city": {
+                                  "type": "string"
+                                },
+                                "errors": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "column": {
+                                        "nullable": true,
+                                        "type": "string"
+                                      },
+                                      "message": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "column",
+                                      "message"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                }
+                              },
+                              "required": [
+                                "row",
+                                "branch",
+                                "city",
+                                "errors"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "key",
+                          "name",
+                          "status",
+                          "businessId",
+                          "errors",
+                          "duplicates",
+                          "rows"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "dryRun",
+                    "fileErrors",
+                    "warnings",
+                    "businesses"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

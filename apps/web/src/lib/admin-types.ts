@@ -56,6 +56,10 @@ export type BranchPhotos = Ok<paths['/v1/admin/branches/{id}/photos']['get']>;
 export type Media = BranchPhotos['photos'][number];
 export type BusinessMedia = Ok<paths['/v1/admin/businesses/{id}/media']['get']>;
 
+export type ImportCsvBody = JsonBody<paths['/v1/admin/imports']['post']['requestBody']>;
+export type ImportResult = Ok<paths['/v1/admin/imports']['post']>;
+export type ImportedBusiness = ImportResult['businesses'][number];
+
 export type PsgcArea = Ok<paths['/v1/admin/psgc-areas']['get']>[number];
 export type AuditLogPage = Ok<paths['/v1/admin/audit-log']['get']>;
 export type AuditEntry = AuditLogPage['items'][number];

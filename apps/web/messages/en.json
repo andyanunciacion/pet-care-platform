@@ -28,8 +28,53 @@
     "navLabel": "Admin sections",
     "nav": {
       "listings": "Listings",
+      "import": "Import",
       "auditLog": "Audit log"
     }
+  },
+  "AdminImport": {
+    "title": "Import listings",
+    "subtitle": "Add businesses and their branches from a spreadsheet saved as CSV. Nothing is saved until you confirm.",
+    "template": "Download the template",
+    "templateHint": "One row per branch; rows with the same business name become one business. In Google Sheets: File → Download → CSV. Imported businesses start hidden, so nothing goes public until you publish it.",
+    "file": "CSV file",
+    "checking": "Checking the file…",
+    "tooLarge": "The file is over 500 KB. Split it into smaller files.",
+    "readFailed": "Couldn't read the file.",
+    "checkFailed": "Couldn't check the file. Try again.",
+    "fileErrors": "This file can't be imported:",
+    "summaryNew": "{count, plural, one {# new business} other {# new businesses}}",
+    "summaryDuplicates": "{count, plural, one {# likely duplicate} other {# likely duplicates}}",
+    "summaryInvalid": "{count, plural, one {# with errors} other {# with errors}}",
+    "summaryHint": "Businesses with errors are skipped: fix them in the spreadsheet and check the file again. Rows already imported then show up as duplicates.",
+    "resultsLabel": "Rows in the file",
+    "columns": {
+      "row": "Row",
+      "branch": "Branch",
+      "city": "City",
+      "problems": "Problems"
+    },
+    "status": {
+      "new": "New",
+      "duplicate": "Likely duplicate",
+      "invalid": "Has errors",
+      "imported": "Imported",
+      "skipped": "Skipped"
+    },
+    "noName": "(no business name)",
+    "sameAs": "Likely the same as:",
+    "dupPhone": "same number, {phone}",
+    "dupInFile": "row {row} of this file: {business}, {branch}",
+    "dupNearby": "similar name, {distance} m away",
+    "importAnyway": "Import anyway",
+    "confirm": "{count, plural, one {Import # business} other {Import # businesses}}",
+    "nothingToImport": "Nothing to import yet.",
+    "importing": "Importing…",
+    "importFailed": "Couldn't import. Try again.",
+    "done": "{count, plural, =0 {Nothing was imported.} one {Imported # business. It stays hidden until you publish it.} other {Imported # businesses. They stay hidden until you publish them.}}",
+    "open": "Open",
+    "another": "Check another file",
+    "cancel": "Cancel"
   },
   "AdminAudit": {
     "title": "Audit log",
@@ -65,6 +110,7 @@
     "actions": {
       "business": {
         "create": "Business created",
+        "import": "Business imported from CSV",
         "update": "Business edited",
         "create_product": "Product added",
         "update_product": "Product edited",
@@ -78,6 +124,7 @@
       },
       "branch": {
         "create": "Branch added",
+        "import": "Branch imported from CSV",
         "update": "Branch edited",
         "update_hours": "Hours edited",
         "set_hours_exception": "Hours exception set",
@@ -120,6 +167,7 @@
       "hoursConfirmedBy": "Hours confirmed by",
       "speciesTreated": "Species treated",
       "service": "Service",
+      "services": "Services",
       "product": "Product",
       "photo": "Photo",
       "photoOrder": "Photo order",

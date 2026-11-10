@@ -16,6 +16,7 @@ import { priceLabels } from '@/lib/price-labels';
 // Labels exist for these; anything newer is shown as stored (e.g. "claim.approve").
 const ACTIONS = [
   'business.create',
+  'business.import',
   'business.update',
   'business.create_product',
   'business.update_product',
@@ -27,6 +28,7 @@ const ACTIONS = [
   'business.update_product_image',
   'business.delete_product_image',
   'branch.create',
+  'branch.import',
   'branch.update',
   'branch.update_hours',
   'branch.set_hours_exception',
@@ -66,6 +68,7 @@ const FIELDS = [
   'hoursConfirmedBy',
   'speciesTreated',
   'service',
+  'services',
   'product',
   'photo',
   'photoOrder',

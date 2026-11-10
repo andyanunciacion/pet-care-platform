@@ -1,0 +1,2 @@
+business,branch,data_source,address,barangay,city,province,coordinates,phones,viber,messenger,email,accepts_emergencies,open_24h,mon,tue,wed,thu,fri,sat,sun,species,services,confirmed_on
+Sample Animal Clinic,Balibago,Called the clinic,"123 Sample Street, near the market",Balibago,Angeles,Pampanga,"15.1627, 120.5560",0917 000 0000 / (045) 000 0000,0917 000 0000,m.me/sampleanimalclinic,,yes,no,"8am-12nn, 1pm-5pm","8am-12nn, 1pm-5pm","8am-12nn, 1pm-5pm","8am-12nn, 1pm-5pm","8am-12nn, 1pm-5pm",8am-12nn,closed,"Dog, Cat","Consultation, Vaccination, Kapon",2026-11-10
