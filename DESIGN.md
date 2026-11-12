@@ -119,6 +119,8 @@ A calm white-and-slate base with one teal brand color, a warm amber tint, and a 
 ### Named Rules
 **The Meaning-Only Color Rule.** Status, stale, verified and emergency colors mean exactly one thing each. Never use them for decoration, and never show status by color alone (UX4).
 
+**The White-Under-Status Rule.** `muted-foreground`, `status-unknown` and `emergency` pass AA only on white (they reach 4.34–4.41:1 on `muted`). Status lines, freshness and secondary text sit on white (cards take a hairline border instead of a tint), and anything on a `muted` or `accent` tint uses `foreground` (AI_DOCS/DESIGN §7.1).
+
 **The Token-Only Rule.** Components use the Tailwind classes these tokens produce (`bg-primary`, `text-status-open`), never raw values. Changing the brand is an edit to `globals.css` only.
 
 ## Typography
@@ -138,7 +140,7 @@ A calm white-and-slate base with one teal brand color, a warm amber tint, and a 
 
 ## Layout
 
-Mobile-first: design at 360 px wide, with a 16px side gutter (`px-4`) and a centered `max-w-5xl` (64rem) container. Public pages have a slim top bar (wordmark; compact search on inner pages) and no bottom tab bar in P1 (UX18). On clinic pages the primary actions sit in a sticky bottom bar in the thumb zone (**Call · Messenger · Directions**, UX8). The mobile results view shows a list with a map toggle; desktop shows list and map side by side (UX2). Spacing follows Tailwind's 0.25rem scale; cards pad 16px (12px when compact).
+Mobile-first: design at 360 px wide, with a 16px side gutter (`px-4`) and a centered `max-w-5xl` (64rem) container. Public pages have a slim top bar (wordmark; compact search on inner pages) and no bottom tab bar in P1 (UX18). On clinic pages the primary actions sit in a sticky bottom bar in the thumb zone (**Call · Messenger · Directions**, UX8). Species treated sit in the clinic page header as one row ("Treats" + a `muted` pill per animal; smaller pills on branch cards), not in a section further down. The mobile results view shows a list with a map toggle; desktop shows list and map side by side (UX2). Spacing follows Tailwind's 0.25rem scale; cards pad 16px (12px when compact).
 
 ## Elevation & Depth
 
@@ -159,6 +161,7 @@ Soft, generous rounding from one radius token (`--radius`, 0.75rem): controls `l
 - **Shape:** rounded corners (`rounded.lg`, 0.75rem).
 - **Primary:** Clinic Teal with white text. Used for the main action on a screen, such as **Call** on a result card or in the contact bar.
 - **Outline / Ghost:** white or transparent, hairline border, tinting to `muted` on hover. For secondary actions (Messenger, Directions).
+- **Hover (owner pages):** primary darkens (never lightens: white text keeps its contrast); outline tints `muted` and its border turns `primary`. Styles: `primaryAction` / `outlineAction` in `apps/web/src/lib/action-styles.ts`.
 - **Focus:** a 3px teal ring at 50% opacity. **Active:** a 1px press-down.
 - **Size:** shadcn's defaults (32–36px tall) are admin density only. **Owner pages and `/dashboard` use controls at least 44px tall** (DESIGN §10).
 
@@ -170,6 +173,10 @@ Soft, generous rounding from one radius token (`--radius`, 0.75rem): controls `l
 - **Corner Style:** `rounded.xl`.
 - **Background:** white, with a hairline ring; `muted` or `accent` tint for grouped or highlighted content.
 - **Internal Padding:** 16px (12px compact).
+- **Cards that open something** (e.g. a branch card): the action is a visible outline button at the bottom ("View branch ›"); only the buttons are tappable, not the whole card. The card heading is plain text. Repeated cards line their buttons up at the bottom (`mt-auto`). The card border turns `primary` on hover.
+
+### Named Rules
+**The Looks-Tappable Rule.** Anything tappable looks tappable at rest, with no hover needed (phones have none): a button shape (≥44px, verb label) or a link that is underlined or ends in an arrow. `text-primary` is reserved for tappable things; headings and plain text never use it. Repeated buttons carry a visually hidden target ("Call Balibago"). Source: AI_DOCS/DESIGN §2 principle 9 and §8 "Making actions obvious".
 
 ### Inputs / Fields
 - **Style:** hairline `input` stroke, transparent background, `rounded.lg`, 16px text on mobile (it also keeps iOS from zooming in on focus).
@@ -186,9 +193,11 @@ Soft, generous rounding from one radius token (`--radius`, 0.75rem): controls `l
 - **Do** keep the main action (**Call**) primary-colored, in the thumb zone, and at least 44px tall on owner and clinic screens.
 - **Do** use `muted` / `accent` tints to group content before reaching for borders or shadows.
 - **Do** pair every icon with a visible label (DESIGN §2, principle 6).
+- **Do** make every action look tappable at rest: a button with a verb label, or an underlined or arrowed link (the Looks-Tappable Rule).
 
 ### Don't:
 - **Don't** use raw color values, or status colors for decoration.
+- **Don't** make a colored heading or bare text the only way into something, or color text `primary` when it can't be tapped.
 - **Don't** add mascots, cartoon illustrations, pet puns or emoji: friendly, not childish (DESIGN §7).
 - **Don't** add motion, hero images or extra client JavaScript to owner pages without a reason; the performance budget (DESIGN §9) is for mid-range Android on mobile data.
 - **Don't** put anything in the emergency view except open-now, distance and **Call** (UX7).
