@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { diffFields, recordAudit } from '../audit.ts';
 import { isUniqueViolation } from '../db-errors.ts';
 import { httpError } from '../errors.ts';
+import { listingPaths, publicBranchPlaces } from './listing-paths.ts';
 
 const { business, branch, psgcArea } = schema;
 
@@ -87,6 +88,8 @@ export const BusinessSchema = z.object({
 });
 
 export const BusinessDetailSchema = BusinessSchema.extend({
+  /** The public page, or null while the business (or every branch) is hidden. */
+  publicPath: z.string().nullable(),
   branches: z.array(
     z.object({
       id: z.uuid(),
@@ -234,24 +237,29 @@ export async function getBusiness(
   const [row] = await db.select().from(business).where(eq(business.id, id));
   if (row === undefined) throw businessNotFound();
 
-  const branches = await db
-    .select({
-      id: branch.id,
-      name: branch.name,
-      slug: branch.slug,
-      addressLine: branch.addressLine,
-      cityCode: psgcArea.code,
-      cityName: psgcArea.name,
-      listingStatus: branch.listingStatus,
-      updatedAt: branch.updatedAt,
-    })
-    .from(branch)
-    .innerJoin(psgcArea, eq(psgcArea.code, branch.cityCode))
-    .where(eq(branch.businessId, id))
-    .orderBy(asc(branch.name), asc(branch.id));
+  const [branches, places] = await Promise.all([
+    db
+      .select({
+        id: branch.id,
+        name: branch.name,
+        slug: branch.slug,
+        addressLine: branch.addressLine,
+        cityCode: psgcArea.code,
+        cityName: psgcArea.name,
+        listingStatus: branch.listingStatus,
+        updatedAt: branch.updatedAt,
+      })
+      .from(branch)
+      .innerJoin(psgcArea, eq(psgcArea.code, branch.cityCode))
+      .where(eq(branch.businessId, id))
+      .orderBy(asc(branch.name), asc(branch.id)),
+    publicBranchPlaces(db, id),
+  ]);
 
   return {
     ...toBusiness(row),
+    publicPath:
+      row.listingStatus === 'hidden' ? null : (listingPaths(row.slug, places)?.business ?? null),
     branches: branches.map(({ cityCode, cityName, updatedAt, ...rest }) => ({
       ...rest,
       city: { code: cityCode, name: cityName },

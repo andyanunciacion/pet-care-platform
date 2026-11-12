@@ -11,7 +11,11 @@ export default async function PublicLayout({ children }: { children: ReactNode }
     <>
       <header className="border-b">
         <div className="mx-auto flex h-14 max-w-5xl items-center px-4">
-          <Link href="/" aria-label={t('homeLink')} className="rounded-md">
+          <Link
+            href="/"
+            aria-label={t('homeLink')}
+            className="inline-flex min-h-11 items-center rounded-md"
+          >
             <Wordmark />
           </Link>
         </div>

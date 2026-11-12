@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { BranchHours } from '@/lib/admin-types';
 import { errorAt, idleForm, type FormState } from '@/lib/form-errors';
-import { useExceptionSummary } from './hours-exceptions';
+import { useExceptionSummary } from '@/components/hours/exception-summary';
 
 interface Props {
   branchId: string;

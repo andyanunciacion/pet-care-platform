@@ -1,3 +1,4 @@
+import { areaSlug } from '@paw/domain';
 import { and, eq, isNotNull, isNull, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -55,6 +56,24 @@ describe('PSGC: Pampanga', () => {
         ),
       );
     expect(misplaced).toEqual([]);
+  });
+
+  it('gives every province, city and municipality the slug areaSlug() makes', async () => {
+    const areas = await db
+      .select({ name: psgcArea.name, level: psgcArea.level, slug: psgcArea.slug })
+      .from(psgcArea)
+      .where(
+        and(
+          sql`${psgcArea.level} <> 'barangay'`,
+          sql`${psgcArea.code} not like '99%'`, // test fixtures
+        ),
+      );
+    expect(areas.length).toBeGreaterThan(0);
+    const mismatched = areas.filter(
+      (area) => area.level !== 'barangay' && area.slug !== areaSlug(area.name, area.level),
+    );
+    expect(mismatched).toEqual([]);
+    expect(areas.find((area) => area.name === 'City of Angeles')?.slug).toBe('angeles-city');
   });
 
   it('keeps accented names intact', async () => {

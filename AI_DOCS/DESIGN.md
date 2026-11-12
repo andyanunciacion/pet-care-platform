@@ -27,6 +27,7 @@ Claude reviews and polishes UI with **Impeccable**, a design plugin for Claude C
 6. **Plain words, icons with labels.** Short English copy that is friendly to Taglish readers. Icons never stand alone.
 7. **Calm in emergencies.** The emergency flow removes everything except open-now, distance, and **Call**.
 8. **Clinic tools are forgiving.** Receptionists aren't tech users: big controls, previews of how owners will see changes, no dead ends.
+9. **Actions look like actions.** Anything that can be tapped must look tappable at a glance, without hovering: a button shape or an underlined/arrowed link, with a verb label ("Call", "View branch"). Text that only *looks* like a link (colored, but not tappable) and links that only look like text are both bugs. Rules in §8 ("Making actions obvious").
 
 ### 2.1 Voice & tone
 
@@ -57,7 +58,8 @@ PAW sounds like **a calm, plain neighbor** who already called around and tells y
 Public (owners, indexable)
 ├── /                              Home: search-first
 ├── /search?q=&…                   Results: list ⇄ map
-├── /{province}/{city}/{business}  Clinic page (branch sections if >1)
+├── /{province}/{city}/{business}  Clinic page (1 branch), or its list of branches (2+)
+│   └── /{branch}                  Each branch's clinic page, in its own city (2+ branches)
 ├── /{province}/{city}/vets        City landing
 ├── /{province}/{city}/services/{category}
 ├── /24-hour-vets/{city}
@@ -108,7 +110,7 @@ Public (owners, indexable)
 | UX5 | **Freshness** | Shown on the clinic page near the hours, and in short form on cards. Wording: "Hours confirmed 5 days ago by the clinic" (or "by PAW"). ≤ 30 days: normal. 31–90 days: "May have changed. Call ahead." > 90 days or never confirmed: a warning style, and the listing ranks lower |
 | UX6 | **Unclaimed vs verified** | Unclaimed must not look broken, since most listings start that way. Show "Listed by PAW" in small text plus a subtle claim CTA at the bottom. Verified: a badge next to the name that explains itself on tap |
 | UX7 | **Emergency entry** | A persistent "Emergency" chip on home and results. Tapping it opens the emergency view (open-now + 24h only, sorted by distance, big Call buttons) with a line: "Call before going" |
-| UX8 | **Clinic page order** | Header (name, badge, status, freshness) → sticky bottom bar (**Call · Messenger · Directions**) → services by category with prices → hours (today highlighted, upcoming exceptions shown) → species treated → photos → other branches → "Report incorrect info" → claim CTA |
+| UX8 | **Clinic page order** | Header (name, address, **species treated** as one row, "Treats" + a pill per animal (also on branch cards), badge, status, freshness) → sticky bottom bar (**Call · Messenger · Directions**) → services by category with prices → hours (today highlighted, upcoming exceptions shown) → photos → other branches → "Report incorrect info" → claim CTA. On desktop, hours, contacts and address sit in a right-hand panel with a hairline border (white, not tinted), so they read as one block apart from the services; on mobile they stack without a panel. A business with several branches has a short list page (each branch with its status and **Call**) and one full page per branch. A permanently closed listing shows "Permanently closed" instead of the status, and no contact bar. Built in slice 4 without photos (P1-4b), the report link (slice 7) and the claim CTA (`/for-clinics` in slice 6, the claim flow in slice 8) |
 | UX9 | **Contact actions** | `tel:` link; `m.me` Messenger link; Viber link; directions open Google Maps or Waze (let the user pick once, then remember the choice in the browser). Every tap is logged as a listing event |
 | UX10 | **Prices** | "₱500–₱800", "From ₱500", or "Call for price", plus the unit when it isn't per visit ("/night"). A footnote on the clinic page: "Prices are estimates. Confirm with the clinic." |
 | UX11 | **Report incorrect info** | A bottom sheet: choose what's wrong (hours · phone · address · services · closed permanently · other) → optional note → send. No login, invisible Turnstile, thank-you state |
@@ -119,6 +121,9 @@ Public (owners, indexable)
 | UX16 | **Dark mode** | Not at launch. Tokens are structured so it can be added without refactoring |
 | UX17 | **Listings with no hours data** | Show them, don't hide them; coverage matters. Status reads **"Hours unknown — call ahead"** (the `--status-unknown` style). These listings are excluded from the "Open now" and emergency results and ranked below listings with hours |
 | UX18 | **Bottom tab bar** | None in P1 (see §4). Revisit in P2 when accounts, favorites, and pets add enough sections |
+| UX19 | **"Accepts emergencies"** | The flag promises that owners **can call the branch about an emergency even when it's closed** (by phone, not necessarily a walk-in). The clinic page says "Takes emergencies" while open and "Closed now · call for emergencies" when closed ("Call for emergencies" when hours are unknown), in normal text with a neutral icon: emergency red is only for the Emergency chip and view (UX7). Confirm the wording in clinic interviews (it's what a clinic agrees to when the flag is set) |
+| UX20 | **Time on cached pages** | Public pages are cached and can be days old when served (ARCHITECTURE D41), so the HTML never states anything that depends on the current time. Before the browser takes over it shows the named day's hours ("Thursday: 8 AM – 5 PM"), the confirmation date ("Hours confirmed Nov 6, 2026 by PAW") and no "Today" row; then the browser shows the open status, "5 days ago" and today's row |
+| UX21 | **Species filter on the clinic page** (planned, not built) | Species treated sit in the header (UX8) because they decide whether the rest of the page matters; branch cards show them too. A filter of species chips above the services ("Cat" shows only what covers cats, with its price) is planned, with these rules: **shown only when it helps** (the branch treats 2+ species, lists about 8+ services, and some services name a species); **services with no species stay visible under every filter** (most imported services have none: they read as "ask the clinic"); **no `?species=` in the URL** (it would make the cached page render per request, ARCHITECTURE D41): chips are a small client component or CSS-only (`:has()`); arriving from a species search ("vet for rabbits") preselects that species. Build it with P1-5b (the search preselect is its strongest use) or once real clinics have species on their services, and check in the 3–5 person usability test whether owners look for it |
 
 ## 7. Brand & visual identity
 
@@ -152,7 +157,7 @@ Public (owners, indexable)
 | `--verified` | `#2563EB` | blue-600 | Verified badge |
 | `--emergency` | `#DC2626` | red-600 | Emergency chip and view |
 
-All text colors above meet WCAG AA contrast (≥ 4.5:1) on white (lowest: slate-500 at 4.76:1). Re-check this when the real palette arrives. The values live, converted to OKLCH (shadcn's color format), in `apps/web/src/app/globals.css`.
+All text colors above meet WCAG AA contrast (≥ 4.5:1) on white (lowest: slate-500 at 4.76:1). **On the `muted` surface (slate-100) they don't:** `muted-foreground` / `status-unknown` reach 4.34:1 and `emergency` 4.41:1. Status lines, freshness and secondary text therefore sit on white (cards get a border instead of a tint), and anything on a `muted` or `accent` tint uses `foreground`. Re-check this when the real palette arrives. The values live, converted to OKLCH (shadcn's color format), in `apps/web/src/app/globals.css`.
 
 **Brand kit deliverables:**
 - Logo: SVG, full + icon-only, light and dark background versions
@@ -182,6 +187,14 @@ All text colors above meet WCAG AA contrast (≥ 4.5:1) on white (lowest: slate-
 - **Type:** the brand font is self-hosted via `next/font` (no layout shift, no Google request at runtime). Minimum body text is 16px.
 - **Icons:** lucide (shadcn's default). Species icons may need a small custom set.
 - **Control size:** shadcn's default buttons and inputs are 32–36px tall, which suits `/admin`'s density only. Owner pages and `/dashboard` use controls at least 44px tall (§10), with 16px text in inputs (which also stops iOS zooming in on focus).
+
+**Making actions obvious** (principle 9; owner pages and `/dashboard`, not `/admin`):
+- **Buttons for actions, at least 44px tall, with a verb label** and an icon where it helps. Primary (`bg-primary`) for the one main action in a group, outline (border, `text-primary`) for the others. Never an icon alone.
+- **Text links say where they go:** underlined, or followed by an arrow (`ChevronRight`), in `text-primary`. `text-primary` is kept for things that can be tapped: headings and plain text never use it.
+- **A card that opens something shows its action as a visible button** ("View branch ›"), lined up with the card's other buttons. Only the buttons are tappable, not the whole card: one obvious target per action, and no hidden tap areas. The card's border may turn `primary` on hover to show which item the buttons belong to. Its heading is plain text, not a link. Reference: `BranchSummary` in `components/listing/sections.tsx`.
+- **Line up repeated actions:** cards in a row have their buttons at the bottom (`mt-auto`), in the same order (Call, then View).
+- **Every tappable thing has hover and press feedback**, plus the global focus ring. Primary buttons darken on hover (darker, never lighter, so white text keeps its contrast); outline buttons tint `muted` and their border turns `primary`; cards turn their border `primary`; text links thicken their underline. Buttons press down 1px when tapped. Transitions are short (150 ms) and off under reduced motion. Hover only adds: the resting state must already look tappable, since phones have no hover. The owner-page button styles live in `apps/web/src/lib/action-styles.ts` (`primaryAction`, `outlineAction`); use them instead of new ones.
+- **Repeated buttons name their target for screen readers:** "Call" + a visually hidden branch name ("Call Balibago").
 
 **PAW components** (built on shadcn primitives, living in `apps/web/components` until there's a reason to share them):
 - **Search:** `SearchBar`, `QuickChips`, `FilterSheet`, `ResultCard`, `MapView` (lazy), `EmptyState`

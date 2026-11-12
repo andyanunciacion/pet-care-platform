@@ -1,6 +1,13 @@
 // How owners see a branch's status (DESIGN UX4, UX5, UX17). Shared by the admin hours
 // preview and (P1-4) the public page; works in Server and Client Components alike.
-import { addDays, freshness, isoWeekday, type LocalMoment, type OpenStatus } from '@paw/domain';
+import {
+  addDays,
+  freshness,
+  isoWeekday,
+  TIME_ZONE,
+  type LocalMoment,
+  type OpenStatus,
+} from '@paw/domain';
 import { CircleAlert, CircleCheck, CircleHelp, CircleX, Clock } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { HoursConfirmedBy } from '@/lib/admin-types';
@@ -76,7 +83,12 @@ export function OpenStatusText({ status, className }: { status: OpenStatus; clas
   );
 }
 
-/** "Hours confirmed 5 days ago by PAW" (UX5); amber with a warning when aging or stale. */
+/**
+ * "Hours confirmed 5 days ago by PAW" (UX5); amber with a warning when aging or stale.
+ * Without `now` (a cached page before hydration) it gives the date instead ("confirmed
+ * Nov 6, 2026"), which stays true however old the page is, and holds back the amber
+ * warning it can't judge yet, except for hours never confirmed.
+ */
 export function HoursFreshness({
   confirmedAt,
   confirmedBy,
@@ -84,10 +96,27 @@ export function HoursFreshness({
 }: {
   confirmedAt: string | null;
   confirmedBy: HoursConfirmedBy | null;
-  now: Date;
+  now: Date | null;
 }) {
   const t = useTranslations('Hours');
-  const { level, daysAgo } = freshness(confirmedAt === null ? null : new Date(confirmedAt), now);
+  const locale = useLocale();
+  const confirmed = confirmedAt === null ? null : new Date(confirmedAt);
+
+  if (now === null && confirmed !== null && confirmedBy !== null) {
+    const date = new Intl.DateTimeFormat(locale, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: TIME_ZONE,
+    }).format(confirmed);
+    return (
+      <p className="text-sm text-muted-foreground">{t('confirmedOn', { date, by: confirmedBy })}</p>
+    );
+  }
+
+  // Without `now` we only get here for hours never confirmed, which is stale at any time.
+  const { level, daysAgo } =
+    now === null ? { level: 'stale' as const, daysAgo: null } : freshness(confirmed, now);
   const fresh = level === 'fresh';
 
   return (

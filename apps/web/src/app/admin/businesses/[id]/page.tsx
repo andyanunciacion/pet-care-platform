@@ -67,6 +67,13 @@ export default async function BusinessPage({ params }: Props) {
           {t('backToListings')}
         </Link>
         <h1 className="text-2xl font-bold">{business.name}</h1>
+        {business.publicPath === null ? (
+          <p className="text-sm text-muted-foreground">{t('notPublic')}</p>
+        ) : (
+          <Link href={business.publicPath} className="text-sm text-primary hover:underline">
+            {t('viewPublicPage')}
+          </Link>
+        )}
       </div>
 
       <AdminFormMessages>

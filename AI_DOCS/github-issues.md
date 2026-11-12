@@ -259,11 +259,26 @@ Notes for later issues:
 
 ### P1-4 · Public clinic page
 `frontend` · Depends on: P1-2b, P1-3 (real data helps: P1-2e)
-- [ ] Server-rendered page at `/{province}/{city}/{business}` (DESIGN.md UX8 layout)
-- [ ] Status, freshness, verified/unclaimed display (UX4–UX6, UX17), sticky ContactBar (UX9), prices (UX10), hours table, species, photos, branches
-- [ ] Contact deep links (tel, Messenger, Viber, Google Maps/Waze with a remembered choice)
-- [ ] JSON-LD (`VeterinaryCare`), OG tags; on-demand revalidation when a listing is edited
-- [ ] Performance budget checked (DESIGN.md §9); 3–5 person usability check
+Shipped as two PRs: the page (4a), then photos, SEO and the performance check (4b).
+
+**4a: API, area slugs, the page**
+- [x] `GET /v1/listings/{businessSlug}` (public plugin, no session); `psgc_area.slug` (ARCHITECTURE D42); admin business page links to the public page
+- [x] Server-rendered page at `/{province}/{city}/{business}`, plus `/{branch}` per branch when there are several, and 308s to the canonical URL (ARCHITECTURE §8)
+- [x] Status, freshness, verified/unclaimed display (UX4–UX6, UX17), sticky ContactBar (UX9), prices (UX10), hours table, species, other branches; permanently closed notice
+- [x] Contact deep links (tel, Messenger, Viber, email, Google Maps/Waze with a remembered choice)
+- [x] Cached pages with on-demand revalidation after every admin edit (ARCHITECTURE D41)
+
+**4b: photos, SEO, performance**
+- [ ] Branch photos, business logo and products (with images) via `next/image` + `images.remotePatterns` for the photos domain
+- [ ] JSON-LD (`VeterinaryCare`, `OpeningHoursSpecification`, `GeoCoordinates`), canonical URL, OG tags
+- [ ] Lighthouse CI in GitHub Actions against a fixture listing: performance ≥ 90 (mobile), CLS ≤ 0.1, LCP ≤ 2.5 s, plus a script-size budget (DESIGN.md §9)
+- [ ] (By you) a seeded clinic on staging, 3–5 person usability check, shown to at least one clinic
+
+Notes for later issues:
+- **P1-6:** city landing pages can find a city by `psgc_area.slug`; build URLs with `businessPath` / `branchPath` (`packages/domain`), never by hand.
+- **P1-7 / P1-8:** the clinic page has no "Report incorrect info" link or claim CTA yet; they go after "Other branches" (UX8).
+- **P1-11a:** contact taps (Call, Messenger, Directions) aren't logged yet.
+- **Caching:** new admin (or dashboard) writes must call `refreshListings()` (`apps/web/src/lib/public-api.ts`), or the public page keeps showing the old data. Edits made straight in the database don't refresh it either.
 
 **Done when:** a seeded clinic page is live on staging, passes the budget, and you've shown it to at least one clinic.
 
@@ -283,6 +298,7 @@ Notes for later issues:
 - [ ] Results list (UX2/UX3), filter sheet, zero-results state (UX12)
 - [ ] Emergency view (UX7)
 - [ ] Usability check (3–5 people)
+- [ ] Maybe (DESIGN.md UX21): species filter on the clinic page's services, preselected when the owner arrives from a species search. Decide from the usability check and from how many services have species by then
 
 **Done when:** the 4 owner journeys (pitch kit §6) work on staging on a phone, apart from the map.
 
