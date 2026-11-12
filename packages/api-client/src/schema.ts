@@ -265,6 +265,7 @@ export interface paths {
                             createdAt: string;
                             /** Format: date-time */
                             updatedAt: string;
+                            publicPath: string | null;
                             branches: {
                                 /** Format: uuid */
                                 id: string;
@@ -2264,6 +2265,131 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/listings/{businessSlug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A published business and its public branches (the clinic page) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    businessSlug: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            business: {
+                                /** Format: uuid */
+                                id: string;
+                                slug: string;
+                                name: string;
+                                /** @enum {string} */
+                                type: "vet_clinic";
+                                description: string | null;
+                                /** @enum {string} */
+                                claimStatus: "unclaimed" | "pending" | "verified";
+                                /** @enum {string} */
+                                listingStatus: "published" | "permanently_closed";
+                                path: string;
+                            };
+                            branches: {
+                                /** Format: uuid */
+                                id: string;
+                                slug: string;
+                                name: string;
+                                path: string;
+                                addressLine: string;
+                                barangay: {
+                                    name: string;
+                                } | null;
+                                city: {
+                                    name: string;
+                                    slug: string;
+                                };
+                                province: {
+                                    name: string;
+                                    slug: string;
+                                };
+                                location: {
+                                    lng: number;
+                                    lat: number;
+                                };
+                                is24h: boolean;
+                                acceptsEmergencies: boolean;
+                                /** @enum {string} */
+                                listingStatus: "published" | "permanently_closed";
+                                /** Format: date-time */
+                                hoursConfirmedAt: string | null;
+                                /** @enum {string|null} */
+                                hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                                weekly: {
+                                    opensAt: string;
+                                    closesAt: string;
+                                    dayOfWeek: number;
+                                }[];
+                                exceptions: {
+                                    /** Format: date */
+                                    date: string;
+                                    isClosed: boolean;
+                                    intervals: {
+                                        opensAt: string;
+                                        closesAt: string;
+                                    }[];
+                                    note: string | null;
+                                }[];
+                                contacts: {
+                                    /** @enum {string} */
+                                    type: "phone" | "messenger" | "viber" | "email";
+                                    value: string;
+                                    label: string | null;
+                                }[];
+                                species: {
+                                    code: string;
+                                    name: string;
+                                }[];
+                                services: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    category: {
+                                        name: string;
+                                        groupName: string | null;
+                                    };
+                                    name: string;
+                                    description: string | null;
+                                    priceMin: number | null;
+                                    priceMax: number | null;
+                                    /** @enum {string} */
+                                    priceUnit: "per_visit" | "per_session" | "per_night" | "per_day";
+                                    priceNote: string | null;
+                                    species: string[];
+                                }[];
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;

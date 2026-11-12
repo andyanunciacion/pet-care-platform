@@ -16,6 +16,7 @@ import { errorHandler, notFoundHandler } from './errors.ts';
 import { loggerOptions } from './logger.ts';
 import { adminRoutes } from './routes/admin/index.ts';
 import { authRoutes } from './routes/auth.ts';
+import { publicRoutes } from './routes/public/index.ts';
 import { healthRoutes } from './routes/health.ts';
 import { createR2Storage, type PhotoStorage } from './storage.ts';
 
@@ -81,6 +82,7 @@ export async function buildApp({ env, storage: storageOption }: AppOptions) {
   await app.register(healthRoutes, { database });
   await app.register(authRoutes, { auth: app.auth, publicOrigin: env.BETTER_AUTH_URL });
   await app.register(adminRoutes, { prefix: '/v1/admin', database, storage });
+  await app.register(publicRoutes, { prefix: '/v1', database });
 
   return app;
 }

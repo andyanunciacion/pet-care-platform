@@ -198,7 +198,8 @@ async function speciesIdsByService(
   return byService;
 }
 
-async function listServices(db: Pick<Db, 'select'>, condition: SQL): Promise<Service[]> {
+/** Services matching `condition`, by category group, then category, then the order added. */
+export async function listServices(db: Pick<Db, 'select'>, condition: SQL): Promise<Service[]> {
   const rows = await db
     .select({
       service: branchService,

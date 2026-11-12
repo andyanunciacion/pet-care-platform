@@ -178,9 +178,21 @@ describe('GET /v1/admin/businesses/:id', () => {
     expect(response.statusCode).toBe(200);
     expect(response.json()).toMatchObject({
       id: business.id,
+      // New businesses start hidden: no public page yet.
+      publicPath: null,
       branches: [
         { id: branch.id, name: 'Balibago', city: { code: testArea.city, name: 'Test City' } },
       ],
+    });
+  });
+
+  it('links to the public page once published', async () => {
+    const business = await insertTestBusiness(db, { listingStatus: 'published' });
+    await insertTestBranch(db, business.id);
+
+    const response = await call('GET', `/v1/admin/businesses/${business.id}`);
+    expect(response.json()).toMatchObject({
+      publicPath: `/test-province/test-city/${business.slug}`,
     });
   });
 

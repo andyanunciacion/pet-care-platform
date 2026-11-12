@@ -544,6 +544,10 @@
                       "format": "date-time",
                       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
                     },
+                    "publicPath": {
+                      "nullable": true,
+                      "type": "string"
+                    },
                     "branches": {
                       "type": "array",
                       "items": {
@@ -617,6 +621,7 @@
                     "dataSource",
                     "createdAt",
                     "updatedAt",
+                    "publicPath",
                     "branches"
                   ],
                   "additionalProperties": false
@@ -5489,6 +5494,436 @@
                     "fileErrors",
                     "warnings",
                     "businesses"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/listings/{businessSlug}": {
+      "get": {
+        "summary": "A published business and its public branches (the clinic page)",
+        "tags": [
+          "public"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            },
+            "in": "path",
+            "name": "businessSlug",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "business": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "vet_clinic"
+                          ]
+                        },
+                        "description": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "claimStatus": {
+                          "type": "string",
+                          "enum": [
+                            "unclaimed",
+                            "pending",
+                            "verified"
+                          ]
+                        },
+                        "listingStatus": {
+                          "type": "string",
+                          "enum": [
+                            "published",
+                            "permanently_closed"
+                          ]
+                        },
+                        "path": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "slug",
+                        "name",
+                        "type",
+                        "description",
+                        "claimStatus",
+                        "listingStatus",
+                        "path"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "branches": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "path": {
+                            "type": "string"
+                          },
+                          "addressLine": {
+                            "type": "string"
+                          },
+                          "barangay": {
+                            "nullable": true,
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "city": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "slug"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "province": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "slug": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "name",
+                              "slug"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "location": {
+                            "type": "object",
+                            "properties": {
+                              "lng": {
+                                "type": "number"
+                              },
+                              "lat": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "lng",
+                              "lat"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "is24h": {
+                            "type": "boolean"
+                          },
+                          "acceptsEmergencies": {
+                            "type": "boolean"
+                          },
+                          "listingStatus": {
+                            "type": "string",
+                            "enum": [
+                              "published",
+                              "permanently_closed"
+                            ]
+                          },
+                          "hoursConfirmedAt": {
+                            "nullable": true,
+                            "type": "string",
+                            "format": "date-time",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
+                          },
+                          "hoursConfirmedBy": {
+                            "nullable": true,
+                            "type": "string",
+                            "enum": [
+                              "clinic",
+                              "paw_ops",
+                              "report"
+                            ]
+                          },
+                          "weekly": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "opensAt": {
+                                  "type": "string"
+                                },
+                                "closesAt": {
+                                  "type": "string"
+                                },
+                                "dayOfWeek": {
+                                  "type": "integer",
+                                  "minimum": -9007199254740991,
+                                  "maximum": 9007199254740991
+                                }
+                              },
+                              "required": [
+                                "opensAt",
+                                "closesAt",
+                                "dayOfWeek"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "exceptions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "date": {
+                                  "type": "string",
+                                  "format": "date",
+                                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                                },
+                                "isClosed": {
+                                  "type": "boolean"
+                                },
+                                "intervals": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "opensAt": {
+                                        "type": "string"
+                                      },
+                                      "closesAt": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "opensAt",
+                                      "closesAt"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "note": {
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "date",
+                                "isClosed",
+                                "intervals",
+                                "note"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "contacts": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "phone",
+                                    "messenger",
+                                    "viber",
+                                    "email"
+                                  ]
+                                },
+                                "value": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "value",
+                                "label"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "species": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "code": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "code",
+                                "name"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "services": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "format": "uuid",
+                                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                                },
+                                "category": {
+                                  "type": "object",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "groupName": {
+                                      "nullable": true,
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "groupName"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "priceMin": {
+                                  "nullable": true,
+                                  "type": "integer",
+                                  "minimum": -9007199254740991,
+                                  "maximum": 9007199254740991
+                                },
+                                "priceMax": {
+                                  "nullable": true,
+                                  "type": "integer",
+                                  "minimum": -9007199254740991,
+                                  "maximum": 9007199254740991
+                                },
+                                "priceUnit": {
+                                  "type": "string",
+                                  "enum": [
+                                    "per_visit",
+                                    "per_session",
+                                    "per_night",
+                                    "per_day"
+                                  ]
+                                },
+                                "priceNote": {
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "species": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "category",
+                                "name",
+                                "description",
+                                "priceMin",
+                                "priceMax",
+                                "priceUnit",
+                                "priceNote",
+                                "species"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "slug",
+                          "name",
+                          "path",
+                          "addressLine",
+                          "barangay",
+                          "city",
+                          "province",
+                          "location",
+                          "is24h",
+                          "acceptsEmergencies",
+                          "listingStatus",
+                          "hoursConfirmedAt",
+                          "hoursConfirmedBy",
+                          "weekly",
+                          "exceptions",
+                          "contacts",
+                          "species",
+                          "services"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "business",
+                    "branches"
                   ],
                   "additionalProperties": false
                 }
