@@ -86,8 +86,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* A visible keyboard focus ring everywhere (WCAG 2.2: 3:1 against the page). */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
   html {
     @apply font-sans;
+  }
+  /* On clinic pages, keep focused elements clear of the fixed contact bar (WCAG 2.4.11). */
+  html:has([data-contact-bar]) {
+    scroll-padding-bottom: 6rem;
   }
   body {
     /* Minimum body text is 16px (DESIGN.md §8). */

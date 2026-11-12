@@ -3,7 +3,7 @@
 // Server Actions for /admin forms. Each one: (1) checks the session with requireAdmin()
 // (actions are public POST endpoints, reachable without the UI), (2) calls the API as the
 // signed-in user, which validates the input and checks the role again, (3) redirects or
-// refreshes on success, or returns the API's errors for the form to show.
+// refreshes on success (and expires the cached public pages), or returns the API's errors for the form to show.
 
 import { toManila } from '@paw/domain';
 import { refresh } from 'next/cache';
@@ -31,6 +31,7 @@ import type {
   UploadPurpose,
 } from '@/lib/admin-types';
 import { formStateFromProblem, savedForm, type FormState } from '@/lib/form-errors';
+import { refreshListings } from '@/lib/public-api';
 
 // Ids and dates arrive from the browser like any other input; check them before they go in a URL.
 const IdSchema = z.uuid();
@@ -39,6 +40,15 @@ const DateSchema = z.iso.date();
 async function failed(error: unknown): Promise<FormState> {
   const t = await getTranslations('AdminForms');
   return formStateFromProblem(error, t('saveFailed'));
+}
+
+/**
+ * After a successful write: re-renders the current admin page with the saved data, and
+ * expires the cached public pages so owners see the change on their next load (D41).
+ */
+function saved(): void {
+  refreshListings();
+  refresh();
 }
 
 async function checkedId(id: unknown): Promise<string | FormState> {
@@ -68,8 +78,7 @@ export async function updateBusinessAction(
     body,
   });
   if (data === undefined) return failed(error);
-  // Re-renders the current page with the saved data (names in the header, history, …).
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -87,6 +96,7 @@ export async function createBranchAction(
     body,
   });
   if (data === undefined) return failed(error);
+  refreshListings();
   redirect(`/admin/businesses/${id}/branches/${data.id}`);
 }
 
@@ -104,7 +114,7 @@ export async function updateBranchAction(
     body,
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -124,7 +134,7 @@ export async function updateHoursAction(
     body,
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -148,7 +158,7 @@ export async function setHoursExceptionAction(
     body,
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -177,7 +187,7 @@ export async function deleteHoursExceptionAction(
     params: { path: { id, date: parsedDate.data } },
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -191,7 +201,7 @@ export async function confirmHoursAction(branchId: string): Promise<FormState> {
     params: { path: { id } },
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -212,7 +222,7 @@ export async function setSpeciesTreatedAction(
     body: { speciesIds },
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -230,7 +240,7 @@ export async function createServiceAction(
     body,
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -248,7 +258,7 @@ export async function updateServiceAction(
     body,
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -262,7 +272,7 @@ export async function deleteServiceAction(serviceId: string): Promise<FormState>
     params: { path: { id } },
   });
   if (!response.ok) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -281,7 +291,7 @@ export async function copyServiceAction(
     body: { dryRun },
   });
   if (data === undefined) return { state: await failed(error), result: null };
-  if (!dryRun) refresh();
+  if (!dryRun) saved();
   return { state: savedForm, result: data };
 }
 
@@ -298,7 +308,7 @@ export async function importCsvAction(
   const api = await adminApi();
   const { data, error } = await api.POST('/v1/admin/imports', { body });
   if (data === undefined) return { state: await failed(error), result: null };
-  if (!body.dryRun) refresh();
+  if (!body.dryRun) saved();
   return { state: savedForm, result: data };
 }
 
@@ -318,7 +328,7 @@ export async function createProductAction(
     body,
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -336,7 +346,7 @@ export async function updateProductAction(
     body,
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -350,7 +360,7 @@ export async function deleteProductAction(productId: string): Promise<FormState>
     params: { path: { id } },
   });
   if (!response.ok) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -390,7 +400,7 @@ export async function finalizeUploadAction(
         ? await api.PUT('/v1/admin/businesses/{id}/logo', params)
         : await api.PUT('/v1/admin/products/{id}/image', params);
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -405,7 +415,7 @@ export async function updateMediaAltAction(mediaId: string, alt: string): Promis
     body: { alt },
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -420,7 +430,7 @@ export async function reorderPhotosAction(branchId: string, ids: string[]): Prom
     body: { ids },
   });
   if (data === undefined) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }
 
@@ -434,6 +444,6 @@ export async function deleteMediaAction(mediaId: string): Promise<FormState> {
     params: { path: { id } },
   });
   if (!response.ok) return failed(error);
-  refresh();
+  saved();
   return savedForm;
 }

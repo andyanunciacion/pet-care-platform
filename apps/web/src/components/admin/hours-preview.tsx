@@ -19,7 +19,7 @@ import type { BranchHours } from '@/lib/admin-types';
 import { idleForm, type FormState } from '@/lib/form-errors';
 import { dateLabel, intervalLabel, intervalsByDay, weekdayLabel } from '@/lib/hours-format';
 import { cn } from '@/lib/utils';
-import { useExceptionSummary } from './hours-exceptions';
+import { useExceptionSummary } from '@/components/hours/exception-summary';
 
 /** An instant → the value of a `datetime-local` input, in Manila time ("2026-11-06T14:30"). */
 function toInputValue(instant: Date): string {

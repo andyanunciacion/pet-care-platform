@@ -10,23 +10,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { BranchHours } from '@/lib/admin-types';
 import { errorAt, idleForm, type FormState } from '@/lib/form-errors';
-import { dateLabel, intervalLabel } from '@/lib/hours-format';
+import { dateLabel } from '@/lib/hours-format';
 import { describedBy, FormField, FormStatus } from './form-field';
+import { useExceptionSummary } from '@/components/hours/exception-summary';
 import { IntervalRows, newIntervalRow, type IntervalRow } from './interval-rows';
 
 type Exception = BranchHours['exceptions'][number];
-
-/** "Closed — All Saints' Day" or "9 AM – 12 PM, 1 PM – 3 PM". */
-export function useExceptionSummary() {
-  const tHours = useTranslations('Hours');
-  const locale = useLocale();
-  return (exception: Exception): string => {
-    const main = exception.isClosed
-      ? tHours('closed')
-      : exception.intervals.map((interval) => intervalLabel(interval, locale)).join(', ');
-    return exception.note === null ? main : `${main} — ${exception.note}`;
-  };
-}
 
 interface Props {
   branchId: string;

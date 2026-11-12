@@ -9,6 +9,51 @@
     "title": "Find a vet near you",
     "subtitle": "Clinic hours, services and prices in Angeles City, kept up to date."
   },
+  "Listing": {
+    "metaTitle": "{name} · {city}",
+    "metaDescription": "{name} in {city}: opening hours, services and prices, and how to contact them.",
+    "metaDescriptionBranches": "{name}: {count, plural, one {# branch} other {# branches}} with opening hours, services and prices.",
+    "verified": "Verified",
+    "verifiedExplain": "PAW checked that this clinic runs this page: its phone number, PRC license and business permit.",
+    "listedByPaw": "Listed by PAW",
+    "listedByPawExplain": "PAW collected this information. The clinic hasn't claimed this page yet.",
+    "call": "Call",
+    "phone": "Phone",
+    "messenger": "Messenger",
+    "viber": "Viber",
+    "email": "Email",
+    "contactBarLabel": "Contact {name}",
+    "contactTitle": "Contact",
+    "noContacts": "No phone number listed yet. Use the address below to visit.",
+    "addressTitle": "Address",
+    "openInGoogleMaps": "Google Maps",
+    "openInWaze": "Waze",
+    "servicesTitle": "Services and prices",
+    "noServices": "No services listed yet. Call the clinic to ask.",
+    "pricesFootnote": "Prices are estimates. Confirm with the clinic.",
+    "forSpecies": "For: {species}",
+    "treats": "Treats",
+    "treatsLabel": "Animals treated",
+    "otherBranchesTitle": "Other branches",
+    "branchesTitle": "Branches",
+    "viewBranch": "View branch",
+    "permanentlyClosed": "Permanently closed",
+    "businessClosedDetail": "This clinic has closed for good. Its details stay here for reference.",
+    "branchClosedDetail": "This branch has closed for good. Its details stay here for reference.",
+    "emergenciesOpen": "Takes emergencies",
+    "emergenciesClosed": "Closed now · call for emergencies",
+    "emergenciesUnknown": "Call for emergencies",
+    "emergencies": "Takes emergencies · call first",
+    "messengerLink": "Send a message"
+  },
+  "Directions": {
+    "directions": "Directions",
+    "chooseTitle": "Open directions in",
+    "chooseHint": "We'll remember your choice on this device.",
+    "googleMaps": "Google Maps",
+    "waze": "Waze",
+    "cancel": "Cancel"
+  },
   "ApiStatus": {
     "title": "System status",
     "checking": "Checking…",
@@ -240,10 +285,15 @@
     "midnight": "midnight",
     "untilNextDay": "until {time} next day",
     "weekTitle": "Opening hours",
-    "exceptionsTitle": "Coming up",
+    "exceptionsTitle": "Holidays and special hours",
     "confirmed": "Hours confirmed {days, plural, =0 {today} =1 {yesterday} other {# days ago}} {by, select, clinic {by the clinic} paw_ops {by PAW} other {from a report}}",
+    "confirmedOn": "Hours confirmed {date} {by, select, clinic {by the clinic} paw_ops {by PAW} other {from a report}}",
     "notConfirmed": "Hours not confirmed yet",
-    "aging": "May have changed. Call ahead."
+    "aging": "May have changed. Call ahead.",
+    "intervalNextDay": "{opens} – {closes} next day",
+    "today": "Today",
+    "notShared": "The clinic hasn't shared its hours yet.",
+    "dayHours": "{weekday}: {hours}"
   },
   "AdminHours": {
     "tabsLabel": "Branch sections",
@@ -444,7 +494,9 @@
       "address": "Address",
       "listing": "Listing",
       "updated": "Updated"
-    }
+    },
+    "viewPublicPage": "View public page",
+    "notPublic": "Not on the public site: the business or all its branches are hidden."
   },
   "AdminBranch": {
     "newTitle": "New branch",
