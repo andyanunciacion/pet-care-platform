@@ -5,6 +5,7 @@ import {
   insertTestAreas,
   insertTestBranch,
   insertTestBusiness,
+  testArea,
   testDatabaseUrl,
   uniqueSlug,
   violatedConstraint,
@@ -33,8 +34,36 @@ async function newBranch() {
 
 describe('psgc_area', () => {
   it('requires 10-digit codes', async () => {
-    const query = db.insert(psgcArea).values({ code: '123', name: 'Too short', level: 'province' });
+    const query = db
+      .insert(psgcArea)
+      .values({ code: '123', name: 'Too short', level: 'province', slug: 'too-short' });
     expect(await violatedConstraint(query)).toBe('psgc_area_code_format');
+  });
+
+  it('needs a slug except for barangays', async () => {
+    const province = db
+      .insert(psgcArea)
+      .values({ code: '9909900000', name: 'No Slug', level: 'province' });
+    expect(await violatedConstraint(province)).toBe('psgc_area_slug_by_level');
+    const barangay = db.insert(psgcArea).values({
+      code: '9909900001',
+      name: 'Slugged Barangay',
+      level: 'barangay',
+      parentCode: testArea.city,
+      slug: 'slugged-barangay',
+    });
+    expect(await violatedConstraint(barangay)).toBe('psgc_area_slug_by_level');
+  });
+
+  it('keeps slugs unique within a province', async () => {
+    const query = db.insert(psgcArea).values({
+      code: '9900900000',
+      name: 'Test City Again',
+      level: 'municipality',
+      parentCode: testArea.province,
+      slug: 'test-city',
+    });
+    expect(await violatedConstraint(query)).toBe('psgc_area_slug_unique');
   });
 });
 

@@ -18,8 +18,14 @@ export async function insertTestAreas(db: Db): Promise<void> {
   await db
     .insert(psgcArea)
     .values([
-      { code: testArea.province, name: 'Test Province', level: 'province' },
-      { code: testArea.city, name: 'Test City', level: 'city', parentCode: testArea.province },
+      { code: testArea.province, name: 'Test Province', level: 'province', slug: 'test-province' },
+      {
+        code: testArea.city,
+        name: 'Test City',
+        level: 'city',
+        parentCode: testArea.province,
+        slug: 'test-city',
+      },
       {
         code: testArea.barangay,
         name: 'Test Barangay',
@@ -31,6 +37,7 @@ export async function insertTestAreas(db: Db): Promise<void> {
         name: 'Other Test Town',
         level: 'municipality',
         parentCode: testArea.province,
+        slug: 'other-test-town',
       },
       {
         code: testArea.otherBarangay,

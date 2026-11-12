@@ -11,6 +11,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 import { inflateRawSync } from 'node:zlib';
+import { areaSlug } from '@paw/domain';
 
 /** Reads one file out of a .zip (an .xlsx is a zip of XML files). */
 function readZipEntry(zip: Buffer, name: string): string {
@@ -123,7 +124,7 @@ const barangays = areas.filter(
 
 const quote = (text: string) => `'${text.replaceAll("'", "''")}'`;
 const insert = (rows: string[]) =>
-  `INSERT INTO psgc_area (code, name, level, parent_code) VALUES\n${rows.join(',\n')};`;
+  `INSERT INTO psgc_area (code, name, level, parent_code, slug) VALUES\n${rows.join(',\n')};`;
 
 const sql = [
   `-- PSGC: ${province.name} (${String(cities.length)} cities/municipalities, ${String(barangays.length)} barangays).`,
@@ -131,19 +132,22 @@ const sql = [
   ...(args.huc.length > 0
     ? [`-- Highly urbanized cities attached to the province: ${args.huc.join(', ')}.`]
     : []),
-  insert([`  (${quote(province.code)}, ${quote(province.name)}, 'province', NULL)`]),
+  // URL slugs (ARCHITECTURE D42); barangays have none.
+  insert([
+    `  (${quote(province.code)}, ${quote(province.name)}, 'province', NULL, ${quote(areaSlug(province.name, 'province'))})`,
+  ]),
   '--> statement-breakpoint',
   insert(
-    cities.map(
-      (city) =>
-        `  (${quote(city.code)}, ${quote(city.name)}, '${city.level === 'City' ? 'city' : 'municipality'}', ${quote(province.code)})`,
-    ),
+    cities.map((city) => {
+      const level = city.level === 'City' ? 'city' : 'municipality';
+      return `  (${quote(city.code)}, ${quote(city.name)}, '${level}', ${quote(province.code)}, ${quote(areaSlug(city.name, level))})`;
+    }),
   ),
   '--> statement-breakpoint',
   insert(
     barangays.map(
       (barangay) =>
-        `  (${quote(barangay.code)}, ${quote(barangay.name)}, 'barangay', ${quote(`${barangay.code.slice(0, 7)}000`)})`,
+        `  (${quote(barangay.code)}, ${quote(barangay.name)}, 'barangay', ${quote(`${barangay.code.slice(0, 7)}000`)}, NULL)`,
     ),
   ),
   '',

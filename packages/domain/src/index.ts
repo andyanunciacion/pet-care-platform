@@ -30,6 +30,8 @@ export {
 } from './freshness.ts';
 export { addDays, formatTime, isoWeekday, TIME_ZONE, toManila } from './local-time.ts';
 export { SLUG_PATTERN, slugify } from './slug.ts';
+export { areaSlug, type AreaSlugLevel } from './area-slug.ts';
+export { branchPath, businessPath, type ListingPlace } from './listing-path.ts';
 export { normalizePhPhone } from './phone.ts';
 export { formatPesos, MAX_PRICE_CENTAVOS, parsePesos } from './money.ts';
 export {
