@@ -18,7 +18,8 @@
     "db:generate": "pnpm --filter @paw/db db:generate",
     "db:migrate": "pnpm --filter @paw/db db:migrate",
     "db:studio": "pnpm --filter @paw/db db:studio",
-    "api:generate": "pnpm --filter @paw/api-client generate"
+    "api:generate": "pnpm --filter @paw/api-client generate",
+    "lighthouse": "pnpm --filter @paw/lighthouse lighthouse"
   },
   "prettier": "@paw/config/prettier",
   "devDependencies": {

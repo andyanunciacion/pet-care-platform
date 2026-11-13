@@ -43,6 +43,8 @@ jobs:
       DATABASE_URL: postgres://paw:paw@localhost:5432/paw
       # The web build reads it for the /v1/* rewrite (nothing is called during the build).
       API_URL: http://localhost:4000
+      # And this for absolute metadata URLs (canonical, Open Graph).
+      SITE_URL: http://localhost:3000
       TURBO_TELEMETRY_DISABLED: '1'
 
     steps:
@@ -72,3 +74,50 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+
+  # The performance budget (DESIGN §9, ARCHITECTURE D44): Lighthouse on a fixture clinic page,
+  # 3 mobile runs. `pnpm lighthouse` seeds the fixture into its own database, serves its
+  # images, builds and starts the web app and API, then asserts packages/lighthouse/
+  # lighthouserc.json. Not required by branch protection yet: add it once it has been stable.
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgis/postgis:16-3.5
+        env:
+          POSTGRES_USER: paw
+          POSTGRES_PASSWORD: paw
+          POSTGRES_DB: paw
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -h 127.0.0.1 -U paw -d paw"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+
+    env:
+      DATABASE_URL: postgres://paw:paw@localhost:5432/paw
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Chrome comes preinstalled on GitHub's Ubuntu runners.
+      - run: pnpm lighthouse
+
+      # The HTML reports, to see what failed (or what changed).
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: lighthouse-reports
+          path: packages/lighthouse/.lighthouseci/
+          retention-days: 14

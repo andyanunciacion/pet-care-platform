@@ -41,3 +41,7 @@ Thumbs.db
 **/.impeccable/config.local.json
 **/.impeccable/hook.cache.json
 # impeccable-ignore-end
+
+# Lighthouse CI: generated fixture images and run reports (ARCHITECTURE D44)
+packages/lighthouse/.images/
+.lighthouseci/
