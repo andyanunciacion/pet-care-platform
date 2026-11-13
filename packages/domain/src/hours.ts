@@ -55,7 +55,7 @@ export type OpenStatus =
   | { state: 'closed'; opensAt: LocalMoment | null }
   /** A date exception closes the branch today, e.g. a holiday. */
   | { state: 'closed_today'; note: string | null; opensAt: LocalMoment | null }
-  /** No hours data and nothing set for today (UX17): "Hours unknown — call ahead". Never counts as open. */
+  /** No hours data and nothing set for today (UX17): "Hours unknown". Never counts as open. */
   | { state: 'unknown' };
 
 /** "Closing soon" starts this many minutes before closing (UX4). */

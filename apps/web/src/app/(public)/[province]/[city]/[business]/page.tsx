@@ -3,7 +3,8 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { BranchChooser } from '@/components/listing/branch-chooser';
 import { BranchPage } from '@/components/listing/branch-page';
-import { isClosedForGood, loadListing } from '@/lib/listing';
+import { isClosedForGood, loadListing, shownImage, shownPhotos } from '@/lib/listing';
+import { listingMetadata } from '@/lib/listing-metadata';
 
 // A business's page (ARCHITECTURE §8): the full clinic page when it has one branch, or the
 // list of its branches. Looked up by the business slug alone (unique across PAW); any other
@@ -27,17 +28,24 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const t = await getTranslations('Listing');
   const { business, branches } = listing;
   const [only] = branches;
-  return {
-    title:
-      branches.length === 1 && only !== undefined
-        ? t('metaTitle', { name: business.name, city: only.city.name })
-        : business.name,
-    description:
-      branches.length === 1 && only !== undefined
-        ? t('metaDescription', { name: business.name, city: only.city.name })
-        : t('metaDescriptionBranches', { name: business.name, count: branches.length }),
-    ...(isClosedForGood(business) && { robots: { index: false, follow: true } }),
-  };
+  const closedForGood = isClosedForGood(business);
+  if (branches.length === 1 && only !== undefined) {
+    return listingMetadata({
+      title: t('metaTitle', { name: business.name, city: only.city.name }),
+      description: t('metaDescription', { name: business.name, city: only.city.name }),
+      path: business.path,
+      image: shownPhotos(only)[0] ?? shownImage(business.logo),
+      closedForGood,
+    });
+  }
+  return listingMetadata({
+    title: business.name,
+    description: t('metaDescriptionBranches', { name: business.name, count: branches.length }),
+    path: business.path,
+    // The brand stands for all its branches; else the first photo any branch has.
+    image: shownImage(business.logo) ?? branches.flatMap(shownPhotos)[0] ?? null,
+    closedForGood,
+  });
 }
 
 export default async function BusinessPage({ params }: { params: Promise<Params> }) {

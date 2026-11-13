@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  contactReach,
   directionsLink,
   isDirectionsApp,
   mailLink,
@@ -41,5 +42,22 @@ describe('phoneLabel', () => {
     ['+15551234567', '+15551234567'],
   ])('%s → %s', (e164, label) => {
     expect(phoneLabel(e164)).toBe(label);
+  });
+});
+
+describe('contactReach', () => {
+  it('is call with a phone number, whatever else there is', () => {
+    expect(contactReach([{ type: 'messenger' }, { type: 'phone' }])).toBe('call');
+  });
+
+  it('is message with Messenger but no phone (Viber and email are not a call)', () => {
+    expect(contactReach([{ type: 'viber' }, { type: 'messenger' }, { type: 'email' }])).toBe(
+      'message',
+    );
+  });
+
+  it('is visit with neither', () => {
+    expect(contactReach([{ type: 'viber' }])).toBe('visit');
+    expect(contactReach([])).toBe('visit');
   });
 });

@@ -1,7 +1,7 @@
 import { MessageCircle, Phone } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { outlineAction, primaryAction } from '@/lib/action-styles';
-import { telLink } from '@/lib/contact-links';
+import { contactReach, phoneLabel, telLink } from '@/lib/contact-links';
 import type { ListingBranch } from '@/lib/public-types';
 import { cn } from '@/lib/utils';
 import { DirectionsButton } from './directions';
@@ -9,12 +9,27 @@ import { DirectionsButton } from './directions';
 /**
  * Call · Messenger · Directions, fixed to the bottom of the screen in the thumb zone
  * (DESIGN UX8, UX9). Only the channels the branch has; the full list is in the Contact
- * section. The page leaves room for it at the bottom (`pb-28`).
+ * section. There's always one primary button: Call, else Messenger, else Directions. Call
+ * shows the number from tablet width up (shared links are often opened on a computer, where
+ * tel: does nothing visible), and screen readers always hear it. The page leaves room for
+ * the bar at the bottom (`pb-28`).
+ *
+ * Fits a 360px phone: buttons may shrink below their text width (`min-w-0`), the primary
+ * one gets the most room, and below tablet width the secondary ones stack their icon over a
+ * smaller label (still 48px tall, still labelled: never icon-only, DESIGN §2 principle 6).
  */
 export async function ContactBar({ branch, label }: { branch: ListingBranch; label: string }) {
   const t = await getTranslations('Listing');
   const phone = branch.contacts.find((contact) => contact.type === 'phone');
   const messenger = branch.contacts.find((contact) => contact.type === 'messenger');
+  const primary = contactReach(branch.contacts);
+  const style = (isPrimary: boolean) =>
+    isPrimary
+      ? cn(primaryAction, 'min-w-0 flex-[1.4]')
+      : cn(
+          outlineAction,
+          'min-w-0 flex-1 max-sm:flex-col max-sm:gap-0.5 max-sm:px-1 max-sm:text-sm',
+        );
 
   return (
     // A labeled region, not <nav>: these are actions, not links to other pages.
@@ -27,9 +42,10 @@ export async function ContactBar({ branch, label }: { branch: ListingBranch; lab
     >
       <div className="mx-auto flex max-w-5xl gap-2 px-4 py-2.5">
         {phone !== undefined && (
-          <a href={telLink(phone.value)} className={cn(primaryAction, 'flex-1')}>
+          <a href={telLink(phone.value)} className={style(true)}>
             <Phone aria-hidden className="size-5" />
             {t('call')}
+            <span className="sr-only sm:not-sr-only">{` ${phoneLabel(phone.value)}`}</span>
           </a>
         )}
         {messenger !== undefined && (
@@ -37,13 +53,13 @@ export async function ContactBar({ branch, label }: { branch: ListingBranch; lab
             href={messenger.value}
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(outlineAction, 'flex-1')}
+            className={style(primary === 'message')}
           >
             <MessageCircle aria-hidden className="size-5" />
             {t('messenger')}
           </a>
         )}
-        <DirectionsButton location={branch.location} className={cn(outlineAction, 'flex-1')} />
+        <DirectionsButton location={branch.location} className={style(primary === 'visit')} />
       </div>
     </div>
   );

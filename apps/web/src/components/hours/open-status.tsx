@@ -11,6 +11,7 @@ import {
 import { CircleAlert, CircleCheck, CircleHelp, CircleX, Clock } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { HoursConfirmedBy } from '@/lib/admin-types';
+import type { ContactReach } from '@/lib/contact-links';
 import { wallTimeLabel, weekdayLabel } from '@/lib/hours-format';
 import { cn } from '@/lib/utils';
 
@@ -46,13 +47,34 @@ const STYLE = {
   unknown: { Icon: CircleHelp, color: 'text-status-unknown' },
 } as const satisfies Record<OpenStatus['state'], unknown>;
 
-/** "Open · closes 6 PM", "Closed today · opens 8 AM tomorrow", "Hours unknown — call ahead". */
-export function OpenStatusText({ status, className }: { status: OpenStatus; className?: string }) {
+/** What to do when hours are unknown, by how the branch can be reached (DESIGN UX17). */
+const UNKNOWN_ADVICE = {
+  call: 'unknownAdvice.call',
+  message: 'unknownAdvice.message',
+  visit: 'unknownAdvice.visit',
+} as const satisfies Record<ContactReach, string>;
+
+/**
+ * "Open · closes 6 PM", "Closed today · opens 8 AM tomorrow", or "Hours unknown" with what to
+ * do on the next line ("Call before you go."), in body text: the advice is the useful part,
+ * so it isn't greyed out with the label. `reach` picks the advice; the admin preview leaves
+ * it at "call".
+ */
+export function OpenStatusText({
+  status,
+  reach = 'call',
+  className,
+}: {
+  status: OpenStatus;
+  reach?: ContactReach;
+  className?: string;
+}) {
   const t = useTranslations('Hours');
   const momentLabel = useMomentLabel();
   const opens = (moment: LocalMoment | null) =>
     moment === null ? null : momentLabel(moment, 'opens');
 
+  const advice = status.state === 'unknown' ? t(UNKNOWN_ADVICE[reach]) : null;
   const [label, detail, note] = ((): [string, string | null, string | null] => {
     switch (status.state) {
       case 'open':
@@ -79,6 +101,7 @@ export function OpenStatusText({ status, className }: { status: OpenStatus; clas
         {detail !== null && <span>· {detail}</span>}
       </p>
       {note !== null && <p className="pl-6.5 text-sm text-muted-foreground">{note}</p>}
+      {advice !== null && <p className="pl-6.5 text-base">{advice}</p>}
     </div>
   );
 }

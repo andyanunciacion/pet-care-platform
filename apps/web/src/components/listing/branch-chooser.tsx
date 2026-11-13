@@ -1,9 +1,12 @@
 import { getTranslations } from 'next-intl/server';
-import { isClosedForGood } from '@/lib/listing';
+import { serverEnv } from '@/lib/env';
+import { businessJsonLd } from '@/lib/json-ld';
+import { isClosedForGood, shownImage } from '@/lib/listing';
 import type { Listing } from '@/lib/public-types';
 import { ClaimBadge } from './claim-badge';
+import { JsonLd } from './json-ld';
 import { ListingMessages } from './listing-messages';
-import { BranchSummary, ClosedNotice, Section } from './sections';
+import { BranchSummary, BusinessLogo, ClosedNotice, Section } from './sections';
 
 /** A business with several branches: each one with its status and a Call button. */
 export async function BranchChooser({
@@ -19,11 +22,23 @@ export async function BranchChooser({
 
   return (
     <ListingMessages>
+      {!closedForGood && (
+        <JsonLd
+          data={businessJsonLd({
+            listing,
+            siteUrl: serverEnv().SITE_URL,
+            logo: shownImage(business.logo),
+          })}
+        />
+      )}
       <div className="flex flex-col gap-10">
         <header className="flex flex-col gap-3">
-          <h1 className="text-[length:clamp(1.75rem,1.4rem+1.6vw,2.5rem)] leading-tight font-extrabold tracking-tight text-balance">
-            {business.name}
-          </h1>
+          <div className="flex items-center gap-3">
+            <BusinessLogo business={business} />
+            <h1 className="min-w-0 text-[length:clamp(1.75rem,1.5rem+1vw,2rem)] leading-tight font-bold tracking-tight text-balance">
+              {business.name}
+            </h1>
+          </div>
           <ClaimBadge claimStatus={business.claimStatus} />
           {closedForGood && <ClosedNotice detail={t('businessClosedDetail')} />}
           {business.description !== null && (

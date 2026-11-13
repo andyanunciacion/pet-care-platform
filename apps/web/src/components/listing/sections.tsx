@@ -7,15 +7,29 @@ import {
   Phone,
   Smartphone,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { outlineAction, primaryAction } from '@/lib/action-styles';
-import { mailLink, phoneLabel, telLink, viberLink } from '@/lib/contact-links';
-import { addressLabel, branchHours, isClosedForGood } from '@/lib/listing';
+import {
+  contactReach,
+  mailLink,
+  phoneLabel,
+  telLink,
+  viberLink,
+  type ContactReach,
+} from '@/lib/contact-links';
+import { addressLabel, branchHours, isClosedForGood, shownImage } from '@/lib/listing';
 import { servicePriceLabel } from '@/lib/price-format';
 import { priceLabels } from '@/lib/price-labels';
-import type { ListingBranch, ListingContact, ListingService } from '@/lib/public-types';
+import type {
+  ListingBranch,
+  ListingBusiness,
+  ListingContact,
+  ListingProduct,
+  ListingService,
+} from '@/lib/public-types';
 import { cn } from '@/lib/utils';
 import { DirectionsAppLink } from './directions';
 import { EmergencyLine, LiveStatus } from './live-status';
@@ -42,6 +56,28 @@ export function Section({
   );
 }
 
+/**
+ * The business's logo beside its name in the page header, when it has one. Fixed size, so
+ * the header doesn't shift when it loads; `object-contain` fits logos of any shape. The alt
+ * is empty on purpose: the name right next to it already says it, and a screen reader
+ * would read it twice.
+ */
+export function BusinessLogo({ business }: { business: ListingBusiness }) {
+  const logo = shownImage(business.logo);
+  if (logo === null) return null;
+  return (
+    <Image
+      src={logo.url}
+      alt=""
+      width={56}
+      height={56}
+      // In the header, so above the fold: load it right away (it's small, not the LCP).
+      loading="eager"
+      className="size-14 shrink-0 rounded-lg border bg-background object-contain"
+    />
+  );
+}
+
 /** "Permanently closed" in place of the open status. */
 export async function ClosedNotice({ detail }: { detail: string }) {
   const t = await getTranslations('Listing');
@@ -56,8 +92,12 @@ export async function ClosedNotice({ detail }: { detail: string }) {
   );
 }
 
-/** "Takes emergencies" / "Closed now · call for emergencies" (DESIGN UX19), for branches that do. */
+/**
+ * "Takes emergencies" / "Closed now · call for emergencies" (DESIGN UX19), for branches that
+ * do. Nothing without a phone number: the flag promises a call, which owners can't make.
+ */
 export async function Emergencies({ branch }: { branch: ListingBranch }) {
+  if (contactReach(branch.contacts) !== 'call') return null;
   const t = await getTranslations('Listing');
   return (
     <EmergencyLine
@@ -76,7 +116,7 @@ export async function AddressSection({ branch }: { branch: ListingBranch }) {
   const t = await getTranslations('Listing');
   return (
     <Section id="address" title={t('addressTitle')}>
-      <p>{addressLabel(branch)}</p>
+      <p className="text-pretty">{addressLabel(branch)}</p>
       <p className="flex gap-4">
         <DirectionsAppLink app="google_maps" location={branch.location}>
           {t('openInGoogleMaps')}
@@ -139,6 +179,8 @@ export async function ContactSection({ branch }: { branch: ListingBranch }) {
                     <span className="font-medium text-primary underline underline-offset-4">
                       {text}
                     </span>
+                    {/* Read as "0917 123 4567, Phone", not run together. */}
+                    <span className="sr-only">, </span>
                     <span className="text-sm text-muted-foreground">
                       {typeLabel[contact.type]}
                       {contact.label !== null &&
@@ -157,9 +199,24 @@ export async function ContactSection({ branch }: { branch: ListingBranch }) {
 }
 
 /** Services grouped by category group ("Surgery"), each with its price (DESIGN UX10). */
-export async function ServicesSection({ services }: { services: ListingService[] }) {
+export async function ServicesSection({
+  services,
+  reach,
+}: {
+  services: ListingService[];
+  /** Without a phone, "Call for price" and "Call the clinic" become ask/message (UX17). */
+  reach: ContactReach;
+}) {
   const t = await getTranslations('Listing');
-  const labels = priceLabels(await getTranslations('Prices'));
+  const tPrices = await getTranslations('Prices');
+  const allLabels = priceLabels(tPrices);
+  const labels =
+    reach === 'call' ? allLabels : { ...allLabels, callForPrice: tPrices('askForPrice') };
+  const noServices = {
+    call: t('noServices'),
+    message: t('noServicesMessage'),
+    visit: t('noServicesVisit'),
+  }[reach];
 
   const groups = new Map<string, ListingService[]>();
   for (const service of services) {
@@ -170,20 +227,27 @@ export async function ServicesSection({ services }: { services: ListingService[]
   return (
     <Section id="services" title={t('servicesTitle')}>
       {services.length === 0 ? (
-        <p className="text-muted-foreground">{t('noServices')}</p>
+        <p className="text-muted-foreground">{noServices}</p>
       ) : (
         <>
           {[...groups].map(([group, items]) => (
             <div key={group} className="flex flex-col gap-1">
-              <h3 className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-                {group}
-              </h3>
+              {/* Foreground text on the muted band (the White-Under-Status rule, DESIGN §7.1). */}
+              <h3 className="rounded-lg bg-muted px-3 py-1.5 font-semibold">{group}</h3>
               <ul className="flex flex-col divide-y">
                 {items.map((service) => (
                   <li key={service.id} className="flex flex-col gap-0.5 py-3">
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                      <span className="font-medium">{service.name}</span>
-                      <span className="font-semibold">{servicePriceLabel(service, labels)}</span>
+                    {/*
+                      The name keeps at least 12rem; a price too long to fit beside it (a
+                      range with a unit) moves to its own line, still right-aligned.
+                    */}
+                    <div className="flex flex-wrap items-baseline gap-x-4">
+                      <span className="min-w-[min(100%,12rem)] flex-1 font-medium text-pretty">
+                        {service.name}
+                      </span>
+                      <span className="ml-auto shrink-0 text-right font-semibold">
+                        {servicePriceLabel(service, labels)}
+                      </span>
                     </div>
                     {service.priceNote !== null && (
                       <p className="text-sm text-muted-foreground">{service.priceNote}</p>
@@ -204,6 +268,73 @@ export async function ServicesSection({ services }: { services: ListingService[]
           <p className="text-sm text-muted-foreground">{t('pricesFootnote')}</p>
         </>
       )}
+    </Section>
+  );
+}
+
+/**
+ * The business's products, read-only (PRD: name, photo, price, availability; no cart), right
+ * after the services (DESIGN UX8). Availability is always written out, never only shown by
+ * color. A thumbnail only when the product has an image: no placeholder.
+ */
+export async function ProductsSection({
+  products,
+  reach,
+}: {
+  products: ListingProduct[];
+  reach: ContactReach;
+}) {
+  if (products.length === 0) return null;
+  const t = await getTranslations('Listing');
+  const labels = priceLabels(await getTranslations('Prices'));
+  // When some products have a thumbnail, the others keep the same text column.
+  const anyImage = products.some((product) => shownImage(product.image) !== null);
+  return (
+    <Section id="products" title={t('productsTitle')}>
+      <ul className="flex flex-col divide-y">
+        {products.map((product) => {
+          const image = shownImage(product.image);
+          return (
+            <li key={product.id} className="flex items-center gap-3 py-3">
+              {image === null ? (
+                anyImage && <div aria-hidden className="size-16 shrink-0" />
+              ) : (
+                <Image
+                  src={image.url}
+                  alt={image.alt}
+                  width={64}
+                  height={64}
+                  className="size-16 shrink-0 rounded-lg bg-muted object-cover"
+                />
+              )}
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <div className="flex flex-wrap items-baseline gap-x-4">
+                  <span className="min-w-[min(100%,12rem)] flex-1 font-medium text-pretty">
+                    {product.name}
+                  </span>
+                  <span className="ml-auto shrink-0 text-right font-semibold">
+                    {labels.productPrice(product.price)}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {[product.category, t(`availability.${product.availability}`)]
+                    .filter((part) => part !== null)
+                    .join(' · ')}
+                </p>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="text-sm text-muted-foreground">
+        {
+          {
+            call: t('productsFootnote'),
+            message: t('productsFootnoteMessage'),
+            visit: t('productsFootnoteVisit'),
+          }[reach]
+        }
+      </p>
     </Section>
   );
 }
@@ -277,7 +408,11 @@ export async function BranchSummary({
         </p>
       ) : (
         <>
-          <LiveStatus hours={branchHours(branch)} renderedAt={renderedAt} />
+          <LiveStatus
+            hours={branchHours(branch)}
+            renderedAt={renderedAt}
+            reach={contactReach(branch.contacts)}
+          />
           {branch.acceptsEmergencies && <Emergencies branch={branch} />}
         </>
       )}

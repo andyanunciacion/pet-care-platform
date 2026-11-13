@@ -30,6 +30,8 @@
     "openInWaze": "Waze",
     "servicesTitle": "Services and prices",
     "noServices": "No services listed yet. Call the clinic to ask.",
+    "noServicesMessage": "No services listed yet. Message the clinic to ask.",
+    "noServicesVisit": "No services listed yet. Ask the clinic when you visit.",
     "pricesFootnote": "Prices are estimates. Confirm with the clinic.",
     "forSpecies": "For: {species}",
     "treats": "Treats",
@@ -44,7 +46,24 @@
     "emergenciesClosed": "Closed now · call for emergencies",
     "emergenciesUnknown": "Call for emergencies",
     "emergencies": "Takes emergencies · call first",
-    "messengerLink": "Send a message"
+    "statusTitle": "Open now?",
+    "seeAllHours": "See all hours",
+    "messengerLink": "Send a message",
+    "photosTitle": "Photos",
+    "photosLabel": "Photos of {name}, scroll sideways for more",
+    "photoCount": "{count, plural, one {# photo} other {# photos}}",
+    "photoEnlarge": "Enlarge photo:",
+    "photoPosition": "Photo {position} of {count}",
+    "photoClose": "Close",
+    "productsTitle": "Products",
+    "productsFootnote": "Stock changes. Call to check before you go.",
+    "productsFootnoteMessage": "Stock changes. Message to check before you go.",
+    "productsFootnoteVisit": "Stock changes, so it may not be there when you visit.",
+    "availability": {
+      "available": "In stock",
+      "limited": "Limited stock",
+      "out": "Out of stock"
+    }
   },
   "Directions": {
     "directions": "Directions",
@@ -276,7 +295,12 @@
     "closed": "Closed",
     "closedToday": "Closed today",
     "open24h": "Open 24 hours",
-    "unknown": "Hours unknown — call ahead",
+    "unknown": "Hours unknown",
+    "unknownAdvice": {
+      "call": "Call before you go.",
+      "message": "Message before you go.",
+      "visit": "There's no phone or Messenger listed to check first."
+    },
     "closes": "closes {time}",
     "closesTomorrow": "closes {time} tomorrow",
     "opens": "opens {time}",
@@ -313,7 +337,7 @@
     "addInterval": "Add interval",
     "removeInterval": "Remove interval",
     "copyToWeekdays": "Copy to Mon–Fri",
-    "noHoursWarning": "No weekly hours: owners see “Hours unknown — call ahead”.",
+    "noHoursWarning": "No weekly hours: owners see “Hours unknown” and a line on how to check first.",
     "saveHours": "Save hours",
     "unsaved": "Unsaved changes. The preview includes them; owners see them only after you save.",
     "issues": {
