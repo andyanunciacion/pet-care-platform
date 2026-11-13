@@ -47,3 +47,29 @@ export {
 } from './media.ts';
 export { isInPhilippines, parseLatLng, PHILIPPINES_BOUNDS, type LngLat } from './location.ts';
 export { BUSINESS_TYPE_RULES, type BusinessType, type BusinessTypeRules } from './business-type.ts';
+export {
+  compareSortKeys,
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_RADIUS_KM,
+  DISTANCE_HALF_KM,
+  FIELD_SCORES,
+  matchListing,
+  MAX_MATCHED_SERVICES,
+  MAX_PAGE_SIZE,
+  MAX_QUERY_LENGTH,
+  MAX_QUERY_TOKENS,
+  MAX_RADIUS_KM,
+  RANK_BOOSTS,
+  searchScore,
+  searchSortKey,
+  searchTerms,
+  SPECIES_SCORE,
+  TYPO_MIN_LENGTH,
+  TYPO_MIN_SIMILARITY,
+  type EmergencyGroup,
+  type ListingMatch,
+  type ListingMatchInput,
+  type ScoreInput,
+  type SearchTerms,
+  type TokenHits,
+} from './search.ts';

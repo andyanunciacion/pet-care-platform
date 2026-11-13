@@ -12,6 +12,11 @@ export const species = pgTable(
     id: id(),
     code: text().notNull().unique(),
     name: text().notNull(),
+    /** Other words owners search with: "aso", "pusa", plurals. Search reads them (ARCHITECTURE §6). */
+    synonyms: text()
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
     sortOrder: smallint().notNull().default(0),
     ...timestamps,
   },

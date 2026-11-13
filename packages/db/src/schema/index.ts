@@ -10,3 +10,4 @@ export * from './services.ts';
 export * from './product.ts';
 export * from './media.ts';
 export * from './audit.ts';
+export * from './search.ts';
