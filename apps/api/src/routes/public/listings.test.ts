@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { createDatabase, schema } from '@paw/db';
 import {
   insertTestAreas,
@@ -12,6 +13,7 @@ import { addDays, toManila } from '@paw/domain';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { buildApp } from '../../app.ts';
 import type { Listing } from '../../services/listings.ts';
+import { createMemoryStorage } from '../../storage.ts';
 import { testEnv } from '../../testing.ts';
 
 let app: Awaited<ReturnType<typeof buildApp>>;
@@ -216,6 +218,115 @@ describe('GET /v1/listings/:businessSlug', () => {
         priceNote: null,
         species: ['Listing dog', 'Listing cat'],
       },
+    ]);
+  });
+});
+
+describe('GET /v1/listings/:businessSlug: images and products', () => {
+  let withStorage: Awaited<ReturnType<typeof buildApp>>;
+
+  beforeAll(async () => {
+    withStorage = await buildApp({ env: testEnv(), storage: createMemoryStorage() });
+  });
+
+  afterAll(async () => {
+    await withStorage.close();
+  });
+
+  const image = (key: string, alt: string) => ({
+    storageKey: `listing-test/${key}-${randomUUID()}.webp`,
+    alt,
+    width: 1600,
+    height: 1200,
+  });
+
+  async function product(businessId: string, name: string, category: string | null) {
+    const [row] = await db
+      .insert(schema.product)
+      .values({ businessId, name, category, price: category === null ? null : 125000 })
+      .returning();
+    if (row === undefined) throw new Error('no product');
+    return row;
+  }
+
+  /** A business with a logo, two photos on its branch and two products (one with an image). */
+  async function businessWithImages() {
+    const business = await published();
+    const branch = await insertTestBranch(db, business.id);
+    const food = await product(business.id, 'Dog food 2 kg', 'Food');
+    const collar = await product(business.id, 'Flea collar', null);
+    const logo = image('logo', 'Clinic logo');
+    const second = image('second', 'Waiting area');
+    const first = image('first', 'Front of the clinic');
+    const foodImage = image('food', 'A bag of dog food');
+    await db.insert(schema.media).values([
+      { kind: 'logo', businessId: business.id, ...logo },
+      { kind: 'photo', branchId: branch.id, sortOrder: 1, ...second },
+      { kind: 'photo', branchId: branch.id, sortOrder: 0, ...first },
+      { kind: 'photo', productId: food.id, ...foodImage },
+    ]);
+    return { business, food, collar, logo, first, second, foodImage };
+  }
+
+  const publicImage = ({ storageKey, alt }: { storageKey: string; alt: string }) => ({
+    url: `https://photos.test/${storageKey}`,
+    alt,
+    width: 1600,
+    height: 1200,
+  });
+
+  it('sends the logo, branch photos in order and products with their images', async () => {
+    const { business, food, collar, logo, first, second, foodImage } = await businessWithImages();
+
+    const response = await withStorage.inject({ url: `/v1/listings/${business.slug}` });
+    expect(response.statusCode).toBe(200);
+    const listing = response.json<Listing>();
+
+    expect(listing.business.logo).toEqual(publicImage(logo));
+    expect(listing.branches[0]?.photos).toEqual([publicImage(first), publicImage(second)]);
+    // By category, uncategorized last.
+    expect(listing.business.products).toEqual([
+      {
+        id: food.id,
+        name: 'Dog food 2 kg',
+        category: 'Food',
+        price: 125000,
+        availability: 'available',
+        image: publicImage(foodImage),
+      },
+      {
+        id: collar.id,
+        name: 'Flea collar',
+        category: null,
+        price: null,
+        availability: 'available',
+        image: null,
+      },
+    ]);
+  });
+
+  it("never sends another business's images", async () => {
+    await businessWithImages();
+    const business = await published();
+    await insertTestBranch(db, business.id);
+
+    const listing = (
+      await withStorage.inject({ url: `/v1/listings/${business.slug}` })
+    ).json<Listing>();
+    expect(listing.business.logo).toBeNull();
+    expect(listing.business.products).toEqual([]);
+    expect(listing.branches[0]?.photos).toEqual([]);
+  });
+
+  it('sends no images when photo storage is not set up, but still the products', async () => {
+    const { business } = await businessWithImages();
+
+    const listing = await getListing(business.slug);
+    expect(listing.business.logo).toBeNull();
+    expect(listing.branches[0]?.photos).toEqual([]);
+    expect(listing.business.products.map((p) => [p.name, p.image])).toEqual([
+      ['Dog food 2 kg', null],
+      ['Flea collar', null],
     ]);
   });
 });

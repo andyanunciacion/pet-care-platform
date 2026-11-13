@@ -1,15 +1,18 @@
 // The public clinic page's data (DESIGN UX8): a published business and the branches owners
-// can see, with everything the page shows. Read-only and open to everyone.
+// can see, with everything the page shows. Read-only and open to everyone. Images come with
+// their public URLs; without photo storage configured, a listing simply has none.
 import type { Db } from '@paw/db';
 import { schema } from '@paw/db';
 import { addDays, toManila } from '@paw/domain';
-import { and, asc, eq, gte, inArray } from 'drizzle-orm';
+import { and, asc, eq, gte, inArray, or, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 import { httpError } from '../errors.ts';
+import type { PhotoStorage } from '../storage.ts';
 import { listServices, PRICE_UNITS } from './branch-services.ts';
 import { BUSINESS_TYPES, CLAIM_STATUSES, SlugSchema } from './businesses.ts';
 import { listingPaths, publicBranchPlaces } from './listing-paths.ts';
+import { PRODUCT_AVAILABILITIES } from './products.ts';
 
 const {
   business,
@@ -19,6 +22,8 @@ const {
   branchHoursException,
   branchService,
   branchSpecies,
+  media,
+  product,
   psgcArea,
   species,
 } = schema;
@@ -35,6 +40,13 @@ export const ListingParamsSchema = z.object({ businessSlug: SlugSchema });
 const PlaceSchema = z.object({ name: z.string(), slug: z.string() });
 const IntervalSchema = z.object({ opensAt: z.string(), closesAt: z.string() });
 const SpeciesSchema = z.object({ code: z.string(), name: z.string() });
+/** A stored image, already resized (ARCHITECTURE D38). Its size lets pages reserve its space. */
+const PublicImageSchema = z.object({
+  url: z.string(),
+  alt: z.string(),
+  width: z.int(),
+  height: z.int(),
+});
 
 const ListingBranchSchema = z.object({
   id: z.uuid(),
@@ -88,6 +100,8 @@ const ListingBranchSchema = z.object({
       species: z.array(z.string()),
     }),
   ),
+  /** In display order. */
+  photos: z.array(PublicImageSchema),
 });
 
 export const ListingSchema = z.object({
@@ -101,6 +115,18 @@ export const ListingSchema = z.object({
     listingStatus: z.enum(PUBLIC_STATUSES),
     /** The business's page: the only branch's full page, or the list of its branches. */
     path: z.string(),
+    logo: PublicImageSchema.nullable(),
+    /** By category (uncategorized last), then name, as in the admin. Prices in centavos. */
+    products: z.array(
+      z.object({
+        id: z.uuid(),
+        name: z.string(),
+        category: z.string().nullable(),
+        price: z.int().nullable(),
+        availability: z.enum(PRODUCT_AVAILABILITIES),
+        image: PublicImageSchema.nullable(),
+      }),
+    ),
   }),
   /** Every branch but hidden ones, in the order they were added. */
   branches: z.array(ListingBranchSchema),
@@ -123,9 +149,61 @@ function groupBy<T>(rows: readonly T[], key: (row: T) => string): Map<string, T[
   return groups;
 }
 
+type PublicImage = z.infer<typeof PublicImageSchema>;
+type ListingImage = PublicImage &
+  Pick<typeof media.$inferSelect, 'kind' | 'branchId' | 'productId'>;
+
+/**
+ * The business's logo, its product images and its branches' photos, in display order, with
+ * their public URLs. None when photo storage isn't configured: there'd be no URL to show,
+ * and the page must render all the same.
+ */
+async function listingImages(
+  db: Pick<Db, 'select'>,
+  storage: PhotoStorage | null,
+  businessId: string,
+  branchIds: string[],
+): Promise<ListingImage[]> {
+  if (storage === null) return [];
+  const rows = await db
+    .select()
+    .from(media)
+    .where(
+      or(
+        and(eq(media.businessId, businessId), eq(media.kind, 'logo')),
+        inArray(media.branchId, branchIds),
+        inArray(
+          media.productId,
+          db.select({ id: product.id }).from(product).where(eq(product.businessId, businessId)),
+        ),
+      ),
+    )
+    .orderBy(asc(media.sortOrder), asc(media.id));
+  return rows.map((row) => ({
+    url: storage.publicUrl(row.storageKey),
+    alt: row.alt,
+    width: row.width,
+    height: row.height,
+    kind: row.kind,
+    branchId: row.branchId,
+    productId: row.productId,
+  }));
+}
+
+const publicImage = ({ url, alt, width, height }: ListingImage): PublicImage => ({
+  url,
+  alt,
+  width,
+  height,
+});
+
 // ── Query ───────────────────────────────────────────────────────────────────────────────
 
-export async function getListing(db: Pick<Db, 'select'>, businessSlug: string): Promise<Listing> {
+export async function getListing(
+  db: Pick<Db, 'select'>,
+  storage: PhotoStorage | null,
+  businessSlug: string,
+): Promise<Listing> {
   const [found] = await db.select().from(business).where(eq(business.slug, businessSlug));
   if (found === undefined || !isPublic(found.listingStatus)) throw listingNotFound();
 
@@ -139,49 +217,59 @@ export async function getListing(db: Pick<Db, 'select'>, businessSlug: string): 
   const province = alias(psgcArea, 'province');
   const yesterday = addDays(toManila(new Date()).date, -1);
 
-  const [branches, weekly, exceptions, contacts, treated, services] = await Promise.all([
-    db
-      .select({
-        branch,
-        barangayName: barangay.name,
-        cityName: city.name,
-        provinceName: province.name,
-      })
-      .from(branch)
-      .innerJoin(city, eq(city.code, branch.cityCode))
-      .innerJoin(province, eq(province.code, branch.provinceCode))
-      .leftJoin(barangay, eq(barangay.code, branch.barangayCode))
-      .where(inArray(branch.id, ids)),
-    db
-      .select()
-      .from(branchHours)
-      .where(inArray(branchHours.branchId, ids))
-      .orderBy(asc(branchHours.dayOfWeek), asc(branchHours.opensAt)),
-    db
-      .select()
-      .from(branchHoursException)
-      .where(
-        and(inArray(branchHoursException.branchId, ids), gte(branchHoursException.date, yesterday)),
-      )
-      .orderBy(asc(branchHoursException.date)),
-    db
-      .select()
-      .from(branchContact)
-      .where(inArray(branchContact.branchId, ids))
-      .orderBy(asc(branchContact.sortOrder), asc(branchContact.id)),
-    db
-      .select({
-        branchId: branchSpecies.branchId,
-        id: species.id,
-        code: species.code,
-        name: species.name,
-      })
-      .from(branchSpecies)
-      .innerJoin(species, eq(species.id, branchSpecies.speciesId))
-      .where(inArray(branchSpecies.branchId, ids))
-      .orderBy(asc(species.sortOrder), asc(species.name)),
-    listServices(db, inArray(branchService.branchId, ids)),
-  ]);
+  const [branches, weekly, exceptions, contacts, treated, services, products, images] =
+    await Promise.all([
+      db
+        .select({
+          branch,
+          barangayName: barangay.name,
+          cityName: city.name,
+          provinceName: province.name,
+        })
+        .from(branch)
+        .innerJoin(city, eq(city.code, branch.cityCode))
+        .innerJoin(province, eq(province.code, branch.provinceCode))
+        .leftJoin(barangay, eq(barangay.code, branch.barangayCode))
+        .where(inArray(branch.id, ids)),
+      db
+        .select()
+        .from(branchHours)
+        .where(inArray(branchHours.branchId, ids))
+        .orderBy(asc(branchHours.dayOfWeek), asc(branchHours.opensAt)),
+      db
+        .select()
+        .from(branchHoursException)
+        .where(
+          and(
+            inArray(branchHoursException.branchId, ids),
+            gte(branchHoursException.date, yesterday),
+          ),
+        )
+        .orderBy(asc(branchHoursException.date)),
+      db
+        .select()
+        .from(branchContact)
+        .where(inArray(branchContact.branchId, ids))
+        .orderBy(asc(branchContact.sortOrder), asc(branchContact.id)),
+      db
+        .select({
+          branchId: branchSpecies.branchId,
+          id: species.id,
+          code: species.code,
+          name: species.name,
+        })
+        .from(branchSpecies)
+        .innerJoin(species, eq(species.id, branchSpecies.speciesId))
+        .where(inArray(branchSpecies.branchId, ids))
+        .orderBy(asc(species.sortOrder), asc(species.name)),
+      listServices(db, inArray(branchService.branchId, ids)),
+      db
+        .select()
+        .from(product)
+        .where(eq(product.businessId, found.id))
+        .orderBy(sql`${product.category} asc nulls last`, asc(product.name), asc(product.id)),
+      listingImages(db, storage, found.id, ids),
+    ]);
 
   // Service species come as ids; owners read names.
   const serviceSpeciesIds = [...new Set(services.flatMap((service) => service.speciesIds))];
@@ -202,6 +290,18 @@ export async function getListing(db: Pick<Db, 'select'>, businessSlug: string): 
   const contactsBy = groupBy(contacts, (row) => row.branchId);
   const speciesBy = groupBy(treated, (row) => row.branchId);
   const servicesBy = groupBy(services, (service) => service.branchId);
+  const logo = images.find((image) => image.kind === 'logo');
+  const photosBy = groupBy(
+    images.filter((image) => image.branchId !== null),
+    (image) => image.branchId ?? '',
+  );
+  // One image per product: the first, should an older write have left more.
+  const productImages = new Map<string, PublicImage>();
+  for (const image of images) {
+    if (image.productId !== null && !productImages.has(image.productId)) {
+      productImages.set(image.productId, publicImage(image));
+    }
+  }
 
   return {
     business: {
@@ -213,6 +313,15 @@ export async function getListing(db: Pick<Db, 'select'>, businessSlug: string): 
       claimStatus: found.claimStatus,
       listingStatus: found.listingStatus,
       path: paths.business,
+      logo: logo === undefined ? null : publicImage(logo),
+      products: products.map((row) => ({
+        id: row.id,
+        name: row.name,
+        category: row.category,
+        price: row.price,
+        availability: row.availability,
+        image: productImages.get(row.id) ?? null,
+      })),
     },
     branches: places.map((place) => {
       const row = byId.get(place.id);
@@ -264,6 +373,7 @@ export async function getListing(db: Pick<Db, 'select'>, businessSlug: string): 
           priceNote: service.priceNote,
           species: service.speciesIds.flatMap((id) => speciesNames.get(id) ?? []),
         })),
+        photos: (photosBy.get(b.id) ?? []).map(publicImage),
       };
     }),
   };
