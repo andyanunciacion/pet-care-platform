@@ -2423,6 +2423,248 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search published branches and their services */
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                    lat?: number;
+                    lng?: number;
+                    radiusKm?: number;
+                    cityCode?: string;
+                    species?: string;
+                    category?: string;
+                    openNow?: "true" | "false";
+                    emergency?: "true" | "false";
+                    limit?: number;
+                    cursor?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            results: ({
+                                business: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    slug: string;
+                                    name: string;
+                                    /** @enum {string} */
+                                    claimStatus: "unclaimed" | "pending" | "verified";
+                                };
+                                branch: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    name: string;
+                                    path: string;
+                                    addressLine: string;
+                                    barangay: {
+                                        name: string;
+                                    } | null;
+                                    city: {
+                                        name: string;
+                                    };
+                                    location: {
+                                        lng: number;
+                                        lat: number;
+                                    };
+                                    is24h: boolean;
+                                    acceptsEmergencies: boolean;
+                                    /** Format: date-time */
+                                    hoursConfirmedAt: string | null;
+                                    /** @enum {string|null} */
+                                    hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                                    weekly: {
+                                        opensAt: string;
+                                        closesAt: string;
+                                        dayOfWeek: number;
+                                    }[];
+                                    exceptions: {
+                                        /** Format: date */
+                                        date: string;
+                                        isClosed: boolean;
+                                        intervals: {
+                                            opensAt: string;
+                                            closesAt: string;
+                                        }[];
+                                        note: string | null;
+                                    }[];
+                                    species: {
+                                        code: string;
+                                        name: string;
+                                    }[];
+                                    phone: string | null;
+                                    messenger: string | null;
+                                };
+                                distanceM: number | null;
+                                /** @enum {string|null} */
+                                emergency: "open" | "callable" | null;
+                                /** @enum {string} */
+                                kind: "branch";
+                            } | {
+                                business: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    slug: string;
+                                    name: string;
+                                    /** @enum {string} */
+                                    claimStatus: "unclaimed" | "pending" | "verified";
+                                };
+                                branch: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    name: string;
+                                    path: string;
+                                    addressLine: string;
+                                    barangay: {
+                                        name: string;
+                                    } | null;
+                                    city: {
+                                        name: string;
+                                    };
+                                    location: {
+                                        lng: number;
+                                        lat: number;
+                                    };
+                                    is24h: boolean;
+                                    acceptsEmergencies: boolean;
+                                    /** Format: date-time */
+                                    hoursConfirmedAt: string | null;
+                                    /** @enum {string|null} */
+                                    hoursConfirmedBy: "clinic" | "paw_ops" | "report" | null;
+                                    weekly: {
+                                        opensAt: string;
+                                        closesAt: string;
+                                        dayOfWeek: number;
+                                    }[];
+                                    exceptions: {
+                                        /** Format: date */
+                                        date: string;
+                                        isClosed: boolean;
+                                        intervals: {
+                                            opensAt: string;
+                                            closesAt: string;
+                                        }[];
+                                        note: string | null;
+                                    }[];
+                                    species: {
+                                        code: string;
+                                        name: string;
+                                    }[];
+                                    phone: string | null;
+                                    messenger: string | null;
+                                };
+                                distanceM: number | null;
+                                /** @enum {string|null} */
+                                emergency: "open" | "callable" | null;
+                                /** @enum {string} */
+                                kind: "service";
+                                services: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    name: string;
+                                    category: {
+                                        name: string;
+                                        groupName: string | null;
+                                    };
+                                    priceMin: number | null;
+                                    priceMax: number | null;
+                                    /** @enum {string} */
+                                    priceUnit: "per_visit" | "per_session" | "per_night" | "per_day";
+                                    priceNote: string | null;
+                                    species: string[];
+                                }[];
+                            })[];
+                            total: number;
+                            nextCursor: string | null;
+                            matchedCategories: {
+                                code: string;
+                                name: string;
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/taxonomy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Species and service categories (search filters) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Default Response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            species: {
+                                /** Format: uuid */
+                                id: string;
+                                code: string;
+                                name: string;
+                            }[];
+                            categories: {
+                                /** Format: uuid */
+                                id: string;
+                                code: string;
+                                name: string;
+                                children: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    code: string;
+                                    name: string;
+                                }[];
+                            }[];
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
