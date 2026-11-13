@@ -47,3 +47,16 @@ export function phoneLabel(e164: string): string {
   }
   return national;
 }
+
+/**
+ * How owners can reach a branch, for the copy that tells them what to do (DESIGN UX9,
+ * UX17, UX19): call (it has a phone number), message (Messenger only), or only visit.
+ * Viber and email don't count: the contact bar's Call button uses phone numbers only.
+ */
+export type ContactReach = 'call' | 'message' | 'visit';
+
+export function contactReach(contacts: readonly { type: string }[]): ContactReach {
+  if (contacts.some((contact) => contact.type === 'phone')) return 'call';
+  if (contacts.some((contact) => contact.type === 'messenger')) return 'message';
+  return 'visit';
+}

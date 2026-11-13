@@ -11,3 +11,5 @@ export type ListingBusiness = Listing['business'];
 export type ListingBranch = Listing['branches'][number];
 export type ListingContact = ListingBranch['contacts'][number];
 export type ListingService = ListingBranch['services'][number];
+export type ListingImage = ListingBranch['photos'][number];
+export type ListingProduct = ListingBusiness['products'][number];

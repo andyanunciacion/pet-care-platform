@@ -1,5 +1,6 @@
 import type { Database } from '@paw/db';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import type { PhotoStorage } from '../../storage.ts';
 import { publicListingRoutes } from './listings.ts';
 
 /**
@@ -7,9 +8,10 @@ import { publicListingRoutes } from './listings.ts';
  * that needs a signed-in user belongs in the admin plugin (or, from slice 8, the clinic
  * dashboard's), never here.
  */
-export const publicRoutes: FastifyPluginAsyncZod<{ database: Database }> = async (
-  app,
-  { database },
-) => {
-  await app.register(publicListingRoutes, { database });
+export const publicRoutes: FastifyPluginAsyncZod<{
+  database: Database;
+  /** Only for image URLs; null when it isn't configured (listings then have no images). */
+  storage: PhotoStorage | null;
+}> = async (app, { database, storage }) => {
+  await app.register(publicListingRoutes, { database, storage });
 };

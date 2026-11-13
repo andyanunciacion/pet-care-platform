@@ -82,7 +82,7 @@ export async function buildApp({ env, storage: storageOption }: AppOptions) {
   await app.register(healthRoutes, { database });
   await app.register(authRoutes, { auth: app.auth, publicOrigin: env.BETTER_AUTH_URL });
   await app.register(adminRoutes, { prefix: '/v1/admin', database, storage });
-  await app.register(publicRoutes, { prefix: '/v1', database });
+  await app.register(publicRoutes, { prefix: '/v1', database, storage });
 
   return app;
 }

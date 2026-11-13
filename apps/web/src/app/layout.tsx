@@ -2,11 +2,14 @@ import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { brand } from '@/lib/brand';
+import { serverEnv } from '@/lib/env';
 import './globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Metadata');
   return {
+    // Relative URLs in metadata (canonical, Open Graph) become absolute on this origin.
+    metadataBase: new URL(serverEnv().SITE_URL),
     title: { default: brand.name, template: `%s · ${brand.name}` },
     description: t('description'),
   };

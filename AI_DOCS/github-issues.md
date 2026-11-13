@@ -269,15 +269,23 @@ Shipped as two PRs: the page (4a), then photos, SEO and the performance check (4
 - [x] Cached pages with on-demand revalidation after every admin edit (ARCHITECTURE D41)
 
 **4b: photos, SEO, performance**
-- [ ] Branch photos, business logo and products (with images) via `next/image` + `images.remotePatterns` for the photos domain
-- [ ] JSON-LD (`VeterinaryCare`, `OpeningHoursSpecification`, `GeoCoordinates`), canonical URL, OG tags
-- [ ] Lighthouse CI in GitHub Actions against a fixture listing: performance ≥ 90 (mobile), CLS ≤ 0.1, LCP ≤ 2.5 s, plus a script-size budget (DESIGN.md §9)
+- [x] Branch photos (swipe strip), business logo and products (with images) via `next/image` + `images.remotePatterns` for the photos domain (`PHOTOS_URL`, ARCHITECTURE D43)
+- [x] JSON-LD (`VeterinaryCare` + `LocalBusiness`, `OpeningHoursSpecification`, `GeoCoordinates`), canonical URL, OG tags (ARCHITECTURE §8)
+- [x] Lighthouse CI in GitHub Actions against a fixture listing: performance ≥ 90 (mobile), CLS ≤ 0.1, LCP ≤ 2.5 s, plus a script-size budget of 205 KB (DESIGN.md §9, ARCHITECTURE D44)
 - [ ] (By you) a seeded clinic on staging, 3–5 person usability check, shown to at least one clinic
 
+**Staging follow-up (by you):**
+- Vercel → Settings → Environment Variables: add `SITE_URL` for **Preview and Production** before merging (the build fails without it): the staging URL (the `develop` branch alias, `https://…`, no trailing slash) for Preview, the production domain later.
+- Once the photos domain exists (P1-2d's staging follow-up), add `PHOTOS_URL` (= the API's `R2_PUBLIC_URL`) to Vercel too and redeploy: it's read at build time. Until then staging pages show no images.
+- After the first `lighthouse` CI runs pass reliably (a few PRs), add the `lighthouse` check to branch protection on `develop` and `production`.
+- Paste a staging clinic page into Google's Rich Results Test and Facebook's Sharing Debugger (staging is behind Vercel Authentication, so use the bypass token or wait for production). Check that Facebook shows the WebP preview image; if it doesn't, P1-6's OG work should serve a JPEG.
+
 Notes for later issues:
-- **P1-6:** city landing pages can find a city by `psgc_area.slug`; build URLs with `businessPath` / `branchPath` (`packages/domain`), never by hand.
+- **P1-6:** city landing pages can find a city by `psgc_area.slug`; build URLs with `businessPath` / `branchPath` (`packages/domain`), never by hand. Reuse `listingMetadata` (`apps/web/src/lib/listing-metadata.ts`) for canonical/OG tags, add a default OG image for listings without photos, and add the landing pages' URLs to `packages/lighthouse` (fixture + `lighthouserc.json`).
 - **P1-7 / P1-8:** the clinic page has no "Report incorrect info" link or claim CTA yet; they go after "Other branches" (UX8).
 - **P1-11a:** contact taps (Call, Messenger, Directions) aren't logged yet.
+- **Follow-up issue (warn, don't block):** a branch with "Accepts emergencies" but no phone contact shows no emergency line (DESIGN UX19), so the promise is invisible. `/admin` (branch form) and the CSV import preview should warn ("No phone number: owners won't see that this branch takes emergencies") but still save. Small API + admin change.
+- **Images:** listing images render only through `shownImage` / `shownPhotos` (`apps/web/src/lib/listing.ts`), never from a raw URL: `next/image` throws on hosts outside `PHOTOS_URL`.
 - **Caching:** new admin (or dashboard) writes must call `refreshListings()` (`apps/web/src/lib/public-api.ts`), or the public page keeps showing the old data. Edits made straight in the database don't refresh it either.
 
 **Done when:** a seeded clinic page is live on staging, passes the budget, and you've shown it to at least one clinic.

@@ -2310,6 +2310,27 @@ export interface paths {
                                 /** @enum {string} */
                                 listingStatus: "published" | "permanently_closed";
                                 path: string;
+                                logo: {
+                                    url: string;
+                                    alt: string;
+                                    width: number;
+                                    height: number;
+                                } | null;
+                                products: {
+                                    /** Format: uuid */
+                                    id: string;
+                                    name: string;
+                                    category: string | null;
+                                    price: number | null;
+                                    /** @enum {string} */
+                                    availability: "available" | "limited" | "out";
+                                    image: {
+                                        url: string;
+                                        alt: string;
+                                        width: number;
+                                        height: number;
+                                    } | null;
+                                }[];
                             };
                             branches: {
                                 /** Format: uuid */
@@ -2381,6 +2402,12 @@ export interface paths {
                                     priceUnit: "per_visit" | "per_session" | "per_night" | "per_day";
                                     priceNote: string | null;
                                     species: string[];
+                                }[];
+                                photos: {
+                                    url: string;
+                                    alt: string;
+                                    width: number;
+                                    height: number;
                                 }[];
                             }[];
                         };

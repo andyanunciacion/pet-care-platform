@@ -106,7 +106,8 @@ export function DirectionsAppLink({
       className={cn(
         variant === 'button'
           ? outlineAction
-          : 'inline-flex min-h-11 items-center font-medium text-primary underline underline-offset-4 hover:decoration-2',
+          : // At least 44px wide too ("Waze" alone is narrower), centered in that space.
+            'inline-flex min-h-11 min-w-11 items-center justify-center font-medium text-primary underline underline-offset-4 hover:decoration-2',
       )}
     >
       {children}

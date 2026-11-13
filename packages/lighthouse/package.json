@@ -1,0 +1,26 @@
+{
+  "name": "@paw/lighthouse",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Lighthouse CI for public pages: a fixture listing and the performance budget (DESIGN §9, ARCHITECTURE D44).",
+  "type": "module",
+  "scripts": {
+    "lighthouse": "node src/run.ts",
+    "seed": "node src/seed.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@paw/db": "workspace:*",
+    "drizzle-orm": "catalog:",
+    "pg": "catalog:"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.16.1",
+    "@paw/config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/pg": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  }
+}
