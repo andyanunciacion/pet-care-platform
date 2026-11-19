@@ -1,27 +1,40 @@
+import { connection } from 'next/server';
 import { getTranslations } from 'next-intl/server';
-import { Suspense } from 'react';
-import { ApiStatus, ApiStatusPending } from '@/components/api-status';
+import { SearchForm } from '@/components/search/search-form';
+import { SearchMessages } from '@/components/search/search-messages';
+import { loadCities, loadTaxonomy } from '@/lib/search-data';
 
-// Walking-skeleton home page. The real search-first home arrives with slice 5 (DESIGN.md UX1).
+const QUICK_SPECIES = 3;
+
+// Home (DESIGN UX1): search-first, not a marketing page. The search box, the location line
+// and the quick chips are the whole top of the page.
 export default async function HomePage() {
-  const t = await getTranslations();
-  return (
-    <div className="flex flex-col gap-8">
-      {/* A neutral tint groups the intro; the pink page tint is kept for the status card (DESIGN.md §7.1). */}
-      <section className="flex flex-col gap-3 rounded-2xl bg-muted px-6 py-12 md:px-12 md:py-18">
-        <h1 className="text-[length:clamp(2rem,1.3rem+3vw,3rem)] leading-[1.08] font-extrabold tracking-[-0.03em] text-balance">
-          {t('Home.title')}
-        </h1>
-        <p className="max-w-[40ch]">{t('Home.subtitle')}</p>
-      </section>
+  // Rendered on request rather than at build time, when the API isn't running (CI builds
+  // without one); the taxonomy and cities themselves come from Next's data cache.
+  await connection();
+  const t = await getTranslations('Home');
+  const [taxonomy, cities] = await Promise.all([loadTaxonomy(), loadCities()]);
 
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-5 text-muted-foreground">
-        <span>{t('ApiStatus.title')}</span>
-        {/* The page shell renders immediately; the status streams in when the API answers. */}
-        <Suspense fallback={<ApiStatusPending />}>
-          <ApiStatus />
-        </Suspense>
-      </div>
-    </div>
+  return (
+    <SearchMessages>
+      {/* A neutral tint groups the search; the pink page tint is kept for the status card (DESIGN §7.1). */}
+      <section className="flex flex-col gap-6 rounded-2xl bg-muted px-5 py-8 md:px-10 md:py-12">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-[length:clamp(2rem,1.3rem+3vw,3rem)] leading-[1.08] font-extrabold tracking-[-0.03em] text-balance">
+            {t('title')}
+          </h1>
+          <p className="max-w-[48ch]">{t('subtitle')}</p>
+        </div>
+        <SearchForm
+          initial={{ location: { kind: 'city', code: cities.defaultCode } }}
+          cities={cities.cities}
+          defaultCityCode={cities.defaultCode}
+          // The most searched animals (dog, cat, rabbit, in the taxonomy's order) as chips; the
+          // rest are in the results page's filters, so the chips stay on two lines on a phone.
+          species={taxonomy.species.slice(0, QUICK_SPECIES)}
+          rememberLocation
+        />
+      </section>
+    </SearchMessages>
   );
 }

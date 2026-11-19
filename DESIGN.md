@@ -126,6 +126,48 @@ components:
   hours-today-row:
     backgroundColor: "{colors.accent}"
     textColor: "{colors.foreground}"
+  search-field:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    typography: "{typography.body}"
+    rounded: "{rounded.xl}"
+    padding: "0 16px"
+    height: "48px"
+  chip-quick:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.primary}"
+    typography: "{typography.button}"
+    rounded: "{rounded.xl}"
+    padding: "0 12px"
+    height: "44px"
+  chip-emergency:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.emergency}"
+    typography: "{typography.button}"
+    rounded: "{rounded.xl}"
+    padding: "0 12px"
+    height: "44px"
+  chip-filter-active:
+    backgroundColor: "{colors.muted}"
+    textColor: "{colors.primary}"
+    rounded: "{rounded.xl}"
+    padding: "0 12px"
+    height: "44px"
+  result-card:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.2xl}"
+    padding: "{spacing.card}"
+  result-card-service:
+    backgroundColor: "{colors.muted}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.xl}"
+    padding: "8px 12px"
+  filter-sheet:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.2xl}"
+    padding: "{spacing.panel}"
 ---
 
 # Design System: PAW
@@ -175,7 +217,7 @@ A white page under a booklet-blue cover, with pink for the binding and the one l
 ### Semantic
 - **Open Green** (`status-open`), **Closing Amber** (`status-closing`), **Closed Red** (`status-closed`, also `destructive`), **Unknown** (`status-unknown`): the open status (UX4).
 - **Stale Amber** (`stale`): freshness warnings, and the stamp when hours are aging or stale (UX5).
-- **Emergency Red** (`emergency`): the Emergency chip and view only (UX7). The clinic page's emergency line stays in body color (UX19).
+- **Emergency Red** (`emergency`): entries to emergency help only: the Emergency chip, the emergency view (UX7), the home emergency band (UX22) and the night-time zero-results link (UX12). The clinic page's emergency line stays in body color (UX19).
 
 ### Named Rules
 **The Meaning-Only Color Rule.** Status, stale, stamp and emergency colors each mean one thing. Never use them for decoration, and never show status by color alone (UX4).
@@ -210,11 +252,11 @@ A white page under a booklet-blue cover, with pink for the binding and the one l
 
 **The Tabular Numbers Rule.** Tables use tabular numerals so hours line up.
 
-Known gap: the placeholder home page h1 (`apps/web/src/app/(public)/page.tsx`) still uses an arbitrary clamp size outside the named steps (its intro band uses the neutral `muted` tint). It is not a pattern to copy; the real home arrives with slice 5.
+Known gap: the home page h1 (`apps/web/src/app/(public)/page.tsx`) uses an arbitrary clamp size outside the named steps (its search band uses the neutral `muted` tint). It is not a pattern to copy.
 
 ## Layout
 
-Mobile-first at 360px: a 16px side gutter and a centered 64rem container. Sections stack 40px apart; inside a section, items stack about 12px apart. The clinic page reads top to bottom: header (logo, name on a rule, address, "Treats" with stickers, the status card), then services, products, hours, contact, address, photos, other branches (UX8). The contact bar (**Call · Messenger · Directions**) is fixed at the bottom in the thumb zone, and the page leaves room for it. From 1024px wide the page splits into the main column and a 22rem right-hand panel (hours, contact, address) with a 2px border on white and 20px padding, so the week sits beside the status it explains. Below 640px the contact bar's secondary buttons stack their icon over a smaller label; Call keeps the most room. Branch cards sit in one column, then two from 640px.
+Mobile-first at 360px: a 16px side gutter and a centered 64rem container. Sections stack 40px apart; inside a section, items stack about 12px apart. The clinic page reads top to bottom: header (logo, name on a rule, address, "Treats" with stickers, the status card), then services, products, hours, contact, address, photos, other branches (UX8). The contact bar (**Call · Messenger · Directions**) is fixed at the bottom in the thumb zone, and the page leaves room for it. From 1024px wide the page splits into the main column and a 22rem right-hand panel (hours, contact, address) with a 2px border on white and 20px padding, so the week sits beside the status it explains. Below 640px the contact bar's secondary buttons stack their icon over a smaller label; Call keeps the most room. Branch cards sit in one column, then two from 640px. Search pages (home and `/search`) put the search box, location line and chips at the top; on home they sit in one `muted` band under the heading. Result cards stack in one column, then two from 768px, with **Show more results** centered below.
 
 ## Elevation & Depth
 
@@ -222,6 +264,7 @@ Flat by default. Depth comes from tint and rules, not shadow: the pink status ca
 
 ### Shadow Vocabulary
 - **Contact bar lift** (`box-shadow: 0 -4px 16px -8px color-mix(in oklch, var(--foreground) 25%, transparent)`): the fixed bottom contact bar, to separate it from the page scrolling under it. Dialogs and popovers keep shadcn's own shadows.
+- **Floating sheet** (Tailwind `shadow-xl`, over a 40% ink backdrop): the filter sheet and the directions chooser.
 
 ### Named Rules
 **The Tint-Before-Shadow Rule.** To group or lift content, use a tint or a rule first. A shadow is only for something that really floats above the page.
@@ -248,7 +291,7 @@ One radius token (`--radius`, 0.75rem) drives a soft, booklet-like set: stickers
 - **Desktop panel:** white, 2px border, `rounded.2xl`, 20px padding.
 
 ### Navigation
-- **The cover header:** a 60px Booklet Blue band, white wordmark (extra-bold "PAW" + `PawPrint`), a 6px binding-pink strip below, and a white focus ring on the blue. A white "Find a vet" button joins its right side only once a search page exists (P1-5b).
+- **The cover header:** a 60px Booklet Blue band, white wordmark (extra-bold "PAW" + `PawPrint`), a 6px binding-pink strip below, and a white focus ring on the blue. A white "Find a vet" button on its right goes to the search page.
 
 ### Links
 - Booklet Blue, underlined (thicker on hover), or followed by a chevron. Contact rows are 48px tall with a blue icon and an underlined value.
@@ -267,6 +310,25 @@ One radius token (`--radius`, 0.75rem) drives a soft, booklet-like set: stickers
 
 ### Hours table
 - Weekdays as row headers, tabular numerals, today's row on butter `accent` with "Today" under the day name (after hydration only).
+
+### Inputs / Fields
+- **Style:** white, a 2px `input` border, `rounded.xl`, 48px tall, 16px text (no iOS zoom on focus), with a visible label above, never placeholder-only. Selects match.
+- **Focus:** the border turns Booklet Blue, plus the 3px ring at 50% blue.
+- **Search field:** the text box with a primary **Search** button beside it (icon only below 640px, its label kept for screen readers). Under it, the location line: a pin, "In City of Angeles" or "Near you", then an underlined **Change** that opens a `muted` panel with **Use my location** (outline button) and the city picker.
+
+### Chips
+- **Quick chips** (home): outline buttons at chip size, 44px tall, `rounded.xl`, 2px Booklet Blue border and blue bold label: Open now, Kapon, Bakuna, three animals. They submit a search, so they look like buttons, not tags.
+- **Emergency chip:** the same shape in Emergency Red with a heart-pulse icon, on home and on the results page. One of the few emergency entries allowed Emergency Red (see Colors).
+- **Active filter chips** (results): `muted` fill, 2px blue border, the filter's name and a ✕; each is a link to the same search without that filter.
+
+### Result card
+- `ResultCard` (`components/search/result-card.tsx`): white, 2px `border` frame, `rounded.2xl`, 16px padding, like the branch card. Top row: the business name (extra-bold, plain text) and the distance with a pin, right-aligned in Quiet Ink. Then the area line, the verified mark (stamp violet), the open status, the emergency line, and for a service search one `muted` tile with the matched service and its price ("+2 more matching services" below). Then the sticker labels, the short freshness line, and **Call** + **View clinic ›** at the bottom. The border turns blue on hover.
+
+### Filter sheet
+- `FilterSheet` (`components/search/filter-sheet.tsx`): a bottom sheet on phones (top corners `2xl`), a centered panel from 640px, built on the Popover API. Title on a 2px rule with **Close**; groups under uppercase entry labels: Animal (radio tiles with a 2px border, blue border and `muted` fill when chosen), Service (a select), "Only clinics open now" (a checkbox); then **Clear filters** (outline) and **Show results** (primary) on a top rule.
+
+### Zero results
+- A framed card (2px border, `rounded.2xl`): a search-x icon and an extra-bold "We couldn't find a clinic for that", then underlined blue links with chevrons, one per way out (wider radius, without a filter, all areas). At night (7 PM–7 AM Manila) an emergency link in Emergency Red joins them (UX12).
 
 ### Named Rules
 **The Looks-Tappable Rule.** Anything tappable looks tappable at rest, with no hover needed (phones have none): a button with a verb label (outline buttons carry a 2px blue border at rest), or a link that is underlined or ends in an arrow. `text-primary` is only for tappable things; a card heading is plain text. Repeated buttons name their target for screen readers. Source: AI_DOCS/DESIGN.md §2 principle 9 and §8 "Making actions obvious".

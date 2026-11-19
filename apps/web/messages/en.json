@@ -3,11 +3,75 @@
     "description": "Vet clinics in Angeles City: whether they're open now, the animals they treat, their services and prices, and when their hours were last confirmed."
   },
   "Header": {
-    "homeLink": "PAW home"
+    "homeLink": "PAW home",
+    "findVet": "Find a vet"
   },
   "Home": {
     "title": "Let's find a vet for your pet",
     "subtitle": "See which clinics are open now, which ones treat your animal, what they offer, and when their hours were last confirmed."
+  },
+  "Search": {
+    "metaTitle": "Find a vet",
+    "metaTitleQuery": "“{q}”: vets and clinics",
+    "searchLabel": "Search for a clinic, service or animal",
+    "searchPlaceholder": "Kapon, bakuna, rabbit, clinic name…",
+    "submit": "Search",
+    "searching": "Searching…",
+    "location": {
+      "near": "Near you",
+      "city": "In {city}",
+      "all": "In all areas"
+    },
+    "changeLocation": "Change",
+    "locationTitle": "Where to search",
+    "useMyLocation": "Use my location",
+    "locating": "Finding your location…",
+    "locationFailed": "We couldn't get your location. Pick a city below, then search again.",
+    "cityLabel": "City or town",
+    "allAreas": "All areas",
+    "chipsLabel": "Quick searches",
+    "chips": {
+      "openNow": "Open now",
+      "emergency": "Emergency",
+      "kapon": "Kapon (spay / neuter)",
+      "bakuna": "Bakuna (vaccines)"
+    },
+    "resultsTitle": "{count, plural, =0 {No clinics} one {# clinic} other {# clinics}} {where, select, near {near you} city {in {city}} other {in all areas}}",
+    "thisCity": "this city",
+    "matched": "Showing {categories} for “{q}”",
+    "filters": "Filters",
+    "filtersTitle": "Filter results",
+    "animal": "Animal",
+    "anyAnimal": "Any animal",
+    "service": "Service",
+    "anyService": "Any service",
+    "allInGroup": "All {group}",
+    "openNowOnly": "Only clinics open now",
+    "applyFilters": "Show results",
+    "clearFilters": "Clear filters",
+    "closeFilters": "Close",
+    "activeFilters": "Active filters",
+    "removeFilter": "Remove filter",
+    "queryFilter": "“{q}”",
+    "emergencyFilter": "Emergency",
+    "openNowFilter": "Open now",
+    "viewClinic": "View clinic",
+    "verified": "Verified",
+    "moreServices": "{count, plural, one {and # more matching service} other {and # more matching services}}",
+    "showMore": "Show more results",
+    "loadingMore": "Loading more results…",
+    "moreFailed": "We couldn't load more results. Check your signal and try again.",
+    "loadFailed": "We couldn't load the results. Check your signal and try again.",
+    "tryAgain": "Try again",
+    "zero": {
+      "title": "We couldn't find a clinic for that",
+      "hint": "Try one of these:",
+      "widen": "Search up to {km} km away",
+      "dropFilter": "Search without “{name}”",
+      "dropQuery": "Show all clinics instead of “{q}”",
+      "allAreas": "Search all areas",
+      "emergency": "Need a vet tonight? See clinics open now or taking emergency calls"
+    }
   },
   "Listing": {
     "metaTitle": "{name} · {city}",
@@ -72,13 +136,6 @@
     "googleMaps": "Google Maps",
     "waze": "Waze",
     "cancel": "Cancel"
-  },
-  "ApiStatus": {
-    "title": "System status",
-    "checking": "Checking…",
-    "ok": "API and database are up",
-    "degraded": "API is up, but the database is unreachable",
-    "down": "API is unreachable"
   },
   "Dashboard": {
     "title": "Clinic dashboard",
