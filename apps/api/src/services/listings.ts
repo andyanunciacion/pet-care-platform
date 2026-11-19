@@ -13,6 +13,7 @@ import { listServices, PRICE_UNITS } from './branch-services.ts';
 import { BUSINESS_TYPES, CLAIM_STATUSES, SlugSchema } from './businesses.ts';
 import { listingPaths, publicBranchPlaces } from './listing-paths.ts';
 import { PRODUCT_AVAILABILITIES } from './products.ts';
+import { groupBy, hhmm } from './rows.ts';
 
 const {
   business,
@@ -138,16 +139,6 @@ const listingNotFound = () => httpError(404, 'No listing at this address.');
 
 const isPublic = (status: string): status is (typeof PUBLIC_STATUSES)[number] =>
   (PUBLIC_STATUSES as readonly string[]).includes(status);
-
-/** Postgres returns `time` as "HH:MM:SS"; the API speaks "HH:MM". */
-const hhmm = (time: string) => time.slice(0, 5);
-
-/** Groups rows into a map of lists by key, keeping their order. */
-function groupBy<T>(rows: readonly T[], key: (row: T) => string): Map<string, T[]> {
-  const groups = new Map<string, T[]>();
-  for (const row of rows) groups.set(key(row), [...(groups.get(key(row)) ?? []), row]);
-  return groups;
-}
 
 type PublicImage = z.infer<typeof PublicImageSchema>;
 type ListingImage = PublicImage &

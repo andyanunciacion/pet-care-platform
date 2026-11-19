@@ -292,13 +292,19 @@ Notes for later issues:
 
 ### P1-5a · Search API
 `backend` · Depends on: P1-1, P1-3
-- [ ] `GET /v1/search`: full-text search + `pg_trgm` + synonym expansion; PostGIS radius + distance ordering
-- [ ] Filters: species, category, open now, emergency/24h; excludes "no hours data" listings from open-now (UX17)
-- [ ] Ranking: relevance × distance × boosts (verified, fresh)
-- [ ] Results are a union of branch and service hits; cursor pagination
-- [ ] `search_log` (no personal data, coarse area)
+- [x] `GET /v1/search`: full-text search + `pg_trgm` + synonym expansion (category and species synonyms); PostGIS radius + distance ordering, or a city (ARCHITECTURE §6, D45)
+- [x] Filters: species, category, open now, emergency/24h; excludes "no hours data" listings from open-now (UX17); emergency adds closed branches that take emergency calls (UX19)
+- [x] Ranking: relevance × distance × boosts (verified, fresh)
+- [x] Results are a union of branch and service hits (one per branch); cursor pagination
+- [x] `search_log` (no personal data, coarse area)
+- [x] `GET /v1/taxonomy` (public): the species and category codes the filters take
 
 **Done when:** integration tests prove "kapon", typos, species filters, and open-now behave correctly.
+
+Notes for later issues:
+- **P1-5b:** build the filter chips from `GET /v1/taxonomy`; filters take codes (`species=rabbit`, `category=spay_neuter`, a group like `surgery` includes its categories). Show `matchedCategories` ("Showing Spay / neuter for 'kapon'"). A `kind: 'service'` card shows `services[0]` with its price (UX3). Emergency results carry `emergency: 'open' | 'callable'`; callable cards read "Closed now · call for emergencies". Results carry weekly hours and exceptions, so the open status renders in the browser with `useNow()` like the clinic page. Zero results (UX12): offer a bigger `radiusKm` (max 50) or dropping filters. Location off: send `cityCode` (default Angeles City, `0330100000`) instead of `lat`/`lng`; then `distanceM` is null.
+- **P1-11a:** zero-result queries are `search_log` rows with `result_count = 0`. The area is a city code or `lat,lng` rounded to 2 decimals.
+- **Tuning:** the match and ranking constants live in `packages/domain/src/search.ts` (`FIELD_SCORES`, `RANK_BOOSTS`, `DISTANCE_HALF_KM`, typo thresholds). Adjust them there, with a test, once real queries come in.
 
 ### P1-5b · Search UI: home, results, emergency view
 `frontend` · Depends on: P1-5a, P1-4

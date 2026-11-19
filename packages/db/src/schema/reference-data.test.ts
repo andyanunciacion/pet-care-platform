@@ -151,13 +151,36 @@ describe('taxonomy', () => {
     expect(await find('purga')).toEqual(['deworming']);
   });
 
+  it('finds species by their Filipino synonyms', async () => {
+    const find = async (term: string) => {
+      const rows = await db
+        .select({ code: species.code })
+        .from(species)
+        .where(
+          and(
+            sql`${term} = any(${species.synonyms})`,
+            sql`${species.code} not like 'species_%'`, // test fixtures
+          ),
+        );
+      return rows.map((row) => row.code);
+    };
+    expect(await find('aso')).toEqual(['dog']);
+    expect(await find('pusa')).toEqual(['cat']);
+    expect(await find('kuneho')).toEqual(['rabbit']);
+  });
+
   it('stores synonyms in lowercase', async () => {
-    const rows = await db
+    const categories = await db
       .select({ code: serviceCategory.code })
       .from(serviceCategory)
       .where(
         sql`exists (select 1 from unnest(${serviceCategory.synonyms}) as s where s <> lower(s))`,
       );
-    expect(rows).toEqual([]);
+    expect(categories).toEqual([]);
+    const speciesRows = await db
+      .select({ code: species.code })
+      .from(species)
+      .where(sql`exists (select 1 from unnest(${species.synonyms}) as s where s <> lower(s))`);
+    expect(speciesRows).toEqual([]);
   });
 });

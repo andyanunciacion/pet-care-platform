@@ -57,6 +57,13 @@
       "when": 1794467369111,
       "tag": "0007_psgc-slugs",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794555623044,
+      "tag": "0008_search",
+      "breakpoints": true
     }
   ]
 }

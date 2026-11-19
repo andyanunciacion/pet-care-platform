@@ -61,7 +61,7 @@ From PRD §5 and DESIGN.md §2:
 1. **"Can I go there now?" in 3 seconds.** Open status, distance and a way to call are visible without scrolling or tapping.
 2. **Honest data.** Freshness and its source are always visible; unconfirmed data never looks confirmed; "Sponsored" is always labeled.
 3. **Useful without login**, and light on data and battery on a mid-range Android.
-4. **Calm in emergencies.** The emergency flow keeps only open-now, distance and **Call**.
+4. **Calm in emergencies.** The emergency flow keeps only the status (open now, or "call for emergencies"), distance and **Call**.
 5. **Low effort for clinics.** Forgiving tools with big controls, previews and no dead ends; keeping a listing current takes under a minute a month.
 
 ## Accessibility & Inclusion

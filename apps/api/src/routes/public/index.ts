@@ -2,6 +2,8 @@ import type { Database } from '@paw/db';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import type { PhotoStorage } from '../../storage.ts';
 import { publicListingRoutes } from './listings.ts';
+import { publicSearchRoutes } from './search.ts';
+import { publicTaxonomyRoutes } from './taxonomy.ts';
 
 /**
  * Public routes (/v1/*) for the owner-facing site: read-only, no session needed. Anything
@@ -14,4 +16,6 @@ export const publicRoutes: FastifyPluginAsyncZod<{
   storage: PhotoStorage | null;
 }> = async (app, { database, storage }) => {
   await app.register(publicListingRoutes, { database, storage });
+  await app.register(publicSearchRoutes, { database });
+  await app.register(publicTaxonomyRoutes, { database });
 };

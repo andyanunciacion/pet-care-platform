@@ -4,7 +4,7 @@ import type { Db } from '@paw/db';
 import { schema } from '@paw/db';
 import { branchPath, businessPath } from '@paw/domain';
 import { alias } from 'drizzle-orm/pg-core';
-import { and, asc, eq, ne } from 'drizzle-orm';
+import { and, asc, eq, inArray, ne } from 'drizzle-orm';
 
 const { branch, psgcArea } = schema;
 
@@ -29,11 +29,22 @@ export async function publicBranchPlaces(
   db: Pick<Db, 'select'>,
   businessId: string,
 ): Promise<PublicBranchPlace[]> {
+  return (await publicBranchPlacesByBusiness(db, [businessId])).get(businessId) ?? [];
+}
+
+/** publicBranchPlaces for several businesses in one query (search results), by business id. */
+export async function publicBranchPlacesByBusiness(
+  db: Pick<Db, 'select'>,
+  businessIds: readonly string[],
+): Promise<Map<string, PublicBranchPlace[]>> {
+  const places = new Map<string, PublicBranchPlace[]>();
+  if (businessIds.length === 0) return places;
   const province = alias(psgcArea, 'province');
   const city = alias(psgcArea, 'city');
   const rows = await db
     .select({
       id: branch.id,
+      businessId: branch.businessId,
       slug: branch.slug,
       provinceCode: province.code,
       provinceSlug: province.slug,
@@ -43,14 +54,18 @@ export async function publicBranchPlaces(
     .from(branch)
     .innerJoin(province, eq(province.code, branch.provinceCode))
     .innerJoin(city, eq(city.code, branch.cityCode))
-    .where(and(eq(branch.businessId, businessId), ne(branch.listingStatus, 'hidden')))
+    .where(and(inArray(branch.businessId, [...businessIds]), ne(branch.listingStatus, 'hidden')))
     .orderBy(asc(branch.createdAt), asc(branch.id));
-  return rows.map((row) => ({
-    id: row.id,
-    slug: row.slug,
-    provinceSlug: areaSlugOf(row.provinceSlug, row.provinceCode),
-    citySlug: areaSlugOf(row.citySlug, row.cityCode),
-  }));
+  for (const row of rows) {
+    const place = {
+      id: row.id,
+      slug: row.slug,
+      provinceSlug: areaSlugOf(row.provinceSlug, row.provinceCode),
+      citySlug: areaSlugOf(row.citySlug, row.cityCode),
+    };
+    places.set(row.businessId, [...(places.get(row.businessId) ?? []), place]);
+  }
+  return places;
 }
 
 export interface ListingPaths {

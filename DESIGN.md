@@ -200,4 +200,4 @@ Soft, generous rounding from one radius token (`--radius`, 0.75rem): controls `l
 - **Don't** make a colored heading or bare text the only way into something, or color text `primary` when it can't be tapped.
 - **Don't** add mascots, cartoon illustrations, pet puns or emoji: friendly, not childish (DESIGN §7).
 - **Don't** add motion, hero images or extra client JavaScript to owner pages without a reason; the performance budget (DESIGN §9) is for mid-range Android on mobile data.
-- **Don't** put anything in the emergency view except open-now, distance and **Call** (UX7).
+- **Don't** put anything in the emergency view except the status (open now, or "call for emergencies"), distance and **Call** (UX7).
