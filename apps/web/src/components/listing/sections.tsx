@@ -4,7 +4,6 @@ import {
   Mail,
   MessageCircle,
   Package,
-  PawPrint,
   Phone,
   Smartphone,
 } from 'lucide-react';
@@ -34,6 +33,7 @@ import type {
 import { cn } from '@/lib/utils';
 import { DirectionsAppLink } from './directions';
 import { EmergencyLine, LiveStatus } from './live-status';
+import { SpeciesLine } from './species-line';
 
 // The parts of the clinic page (DESIGN UX8). Server Components; the time-dependent pieces
 // inside them (status, hours table) are small Client Components.
@@ -350,44 +350,6 @@ export async function ProductsSection({
         }
       </p>
     </Section>
-  );
-}
-
-/**
- * "Treats" followed by a sticker label per animal (like the vaccine stickers in a pet's booklet), near the top of the page and on branch cards
- * (DESIGN UX8): whether a clinic sees your animal decides whether anything else on the page
- * matters. `compact` is the smaller version for branch cards.
- */
-export async function SpeciesLine({
-  species,
-  compact = false,
-}: {
-  species: ListingBranch['species'];
-  compact?: boolean;
-}) {
-  if (species.length === 0) return null;
-  const t = await getTranslations('Listing');
-  return (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
-      <span className="flex items-center gap-1.5 font-semibold">
-        <PawPrint aria-hidden className="size-5 shrink-0 text-muted-foreground" />
-        {t('treats')}
-      </span>
-      <ul aria-label={t('treatsLabel')} className="flex flex-wrap gap-1.5">
-        {species.map((item) => (
-          <li
-            key={item.code}
-            className={
-              compact
-                ? 'rounded-md border border-b-2 bg-background px-2 py-0.5 text-sm font-semibold'
-                : 'rounded-md border border-b-2 bg-background px-3 py-1 font-semibold'
-            }
-          >
-            {item.name}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 

@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "src/components/listing/species-line.tsx"
+        ],
+        "createdAt": "2026-11-19T09:47:19.939Z",
+        "reason": "DESIGN.md §7.1 (decided 2026-11-19): species sticker labels are a hairline border with a 2px lower edge, rounded-md; intentional booklet-sticker device, moved unchanged from sections.tsx"
+      }
+    ]
+  }
+}

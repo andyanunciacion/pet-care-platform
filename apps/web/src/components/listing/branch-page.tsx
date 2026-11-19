@@ -23,8 +23,8 @@ import {
   ProductsSection,
   Section,
   ServicesSection,
-  SpeciesLine,
 } from './sections';
+import { SpeciesLine } from './species-line';
 
 /**
  * A branch's full page (DESIGN UX8): header (logo, name, species, then the status card with
