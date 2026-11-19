@@ -9,14 +9,16 @@ export default async function PublicLayout({ children }: { children: ReactNode }
   const t = await getTranslations('Header');
   return (
     <>
-      <header className="border-b">
-        <div className="mx-auto flex h-14 max-w-5xl items-center px-4">
+      {/* The booklet's cover: a blue band with the pink binding strip under it (DESIGN §7.1). */}
+      <header className="border-b-[6px] border-binding bg-primary">
+        <div className="mx-auto flex h-15 max-w-5xl items-center px-4">
           <Link
             href="/"
             aria-label={t('homeLink')}
-            className="inline-flex min-h-11 items-center rounded-md"
+            // White focus ring: the default blue one would vanish on the blue band.
+            className="inline-flex min-h-11 items-center rounded-md focus-visible:outline-primary-foreground"
           >
-            <Wordmark />
+            <Wordmark onPrimary />
           </Link>
         </div>
       </header>

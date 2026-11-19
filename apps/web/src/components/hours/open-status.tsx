@@ -96,8 +96,9 @@ export function OpenStatusText({
   return (
     <div className={cn('flex flex-col gap-0.5', className)}>
       <p className="flex items-center gap-1.5">
-        <Icon aria-hidden className={cn('size-5 shrink-0', color)} />
-        <span className={cn('font-semibold', color)}>{label}</span>
+        {/* Sized with the text, so the big status on the clinic page gets a bigger icon. */}
+        <Icon aria-hidden className={cn('size-[1.15em] shrink-0', color)} />
+        <span className={cn('font-extrabold', color)}>{label}</span>
         {detail !== null && <span>· {detail}</span>}
       </p>
       {note !== null && <p className="pl-6.5 text-sm text-muted-foreground">{note}</p>}

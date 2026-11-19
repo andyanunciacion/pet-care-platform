@@ -1,13 +1,13 @@
 {
   "Metadata": {
-    "description": "Find vet clinics in Angeles City with up-to-date hours, services and prices."
+    "description": "Vet clinics in Angeles City: whether they're open now, the animals they treat, their services and prices, and when their hours were last confirmed."
   },
   "Header": {
     "homeLink": "PAW home"
   },
   "Home": {
-    "title": "Find a vet near you",
-    "subtitle": "Clinic hours, services and prices in Angeles City, kept up to date."
+    "title": "Let's find a vet for your pet",
+    "subtitle": "See which clinics are open now, which ones treat your animal, what they offer, and when their hours were last confirmed."
   },
   "Listing": {
     "metaTitle": "{name} · {city}",
@@ -16,7 +16,7 @@
     "verified": "Verified",
     "verifiedExplain": "PAW checked that this clinic runs this page: its phone number, PRC license and business permit.",
     "listedByPaw": "Listed by PAW",
-    "listedByPawExplain": "PAW collected this information. The clinic hasn't claimed this page yet.",
+    "listedByPawExplain": "PAW gathered this information to help pet owners. The clinic hasn't claimed this page yet.",
     "call": "Call",
     "phone": "Phone",
     "messenger": "Messenger",
@@ -24,7 +24,7 @@
     "email": "Email",
     "contactBarLabel": "Contact {name}",
     "contactTitle": "Contact",
-    "noContacts": "No phone number listed yet. Use the address below to visit.",
+    "noContacts": "No phone number listed yet. You can visit using the address below.",
     "addressTitle": "Address",
     "openInGoogleMaps": "Google Maps",
     "openInWaze": "Waze",
@@ -32,7 +32,7 @@
     "noServices": "No services listed yet. Call the clinic to ask.",
     "noServicesMessage": "No services listed yet. Message the clinic to ask.",
     "noServicesVisit": "No services listed yet. Ask the clinic when you visit.",
-    "pricesFootnote": "Prices are estimates. Confirm with the clinic.",
+    "pricesFootnote": "Prices are estimates. Please confirm with the clinic.",
     "forSpecies": "For: {species}",
     "treats": "Treats",
     "treatsLabel": "Animals treated",
@@ -317,7 +317,10 @@
     "intervalNextDay": "{opens} – {closes} next day",
     "today": "Today",
     "notShared": "The clinic hasn't shared its hours yet.",
-    "dayHours": "{weekday}: {hours}"
+    "dayHours": "{weekday}: {hours}",
+    "stampTitle": "Hours confirmed",
+    "stampDetail": "{date} · {by, select, clinic {by the clinic} paw_ops {by PAW} other {from a report}}",
+    "confirmedAgo": "{days, plural, =0 {Confirmed today.} =1 {Confirmed yesterday.} other {Confirmed # days ago.}}"
   },
   "AdminHours": {
     "tabsLabel": "Branch sections",

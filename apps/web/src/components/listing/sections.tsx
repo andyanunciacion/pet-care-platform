@@ -3,6 +3,7 @@ import {
   CircleX,
   Mail,
   MessageCircle,
+  Package,
   PawPrint,
   Phone,
   Smartphone,
@@ -48,7 +49,7 @@ export function Section({
 }) {
   return (
     <section aria-labelledby={id} className="flex flex-col gap-3">
-      <h2 id={id} className="text-xl font-bold tracking-tight">
+      <h2 id={id} className="border-b-2 pb-2 text-xl font-extrabold tracking-tight">
         {title}
       </h2>
       {children}
@@ -82,7 +83,7 @@ export function BusinessLogo({ business }: { business: ListingBusiness }) {
 export async function ClosedNotice({ detail }: { detail: string }) {
   const t = await getTranslations('Listing');
   return (
-    <div role="status" className="flex flex-col gap-1 rounded-xl bg-muted p-4">
+    <div role="status" className="flex flex-col gap-1 rounded-2xl bg-page p-4">
       <p className="flex items-center gap-1.5 font-semibold text-status-closed">
         <CircleX aria-hidden className="size-5 shrink-0" />
         {t('permanentlyClosed')}
@@ -232,8 +233,11 @@ export async function ServicesSection({
         <>
           {[...groups].map(([group, items]) => (
             <div key={group} className="flex flex-col gap-1">
-              {/* Foreground text on the muted band (the White-Under-Status rule, DESIGN §7.1). */}
-              <h3 className="rounded-lg bg-muted px-3 py-1.5 font-semibold">{group}</h3>
+              {/* A booklet entry label on a ruled line (DESIGN §7.1); the pink page tint is kept
+                  for the status card, so it stays the one booklet page that leads. */}
+              <h3 className="border-b-2 border-binding pt-2 pb-1 text-sm font-extrabold tracking-wider text-muted-foreground uppercase">
+                {group}
+              </h3>
               <ul className="flex flex-col divide-y">
                 {items.map((service) => (
                   <li key={service.id} className="flex flex-col gap-0.5 py-3">
@@ -297,7 +301,15 @@ export async function ProductsSection({
           return (
             <li key={product.id} className="flex items-center gap-3 py-3">
               {image === null ? (
-                anyImage && <div aria-hidden className="size-16 shrink-0" />
+                // A plain tile keeps the rows lined up when other products have photos.
+                anyImage && (
+                  <div
+                    aria-hidden
+                    className="flex size-16 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground"
+                  >
+                    <Package className="size-6" />
+                  </div>
+                )
               ) : (
                 <Image
                   src={image.url}
@@ -308,8 +320,10 @@ export async function ProductsSection({
                 />
               )}
               <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                {/* The name keeps 8rem, not the services' 12rem: the thumbnail takes the rest,
+                    and a short price ("Ask for price") still fits beside it on a phone. */}
                 <div className="flex flex-wrap items-baseline gap-x-4">
-                  <span className="min-w-[min(100%,12rem)] flex-1 font-medium text-pretty">
+                  <span className="min-w-[min(100%,8rem)] flex-1 font-medium text-pretty">
                     {product.name}
                   </span>
                   <span className="ml-auto shrink-0 text-right font-semibold">
@@ -340,7 +354,7 @@ export async function ProductsSection({
 }
 
 /**
- * "Treats" followed by a pill per animal, near the top of the page and on branch cards
+ * "Treats" followed by a sticker label per animal (like the vaccine stickers in a pet's booklet), near the top of the page and on branch cards
  * (DESIGN UX8): whether a clinic sees your animal decides whether anything else on the page
  * matters. `compact` is the smaller version for branch cards.
  */
@@ -355,7 +369,7 @@ export async function SpeciesLine({
   const t = await getTranslations('Listing');
   return (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
-      <span className="flex items-center gap-1.5 font-medium">
+      <span className="flex items-center gap-1.5 font-semibold">
         <PawPrint aria-hidden className="size-5 shrink-0 text-muted-foreground" />
         {t('treats')}
       </span>
@@ -365,8 +379,8 @@ export async function SpeciesLine({
             key={item.code}
             className={
               compact
-                ? 'rounded-full bg-muted px-2.5 py-0.5 text-sm font-medium'
-                : 'rounded-full bg-muted px-3 py-1 font-medium'
+                ? 'rounded-md border border-b-2 bg-background px-2 py-0.5 text-sm font-semibold'
+                : 'rounded-md border border-b-2 bg-background px-3 py-1 font-semibold'
             }
           >
             {item.name}
@@ -380,7 +394,7 @@ export async function SpeciesLine({
 /**
  * One branch as a card: name, area, live status (or closed), then its actions at the bottom
  * (lined up across cards): an optional **Call** and **View branch**. Only the buttons are
- * tappable; the card's border turns teal on hover to show which branch they belong to.
+ * tappable; the card's border turns blue on hover to show which branch they belong to.
  */
 export async function BranchSummary({
   branch,
@@ -397,8 +411,8 @@ export async function BranchSummary({
   const callable = showCall && !isClosedForGood(branch) && phone !== undefined;
 
   return (
-    <li className="flex flex-col gap-2 rounded-xl border p-4 transition-colors hover:border-primary motion-reduce:transition-none">
-      <h3 className="text-lg font-semibold">{branch.name}</h3>
+    <li className="flex flex-col gap-2 rounded-2xl border-2 p-4 transition-colors hover:border-primary motion-reduce:transition-none">
+      <h3 className="text-lg font-bold">{branch.name}</h3>
       <p className="text-pretty text-muted-foreground">{addressLabel(branch)}</p>
       <SpeciesLine species={branch.species} compact />
       {isClosedForGood(branch) ? (

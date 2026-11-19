@@ -33,9 +33,9 @@ export async function BranchChooser({
       )}
       <div className="flex flex-col gap-10">
         <header className="flex flex-col gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 border-b-2 pb-3">
             <BusinessLogo business={business} />
-            <h1 className="min-w-0 text-[length:clamp(1.75rem,1.5rem+1vw,2rem)] leading-tight font-bold tracking-tight text-balance">
+            <h1 className="min-w-0 text-title font-extrabold tracking-tight text-balance">
               {business.name}
             </h1>
           </div>

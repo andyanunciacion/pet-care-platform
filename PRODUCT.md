@@ -44,14 +44,15 @@ Pet-specific search for services, species and open-now, backed by visibly confir
 
 ## Brand Commitments
 
-- **Working name "PAW" with a placeholder brand** (DESIGN.md §7.1): teal primary, system font, text wordmark plus the lucide `PawPrint` icon. **It is binding until the brand kit (P0-D3) replaces it.** Design work stays inside the tokens in `apps/web/src/app/globals.css`. It may flag contrast or hierarchy problems, but it doesn't propose new palettes, fonts or logos.
-- Brand direction for the future kit: warm, friendly, trustworthy; clean like a good clinic, not childish or cartoonish. It should reassure a worried owner at 9 PM and look professional to a vet (DESIGN.md §7).
-- **Voice: a calm, plain neighbor** (DESIGN.md §2.1). Short, warm, direct English. Reassuring, never cute: no pet puns or emoji, no hype, no exclamation marks in status or error text. Emergency copy is facts and actions only.
+- **Working name "PAW" and the lucide `PawPrint` icon stay** until the brand kit (P0-D3) delivers the final name and logo mark.
+- **A new visual design replaces the placeholder look** (teal, system font, plain wordmark) as of 2026-11-19 (DESIGN.md §7): new palette, font and wordmark styling, free of the old design. It covers owner pages and the clinic dashboard; `/admin` stays dense shadcn defaults (UX14). Once it ships, its tokens in `apps/web/src/app/globals.css` are binding again.
+- **What the new design must feel like** (the founder's words): warm and friendly for pet owners, easy to navigate and use, and every action obvious. Also: trustworthy, clean like a good clinic, not childish or cartoonish; it should reassure a worried owner at 9 PM and look professional to a vet.
+- **Voice: a caring, plain neighbor** (DESIGN.md §2.1). Short, warm, direct English that speaks to someone who loves their pet ("Let's find a vet near you", "We hope they feel better soon"). Caring, never cute: no pet puns or emoji, no hype, no exclamation marks in status or error text. Emergency copy stays facts and actions only.
 
 ## Evidence on Hand
 
 - No real clinics, users, testimonials, statistics or partner logos exist yet. Never invent them; prototypes use fictional clinics (P0-D1).
-- No photography or illustration yet; the brand kit will set the image direction.
+- No photography or illustration yet. Clinic photos come only from clinics (listing uploads); the new design may author its own illustration, but never photos or claims presented as real clinics or users.
 - Pitch kits (`AI_DOCS/pitch/`) list the features that can be promised, and mark the rest "Coming later", without dates.
 
 ## Product Principles

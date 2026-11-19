@@ -11,7 +11,7 @@ import { ContactBar } from './contact-bar';
 import { HoursTable } from './hours-table';
 import { JsonLd } from './json-ld';
 import { ListingMessages } from './listing-messages';
-import { LiveFreshness, LiveStatus } from './live-status';
+import { ConfirmationStamp, LiveStatus } from './live-status';
 import { PhotoStrip } from './photos';
 import {
   AddressSection,
@@ -77,81 +77,92 @@ export async function BranchPage({
         The page leaves room for it at the bottom (pb-28).
       */}
       <div className={closedForGood ? 'flex flex-col gap-10' : 'flex flex-col gap-10 pb-28'}>
-        <header className="flex flex-col gap-3">
-          <div className="flex items-start gap-3">
-            <BusinessLogo business={business} />
-            <div className="flex min-w-0 flex-col gap-1">
-              {/* The headline size (DESIGN.md): big enough to lead, small enough that a long name
-                  leaves the status card above the fold on a phone. */}
-              <h1 className="text-[length:clamp(1.75rem,1.5rem+1vw,2rem)] leading-tight font-bold tracking-tight text-balance">
-                {business.name}
-              </h1>
-              {several && <p className="text-lg font-medium">{branch.name}</p>}
-              <p className="text-pretty text-muted-foreground">{addressLabel(branch)}</p>
-            </div>
-          </div>
-          <SpeciesLine species={branch.species} />
-          {verified && claimBadge}
-
-          {closedForGood ? (
-            <ClosedNotice
-              detail={
-                isClosedForGood(business) ? t('businessClosedDetail') : t('branchClosedDetail')
-              }
-            />
-          ) : (
-            // "Can I go there now?" (DESIGN §2 principle 1): the status is the card's largest
-            // line. A heading only screen readers see lets them jump here like to any section.
-            <section
-              aria-labelledby="status"
-              className="flex min-h-24 flex-col justify-center gap-2 rounded-xl border p-4 text-lg lg:max-w-xl"
-            >
-              <h2 id="status" className="sr-only">
-                {t('statusTitle')}
-              </h2>
-              <LiveStatus hours={hours} renderedAt={renderedAt} reach={reach} className="text-xl" />
-              {branch.acceptsEmergencies && <Emergencies branch={branch} />}
-              {showFreshness && (
-                <LiveFreshness
-                  confirmedAt={branch.hoursConfirmedAt}
-                  confirmedBy={branch.hoursConfirmedBy}
-                />
-              )}
-              {/* On phones the week is far below the services; on desktop it's beside them. */}
-              {hasHoursData(hours) && (
-                <a
-                  href="#hours"
-                  className="inline-flex min-h-11 items-center gap-1 self-start text-base font-medium text-primary underline underline-offset-4 hover:decoration-2 lg:hidden"
-                >
-                  {t('seeAllHours')}
-                  <ChevronRight aria-hidden className="size-5" />
-                </a>
-              )}
-            </section>
-          )}
-          {!verified && claimBadge}
-
-          {business.description !== null && (
-            <p className="max-w-prose whitespace-pre-line">{business.description}</p>
-          )}
-        </header>
-
-        {!closedForGood && (
-          <ContactBar branch={branch} label={t('contactBarLabel', { name: business.name })} />
-        )}
-
         {/*
-          Desktop: services and products | a bordered panel with hours, contact and address, so
-          the practical info reads as one block beside them. Mobile: one column in that order,
-          no panel (the sections stack under their own headings, and the hours table needs the
-          width). Photos follow, full width.
+          Desktop: the header and below it services and products on the left; a bordered panel
+          with hours, contact and address on the right from the top, so the week sits beside
+          the status it explains. Mobile: one column in source order (header, services,
+          products, then hours, contact and address, no panel). Photos follow, full width.
         */}
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
-          <div className="flex flex-col gap-10">
+          <header className="flex flex-col gap-3 lg:col-start-1 lg:row-start-1">
+            {/* The name written in like a booklet entry, on a ruled line (DESIGN §7.1). */}
+            <div className="flex items-center gap-3 border-b-2 pb-3">
+              <BusinessLogo business={business} />
+              <div className="flex min-w-0 flex-col gap-0.5">
+                {/* The headline size (DESIGN.md): big enough to lead, small enough that a long name
+                  leaves the status card above the fold on a phone. */}
+                <h1 className="text-title font-extrabold tracking-tight text-balance">
+                  {business.name}
+                </h1>
+                {several && <p className="text-lg font-semibold">{branch.name}</p>}
+              </div>
+            </div>
+            <p className="text-pretty text-muted-foreground">{addressLabel(branch)}</p>
+            <SpeciesLine species={branch.species} />
+            {verified && claimBadge}
+
+            {closedForGood ? (
+              <ClosedNotice
+                detail={
+                  isClosedForGood(business) ? t('businessClosedDetail') : t('branchClosedDetail')
+                }
+              />
+            ) : (
+              // "Can I go there now?" (DESIGN §2 principle 1): the status is the card's largest
+              // line, on a booklet page tint, with the confirmation stamp under a ruled line.
+              // A heading only screen readers see lets them jump here like to any section.
+              <section
+                aria-labelledby="status"
+                className="flex flex-col gap-3 rounded-2xl bg-page p-4 text-lg"
+              >
+                <h2 id="status" className="sr-only">
+                  {t('statusTitle')}
+                </h2>
+                <LiveStatus
+                  hours={hours}
+                  renderedAt={renderedAt}
+                  reach={reach}
+                  className="text-status"
+                />
+                {branch.acceptsEmergencies && <Emergencies branch={branch} />}
+                {(showFreshness || hasHoursData(hours)) && (
+                  <div className="flex flex-col gap-1 border-t-2 border-binding pt-3">
+                    {showFreshness && (
+                      <ConfirmationStamp
+                        confirmedAt={branch.hoursConfirmedAt}
+                        confirmedBy={branch.hoursConfirmedBy}
+                      />
+                    )}
+                    {/* On phones the week is far below the services; on desktop it's beside them. */}
+                    {hasHoursData(hours) && (
+                      <a
+                        href="#hours"
+                        className="inline-flex min-h-11 items-center gap-1 self-start text-base font-bold text-primary underline underline-offset-4 hover:decoration-2 lg:hidden"
+                      >
+                        {t('seeAllHours')}
+                        <ChevronRight aria-hidden className="size-5" />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </section>
+            )}
+            {!verified && claimBadge}
+
+            {business.description !== null && (
+              <p className="max-w-prose whitespace-pre-line">{business.description}</p>
+            )}
+          </header>
+
+          {!closedForGood && (
+            <ContactBar branch={branch} label={t('contactBarLabel', { name: business.name })} />
+          )}
+
+          <div className="flex flex-col gap-10 lg:col-start-1 lg:row-start-2">
             <ServicesSection services={branch.services} reach={reach} />
             <ProductsSection products={business.products} reach={reach} />
           </div>
-          <div className="flex flex-col gap-10 lg:gap-8 lg:rounded-xl lg:border lg:p-5">
+          <div className="flex flex-col gap-10 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:gap-8 lg:rounded-2xl lg:border-2 lg:p-5">
             <Section id="hours" title={tHours('weekTitle')}>
               <HoursTable hours={hours} renderedAt={renderedAt} />
             </Section>
