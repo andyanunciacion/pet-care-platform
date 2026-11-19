@@ -16,7 +16,7 @@ import { DirectionsButton } from './directions';
  *
  * Fits a 360px phone: buttons may shrink below their text width (`min-w-0`), the primary
  * one gets the most room, and below tablet width the secondary ones stack their icon over a
- * smaller label (still 48px tall, still labelled: never icon-only, DESIGN §2 principle 6).
+ * smaller label (56px tall, still labelled: never icon-only, DESIGN §2 principle 6).
  */
 export async function ContactBar({ branch, label }: { branch: ListingBranch; label: string }) {
   const t = await getTranslations('Listing');
@@ -25,10 +25,10 @@ export async function ContactBar({ branch, label }: { branch: ListingBranch; lab
   const primary = contactReach(branch.contacts);
   const style = (isPrimary: boolean) =>
     isPrimary
-      ? cn(primaryAction, 'min-w-0 flex-[1.4]')
+      ? cn(primaryAction, 'min-h-14 min-w-0 flex-[1.4] text-lg')
       : cn(
           outlineAction,
-          'min-w-0 flex-1 max-sm:flex-col max-sm:gap-0.5 max-sm:px-1 max-sm:text-sm',
+          'min-h-14 min-w-0 flex-1 max-sm:flex-col max-sm:gap-0.5 max-sm:px-1 max-sm:text-sm',
         );
 
   return (

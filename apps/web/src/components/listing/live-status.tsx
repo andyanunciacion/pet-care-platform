@@ -1,14 +1,16 @@
 'use client';
 
 import {
+  freshness,
   hasHoursData,
   isoWeekday,
   openStatus,
+  TIME_ZONE,
   toManila,
   type BranchHours,
   type OpenStatus,
 } from '@paw/domain';
-import { Clock, HeartPulse } from 'lucide-react';
+import { CircleAlert, Clock, HeartPulse } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { HoursFreshness, OpenStatusText } from '@/components/hours/open-status';
 import { useNow } from '@/components/hours/use-now';
@@ -93,15 +95,67 @@ export function LiveStatus({
   return <OpenStatusText status={openStatus(hours, now)} reach={reach} className={className} />;
 }
 
-/** "Hours confirmed 5 days ago by PAW" (the date until hydrated), amber once it's aging. */
-export function LiveFreshness({
+/**
+ * The confirmation stamp (DESIGN §7.1, UX5): a tilted, dated stamp in stamp ink, like the
+ * vet's stamp in a pet's health booklet: "HOURS CONFIRMED / Nov 6, 2026 · by the clinic".
+ * The date stays true however old the cached page is (UX20), so the stamp renders on the
+ * server. Once hydrated, a line under it says how long ago, and when the hours are aging or
+ * stale the stamp turns amber with "May have changed. Call ahead.". Hours never confirmed get
+ * no stamp: unconfirmed data must never look confirmed (DESIGN §2 principle 4).
+ */
+export function ConfirmationStamp({
   confirmedAt,
   confirmedBy,
 }: {
   confirmedAt: string | null;
   confirmedBy: HoursConfirmedBy | null;
 }) {
-  return <HoursFreshness confirmedAt={confirmedAt} confirmedBy={confirmedBy} now={useNow()} />;
+  const t = useTranslations('Hours');
+  const locale = useLocale();
+  const now = useNow();
+  if (confirmedAt === null || confirmedBy === null) {
+    return <HoursFreshness confirmedAt={confirmedAt} confirmedBy={confirmedBy} now={now} />;
+  }
+
+  const confirmed = new Date(confirmedAt);
+  const date = new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: TIME_ZONE,
+  }).format(confirmed);
+  const age = now === null ? null : freshness(confirmed, now);
+  const warn = age !== null && age.level !== 'fresh';
+
+  return (
+    <div className="flex flex-col items-start gap-2">
+      <p
+        className={cn(
+          'w-fit -rotate-2 rounded-lg border-2 px-3 py-1.5 leading-snug',
+          warn ? 'border-stale text-stale' : 'border-stamp text-stamp',
+        )}
+      >
+        <span className="block text-sm font-extrabold tracking-wider uppercase">
+          {t('stampTitle')}
+        </span>
+        <span className="block font-bold">{t('stampDetail', { date, by: confirmedBy })}</span>
+      </p>
+      {age !== null && age.daysAgo !== null && (
+        <p
+          className={cn(
+            'flex items-start gap-1.5 text-sm',
+            warn ? 'font-semibold text-stale' : 'text-muted-foreground',
+          )}
+        >
+          {warn && <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />}
+          <span>
+            {t('confirmedAgo', { days: age.daysAgo })}
+            {warn && ` ${t('aging')}`}
+          </span>
+        </p>
+      )}
+    </div>
+  );
 }
 
 /** The emergencies line's wording, one per situation (strings from the Listing messages). */

@@ -3,11 +3,14 @@
 @import 'shadcn/tailwind.css';
 
 /*
- * PAW design tokens: the placeholder brand from DESIGN.md §7.1.
+ * PAW design tokens: the "Pet health booklet" design (DESIGN.md §7.1, 2026-11-19), styled
+ * after the vaccination booklet a vet hands every pet owner.
  * This is the only place colors, radius and fonts are defined. Components use the
  * Tailwind classes these produce (bg-primary, text-status-open, …), never raw values,
- * so swapping in the real brand kit is a change to this block only.
+ * so a brand change is a change to this block only.
  * Colors are OKLCH (shadcn's format); the hex source is noted for each.
+ * Every text color here meets WCAG AA (≥ 4.5:1) on white AND on the page, muted and accent
+ * tints, so status and secondary text may sit on any of them.
  * Dark mode is not planned for launch (UX16); it would be a `.dark { … }` block overriding these.
  */
 :root {
@@ -15,38 +18,54 @@
 
   /* shadcn/ui base tokens (every shadcn component themes from these) */
   --background: oklch(1 0 0); /* #FFFFFF */
-  --foreground: oklch(0.208 0.04 265.8); /* #0F172A slate-900 */
+  --foreground: oklch(0.26 0.024 264); /* #1E2430 booklet ink */
   --card: var(--background);
   --card-foreground: var(--foreground);
   --popover: var(--background);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.511 0.086 186.4); /* #0F766E teal-700 */
-  --primary-foreground: oklch(1 0 0); /* #FFFFFF */
-  --secondary: oklch(0.968 0.007 247.9); /* #F1F5F9 slate-100 */
+  --primary: oklch(0.534 0.124 252.1); /* #2F6FB2 booklet blue: actions, links, the header */
+  --primary-foreground: oklch(1 0 0); /* #FFFFFF, 5.2:1 on primary */
+  --secondary: oklch(0.96 0.009 258.3); /* #EEF2F8 */
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.968 0.007 247.9); /* #F1F5F9 slate-100 */
-  --muted-foreground: oklch(0.554 0.041 257.4); /* #64748B slate-500 */
-  --accent: oklch(0.962 0.058 95.6); /* #FEF3C7 amber-100: backgrounds only, never text */
+  --muted: oklch(0.96 0.009 258.3); /* #EEF2F8 cool tint: hover, quiet surfaces */
+  --muted-foreground: oklch(0.496 0.029 267.6); /* #5B6273 */
+  --accent: oklch(0.963 0.056 94); /* #FFF3C9 butter: today's row; backgrounds only */
   --accent-foreground: var(--foreground);
-  --destructive: oklch(0.505 0.19 27.5); /* #B91C1C red-700 */
-  --border: oklch(0.929 0.013 255.5); /* #E2E8F0 slate-200 */
-  --input: var(--border);
+  --destructive: oklch(0.505 0.19 27.5); /* #B91C1C */
+  --border: oklch(0.914 0.017 259.4); /* #DCE3EE ruled lines */
+  --input: oklch(0.82 0.025 259); /* a little darker than rules, so fields read as fields */
   --ring: var(--primary);
 
-  /* PAW semantic tokens (DESIGN.md §8). All meet WCAG AA (≥ 4.5:1) as text on white. */
-  --status-open: oklch(0.527 0.137 150.1); /* #15803D green-700 */
-  --status-closing: oklch(0.555 0.146 49); /* #B45309 amber-700 */
-  --status-closed: oklch(0.505 0.19 27.5); /* #B91C1C red-700 */
-  --status-unknown: oklch(0.554 0.041 257.4); /* #64748B slate-500 */
-  --stale: oklch(0.555 0.146 49); /* #B45309 amber-700 */
-  --verified: oklch(0.546 0.215 262.9); /* #2563EB blue-600 */
-  --emergency: oklch(0.577 0.215 27.3); /* #DC2626 red-600 */
+  /* PAW booklet tokens (DESIGN.md §7.1) */
+  --page: oklch(0.961 0.016 358); /* #FCEEF2 booklet page: groups facts (the status card) */
+  --binding: oklch(0.87 0.054 0.9); /* #F4C6D2 the binding strip under the header; never text */
+  --stamp: oklch(0.445 0.145 293.5); /* #5A3E9B stamp ink: confirmations only */
+
+  /* PAW semantic tokens (DESIGN.md §8) */
+  --status-open: oklch(0.512 0.125 150.3); /* #1F7A3E */
+  --status-closing: oklch(0.501 0.128 52.5); /* #9A4A00 */
+  --status-closed: oklch(0.505 0.19 27.5); /* #B91C1C */
+  --status-unknown: var(--muted-foreground);
+  --stale: oklch(0.501 0.128 52.5); /* #9A4A00 */
+  --verified: var(--stamp); /* verified is a confirmation, so it's stamp ink */
+  --emergency: oklch(0.535 0.203 27.6); /* #C81E1E */
 }
 
 /* Exposes the tokens to Tailwind as utilities: bg-primary, text-status-open, rounded-lg, … */
 @theme inline {
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Nunito Sans, self-hosted by next/font (src/app/layout.tsx); it has the ₱ sign. */
+  --font-sans: var(--font-nunito-sans), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-heading: var(--font-sans);
+
+  /* Named type steps beyond Tailwind's (DESIGN.md §7.1): the clinic name and the big status. */
+  --text-title: clamp(1.75rem, 1.5rem + 1vw, 2rem);
+  --text-title--line-height: 1.15;
+  --text-status: 1.5rem;
+  --text-status--line-height: 1.3;
+
+  --color-page: var(--page);
+  --color-binding: var(--binding);
+  --color-stamp: var(--stamp);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -100,5 +119,12 @@
   body {
     /* Minimum body text is 16px (DESIGN.md §8). */
     @apply bg-background text-base text-foreground;
+  }
+  /* Browser surfaces carry the palette too: selection in the binding pink, aligned numbers. */
+  ::selection {
+    @apply bg-binding text-foreground;
+  }
+  table {
+    font-variant-numeric: tabular-nums;
   }
 }

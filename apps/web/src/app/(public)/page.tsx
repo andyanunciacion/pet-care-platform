@@ -7,7 +7,7 @@ export default async function HomePage() {
   const t = await getTranslations();
   return (
     <div className="flex flex-col gap-8">
-      {/* A soft muted band groups the intro: tint before shadow (DESIGN.md §7). */}
+      {/* A neutral tint groups the intro; the pink page tint is kept for the status card (DESIGN.md §7.1). */}
       <section className="flex flex-col gap-3 rounded-2xl bg-muted px-6 py-12 md:px-12 md:py-18">
         <h1 className="text-[length:clamp(2rem,1.3rem+3vw,3rem)] leading-[1.08] font-extrabold tracking-[-0.03em] text-balance">
           {t('Home.title')}
