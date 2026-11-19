@@ -117,7 +117,7 @@
 
 ### P0-D3 · Brand kit
 `design` `business` · Depends on: P0-V4 (brand name)
-- [ ] Logo (full + icon, light/dark), favicon/app icon, palette, font, image direction (DESIGN.md §7)
+- [ ] Logo (full + icon, light/dark), favicon/app icon, image direction (DESIGN.md §7). Palette and font now come from the redesign of 2026-11-19 (DESIGN §7 Status); the kit may refine them but starts from them
 - [ ] Palette checked for WCAG AA contrast; the token file updated to replace the placeholders
 
 ### P0-D4 · Design tooling: Impeccable

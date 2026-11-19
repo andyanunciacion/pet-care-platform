@@ -25,7 +25,8 @@
 - [x] UX structure: principles, screen list, key UX decisions (`DESIGN.md`).
 - [ ] Clickable prototype of the P1 owner screens (home, results list/map, clinic page, emergency view, report sheet). Use it in owner interviews.
 - [ ] Clinic-side prototype screens ("your free page", hours editor, For clinics page). Use them in clinic interviews.
-- [ ] Brand kit: logo, palette, fonts (freelancer or DIY). Blocked on the brand name.
+- [x] New visual design, "Pet health booklet" (DESIGN.md §7.1): palette, font and components, built on the clinic page (2026-11-19).
+- [ ] Brand kit: name, logo mark, image direction (freelancer or DIY); starts from the new palette and font. Blocked on the brand name.
 - [x] Design tooling: Impeccable (design skill for Claude Code) set up with PAW's docs and tokens as context, before the first owner-facing page (slice 4).
 - [ ] Update `DESIGN.md` §6 with what the prototype tests showed.
 
@@ -33,7 +34,7 @@
 - [x] Monorepo setup: pnpm + Turborepo, TS strict, lint/format, Vitest, `docker-compose` with Postgres+PostGIS.
 - [x] CI on GitHub Actions: lint, typecheck, test, build.
 - [x] Walking skeleton: API `/health`, web home page calling the API through the typed client, deployed to **staging**.
-- [x] Design tokens + shadcn/ui theme in `apps/web` (placeholder brand from DESIGN.md §7.1 until the brand kit lands; §8).
+- [x] Design tokens + shadcn/ui theme in `apps/web` (now the "Pet health booklet" tokens, DESIGN.md §7.1; §8).
 - [ ] Sentry wired into web and API.
 
 **Exit criteria:** seed list covers the launch area; at least ~5 clinics say they'd claim a free listing; the skeleton is deployed to staging; the validation checkpoint (before Phase 1 slice 8) is done.

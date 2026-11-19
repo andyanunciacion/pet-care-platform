@@ -1,27 +1,27 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-10T11:38:53.423Z",
+  "generatedAt": "2026-11-19T00:00:00.000Z",
   "title": "Design System: PAW",
   "extensions": {
     "colorMeta": {
       "primary": {
         "role": "primary",
-        "displayName": "Clinic Teal",
-        "canonical": "oklch(0.511 0.086 186.4)",
+        "displayName": "Booklet Blue",
+        "canonical": "oklch(0.534 0.124 252.1)",
         "tonalRamp": [
-          "oklch(0.150 0.023 186.4)",
-          "oklch(0.264 0.041 186.4)",
-          "oklch(0.379 0.059 186.4)",
-          "oklch(0.493 0.077 186.4)",
-          "oklch(0.607 0.077 186.4)",
-          "oklch(0.721 0.059 186.4)",
-          "oklch(0.836 0.041 186.4)",
-          "oklch(0.950 0.023 186.4)"
+          "oklch(0.150 0.033 252.1)",
+          "oklch(0.264 0.060 252.1)",
+          "oklch(0.379 0.086 252.1)",
+          "oklch(0.493 0.112 252.1)",
+          "oklch(0.607 0.112 252.1)",
+          "oklch(0.721 0.086 252.1)",
+          "oklch(0.836 0.060 252.1)",
+          "oklch(0.950 0.033 252.1)"
         ]
       },
       "primary-foreground": {
         "role": "neutral",
-        "displayName": "On-Teal White",
+        "displayName": "On-Blue White",
         "canonical": "oklch(1 0 0)",
         "tonalRamp": [
           "oklch(0.150 0.000 0)",
@@ -36,7 +36,7 @@
       },
       "background": {
         "role": "neutral",
-        "displayName": "Clean White",
+        "displayName": "White",
         "canonical": "oklch(1 0 0)",
         "tonalRamp": [
           "oklch(0.150 0.000 0)",
@@ -51,77 +51,137 @@
       },
       "foreground": {
         "role": "neutral",
-        "displayName": "Deep Slate Ink",
-        "canonical": "oklch(0.208 0.04 265.8)",
+        "displayName": "Booklet Ink",
+        "canonical": "oklch(0.26 0.024 264)",
         "tonalRamp": [
-          "oklch(0.150 0.011 265.8)",
-          "oklch(0.264 0.019 265.8)",
-          "oklch(0.379 0.028 265.8)",
-          "oklch(0.493 0.036 265.8)",
-          "oklch(0.607 0.036 265.8)",
-          "oklch(0.721 0.028 265.8)",
-          "oklch(0.836 0.019 265.8)",
-          "oklch(0.950 0.011 265.8)"
+          "oklch(0.150 0.006 264)",
+          "oklch(0.264 0.012 264)",
+          "oklch(0.379 0.017 264)",
+          "oklch(0.493 0.022 264)",
+          "oklch(0.607 0.022 264)",
+          "oklch(0.721 0.017 264)",
+          "oklch(0.836 0.012 264)",
+          "oklch(0.950 0.006 264)"
+        ]
+      },
+      "page": {
+        "role": "secondary",
+        "displayName": "Booklet Page Pink",
+        "canonical": "oklch(0.961 0.016 358)",
+        "tonalRamp": [
+          "oklch(0.150 0.004 358)",
+          "oklch(0.264 0.008 358)",
+          "oklch(0.379 0.011 358)",
+          "oklch(0.493 0.014 358)",
+          "oklch(0.607 0.014 358)",
+          "oklch(0.721 0.011 358)",
+          "oklch(0.836 0.008 358)",
+          "oklch(0.950 0.004 358)"
+        ]
+      },
+      "binding": {
+        "role": "secondary",
+        "displayName": "Binding Pink",
+        "canonical": "oklch(0.87 0.054 0.9)",
+        "tonalRamp": [
+          "oklch(0.150 0.015 0.9)",
+          "oklch(0.264 0.026 0.9)",
+          "oklch(0.379 0.037 0.9)",
+          "oklch(0.493 0.049 0.9)",
+          "oklch(0.607 0.049 0.9)",
+          "oklch(0.721 0.037 0.9)",
+          "oklch(0.836 0.026 0.9)",
+          "oklch(0.950 0.015 0.9)"
+        ]
+      },
+      "stamp": {
+        "role": "tertiary",
+        "displayName": "Stamp Violet",
+        "canonical": "oklch(0.445 0.145 293.5)",
+        "tonalRamp": [
+          "oklch(0.150 0.039 293.5)",
+          "oklch(0.264 0.070 293.5)",
+          "oklch(0.379 0.100 293.5)",
+          "oklch(0.493 0.131 293.5)",
+          "oklch(0.607 0.131 293.5)",
+          "oklch(0.721 0.100 293.5)",
+          "oklch(0.836 0.070 293.5)",
+          "oklch(0.950 0.039 293.5)"
+        ]
+      },
+      "accent": {
+        "role": "tertiary",
+        "displayName": "Butter",
+        "canonical": "oklch(0.963 0.056 94)",
+        "tonalRamp": [
+          "oklch(0.150 0.015 94)",
+          "oklch(0.264 0.027 94)",
+          "oklch(0.379 0.039 94)",
+          "oklch(0.493 0.050 94)",
+          "oklch(0.607 0.050 94)",
+          "oklch(0.721 0.039 94)",
+          "oklch(0.836 0.027 94)",
+          "oklch(0.950 0.015 94)"
         ]
       },
       "muted": {
         "role": "neutral",
-        "displayName": "Soft Slate Wash",
-        "canonical": "oklch(0.968 0.007 247.9)",
+        "displayName": "Cool Tint",
+        "canonical": "oklch(0.96 0.009 258.3)",
         "tonalRamp": [
-          "oklch(0.150 0.002 247.9)",
-          "oklch(0.264 0.003 247.9)",
-          "oklch(0.379 0.005 247.9)",
-          "oklch(0.493 0.006 247.9)",
-          "oklch(0.607 0.006 247.9)",
-          "oklch(0.721 0.005 247.9)",
-          "oklch(0.836 0.003 247.9)",
-          "oklch(0.950 0.002 247.9)"
+          "oklch(0.150 0.002 258.3)",
+          "oklch(0.264 0.004 258.3)",
+          "oklch(0.379 0.006 258.3)",
+          "oklch(0.493 0.008 258.3)",
+          "oklch(0.607 0.008 258.3)",
+          "oklch(0.721 0.006 258.3)",
+          "oklch(0.836 0.004 258.3)",
+          "oklch(0.950 0.002 258.3)"
         ]
       },
       "muted-foreground": {
         "role": "neutral",
-        "displayName": "Quiet Slate",
-        "canonical": "oklch(0.554 0.041 257.4)",
+        "displayName": "Quiet Ink",
+        "canonical": "oklch(0.496 0.029 267.6)",
         "tonalRamp": [
-          "oklch(0.150 0.011 257.4)",
-          "oklch(0.264 0.020 257.4)",
-          "oklch(0.379 0.028 257.4)",
-          "oklch(0.493 0.037 257.4)",
-          "oklch(0.607 0.037 257.4)",
-          "oklch(0.721 0.028 257.4)",
-          "oklch(0.836 0.020 257.4)",
-          "oklch(0.950 0.011 257.4)"
-        ]
-      },
-      "accent": {
-        "role": "secondary",
-        "displayName": "Warm Amber Wash",
-        "canonical": "oklch(0.962 0.058 95.6)",
-        "tonalRamp": [
-          "oklch(0.150 0.016 95.6)",
-          "oklch(0.264 0.028 95.6)",
-          "oklch(0.379 0.040 95.6)",
-          "oklch(0.493 0.052 95.6)",
-          "oklch(0.607 0.052 95.6)",
-          "oklch(0.721 0.040 95.6)",
-          "oklch(0.836 0.028 95.6)",
-          "oklch(0.950 0.016 95.6)"
+          "oklch(0.150 0.008 267.6)",
+          "oklch(0.264 0.014 267.6)",
+          "oklch(0.379 0.020 267.6)",
+          "oklch(0.493 0.026 267.6)",
+          "oklch(0.607 0.026 267.6)",
+          "oklch(0.721 0.020 267.6)",
+          "oklch(0.836 0.014 267.6)",
+          "oklch(0.950 0.008 267.6)"
         ]
       },
       "border": {
         "role": "neutral",
-        "displayName": "Hairline Slate",
-        "canonical": "oklch(0.929 0.013 255.5)",
+        "displayName": "Ruled Line",
+        "canonical": "oklch(0.914 0.017 259.4)",
         "tonalRamp": [
-          "oklch(0.150 0.004 255.5)",
-          "oklch(0.264 0.006 255.5)",
-          "oklch(0.379 0.009 255.5)",
-          "oklch(0.493 0.012 255.5)",
-          "oklch(0.607 0.012 255.5)",
-          "oklch(0.721 0.009 255.5)",
-          "oklch(0.836 0.006 255.5)",
-          "oklch(0.950 0.004 255.5)"
+          "oklch(0.150 0.005 259.4)",
+          "oklch(0.264 0.008 259.4)",
+          "oklch(0.379 0.012 259.4)",
+          "oklch(0.493 0.015 259.4)",
+          "oklch(0.607 0.015 259.4)",
+          "oklch(0.721 0.012 259.4)",
+          "oklch(0.836 0.008 259.4)",
+          "oklch(0.950 0.005 259.4)"
+        ]
+      },
+      "input": {
+        "role": "neutral",
+        "displayName": "Field Line",
+        "canonical": "oklch(0.82 0.025 259)",
+        "tonalRamp": [
+          "oklch(0.150 0.007 259)",
+          "oklch(0.264 0.012 259)",
+          "oklch(0.379 0.017 259)",
+          "oklch(0.493 0.023 259)",
+          "oklch(0.607 0.023 259)",
+          "oklch(0.721 0.017 259)",
+          "oklch(0.836 0.012 259)",
+          "oklch(0.950 0.007 259)"
         ]
       },
       "destructive": {
@@ -129,44 +189,44 @@
         "displayName": "Destructive Red",
         "canonical": "oklch(0.505 0.19 27.5)",
         "tonalRamp": [
-          "oklch(0.150 0.052 27.5)",
+          "oklch(0.150 0.051 27.5)",
           "oklch(0.264 0.091 27.5)",
           "oklch(0.379 0.131 27.5)",
-          "oklch(0.493 0.170 27.5)",
-          "oklch(0.607 0.170 27.5)",
+          "oklch(0.493 0.171 27.5)",
+          "oklch(0.607 0.171 27.5)",
           "oklch(0.721 0.131 27.5)",
           "oklch(0.836 0.091 27.5)",
-          "oklch(0.950 0.052 27.5)"
+          "oklch(0.950 0.051 27.5)"
         ]
       },
       "status-open": {
         "role": "semantic",
         "displayName": "Open Green",
-        "canonical": "oklch(0.527 0.137 150.1)",
+        "canonical": "oklch(0.512 0.125 150.3)",
         "tonalRamp": [
-          "oklch(0.150 0.037 150.1)",
-          "oklch(0.264 0.066 150.1)",
-          "oklch(0.379 0.094 150.1)",
-          "oklch(0.493 0.123 150.1)",
-          "oklch(0.607 0.123 150.1)",
-          "oklch(0.721 0.094 150.1)",
-          "oklch(0.836 0.066 150.1)",
-          "oklch(0.950 0.037 150.1)"
+          "oklch(0.150 0.034 150.3)",
+          "oklch(0.264 0.060 150.3)",
+          "oklch(0.379 0.086 150.3)",
+          "oklch(0.493 0.113 150.3)",
+          "oklch(0.607 0.113 150.3)",
+          "oklch(0.721 0.086 150.3)",
+          "oklch(0.836 0.060 150.3)",
+          "oklch(0.950 0.034 150.3)"
         ]
       },
       "status-closing": {
         "role": "semantic",
         "displayName": "Closing Amber",
-        "canonical": "oklch(0.555 0.146 49)",
+        "canonical": "oklch(0.501 0.128 52.5)",
         "tonalRamp": [
-          "oklch(0.150 0.040 49)",
-          "oklch(0.264 0.070 49)",
-          "oklch(0.379 0.100 49)",
-          "oklch(0.493 0.131 49)",
-          "oklch(0.607 0.131 49)",
-          "oklch(0.721 0.100 49)",
-          "oklch(0.836 0.070 49)",
-          "oklch(0.950 0.040 49)"
+          "oklch(0.150 0.035 52.5)",
+          "oklch(0.264 0.061 52.5)",
+          "oklch(0.379 0.088 52.5)",
+          "oklch(0.493 0.115 52.5)",
+          "oklch(0.607 0.115 52.5)",
+          "oklch(0.721 0.088 52.5)",
+          "oklch(0.836 0.061 52.5)",
+          "oklch(0.950 0.035 52.5)"
         ]
       },
       "status-closed": {
@@ -174,101 +234,129 @@
         "displayName": "Closed Red",
         "canonical": "oklch(0.505 0.19 27.5)",
         "tonalRamp": [
-          "oklch(0.150 0.052 27.5)",
+          "oklch(0.150 0.051 27.5)",
           "oklch(0.264 0.091 27.5)",
           "oklch(0.379 0.131 27.5)",
-          "oklch(0.493 0.170 27.5)",
-          "oklch(0.607 0.170 27.5)",
+          "oklch(0.493 0.171 27.5)",
+          "oklch(0.607 0.171 27.5)",
           "oklch(0.721 0.131 27.5)",
           "oklch(0.836 0.091 27.5)",
-          "oklch(0.950 0.052 27.5)"
+          "oklch(0.950 0.051 27.5)"
         ]
       },
       "status-unknown": {
         "role": "semantic",
-        "displayName": "Unknown Slate",
-        "canonical": "oklch(0.554 0.041 257.4)",
+        "displayName": "Unknown",
+        "canonical": "oklch(0.496 0.029 267.6)",
         "tonalRamp": [
-          "oklch(0.150 0.011 257.4)",
-          "oklch(0.264 0.020 257.4)",
-          "oklch(0.379 0.028 257.4)",
-          "oklch(0.493 0.037 257.4)",
-          "oklch(0.607 0.037 257.4)",
-          "oklch(0.721 0.028 257.4)",
-          "oklch(0.836 0.020 257.4)",
-          "oklch(0.950 0.011 257.4)"
+          "oklch(0.150 0.008 267.6)",
+          "oklch(0.264 0.014 267.6)",
+          "oklch(0.379 0.020 267.6)",
+          "oklch(0.493 0.026 267.6)",
+          "oklch(0.607 0.026 267.6)",
+          "oklch(0.721 0.020 267.6)",
+          "oklch(0.836 0.014 267.6)",
+          "oklch(0.950 0.008 267.6)"
         ]
       },
       "stale": {
         "role": "semantic",
         "displayName": "Stale Amber",
-        "canonical": "oklch(0.555 0.146 49)",
+        "canonical": "oklch(0.501 0.128 52.5)",
         "tonalRamp": [
-          "oklch(0.150 0.040 49)",
-          "oklch(0.264 0.070 49)",
-          "oklch(0.379 0.100 49)",
-          "oklch(0.493 0.131 49)",
-          "oklch(0.607 0.131 49)",
-          "oklch(0.721 0.100 49)",
-          "oklch(0.836 0.070 49)",
-          "oklch(0.950 0.040 49)"
+          "oklch(0.150 0.035 52.5)",
+          "oklch(0.264 0.061 52.5)",
+          "oklch(0.379 0.088 52.5)",
+          "oklch(0.493 0.115 52.5)",
+          "oklch(0.607 0.115 52.5)",
+          "oklch(0.721 0.088 52.5)",
+          "oklch(0.836 0.061 52.5)",
+          "oklch(0.950 0.035 52.5)"
         ]
       },
       "verified": {
         "role": "semantic",
-        "displayName": "Verified Blue",
-        "canonical": "oklch(0.546 0.215 262.9)",
+        "displayName": "Verified (Stamp Violet)",
+        "canonical": "oklch(0.445 0.145 293.5)",
         "tonalRamp": [
-          "oklch(0.150 0.059 262.9)",
-          "oklch(0.264 0.103 262.9)",
-          "oklch(0.379 0.148 262.9)",
-          "oklch(0.493 0.193 262.9)",
-          "oklch(0.607 0.193 262.9)",
-          "oklch(0.721 0.148 262.9)",
-          "oklch(0.836 0.103 262.9)",
-          "oklch(0.950 0.059 262.9)"
+          "oklch(0.150 0.039 293.5)",
+          "oklch(0.264 0.070 293.5)",
+          "oklch(0.379 0.100 293.5)",
+          "oklch(0.493 0.131 293.5)",
+          "oklch(0.607 0.131 293.5)",
+          "oklch(0.721 0.100 293.5)",
+          "oklch(0.836 0.070 293.5)",
+          "oklch(0.950 0.039 293.5)"
         ]
       },
       "emergency": {
         "role": "semantic",
         "displayName": "Emergency Red",
-        "canonical": "oklch(0.577 0.215 27.3)",
+        "canonical": "oklch(0.535 0.203 27.6)",
         "tonalRamp": [
-          "oklch(0.150 0.059 27.3)",
-          "oklch(0.264 0.103 27.3)",
-          "oklch(0.379 0.148 27.3)",
-          "oklch(0.493 0.193 27.3)",
-          "oklch(0.607 0.193 27.3)",
-          "oklch(0.721 0.148 27.3)",
-          "oklch(0.836 0.103 27.3)",
-          "oklch(0.950 0.059 27.3)"
+          "oklch(0.150 0.055 27.6)",
+          "oklch(0.264 0.097 27.6)",
+          "oklch(0.379 0.140 27.6)",
+          "oklch(0.493 0.183 27.6)",
+          "oklch(0.607 0.183 27.6)",
+          "oklch(0.721 0.140 27.6)",
+          "oklch(0.836 0.097 27.6)",
+          "oklch(0.950 0.055 27.6)"
         ]
       }
     },
     "typographyMeta": {
       "headline": {
-        "displayName": "Headline",
-        "purpose": "Page title: the clinic name or page heading."
+        "displayName": "Headline (text-title)",
+        "purpose": "The clinic name, on a 2px ruled line. 28 to 32px fluid."
+      },
+      "status": {
+        "displayName": "Status (text-status)",
+        "purpose": "The open status, the largest line in the status card."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Card and section titles."
+        "purpose": "Section headings, on a 2px ruled line."
       },
       "body": {
         "displayName": "Body",
         "purpose": "All reading text; never below 16px."
       },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Action labels; 1.125rem for Call in the contact bar."
+      },
       "label": {
-        "displayName": "Label",
-        "purpose": "Secondary lines, form labels, freshness notes."
+        "displayName": "Entry Label",
+        "purpose": "Uppercase service-group labels and the stamp title only."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Secondary lines: price notes, footnotes, contact types, the stamp age line."
       }
     },
-    "shadows": [],
+    "shadows": [
+      {
+        "name": "contact-bar-lift",
+        "value": "0 -4px 16px -8px color-mix(in oklch, var(--foreground) 25%, transparent)",
+        "purpose": "The fixed bottom contact bar only. Dialogs and popovers keep shadcn shadows."
+      }
+    ],
     "motion": [
       {
         "name": "state-change",
         "value": "150ms ease",
-        "purpose": "Hover and focus color changes only; reduced motion respected."
+        "purpose": "Hover and press color, border and filter changes; off under reduced motion."
+      },
+      {
+        "name": "press",
+        "value": "translateY(1px)",
+        "purpose": "Buttons press down 1px when tapped."
+      },
+      {
+        "name": "stamp-tilt",
+        "value": "rotate(-2deg)",
+        "purpose": "The confirmation stamp only; static, not animated."
       }
     ],
     "breakpoints": [
@@ -277,115 +365,173 @@
         "value": "360px"
       },
       {
-        "name": "md",
-        "value": "768px"
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
       },
       {
         "name": "container",
-        "value": "1024px"
+        "value": "64rem"
       }
     ]
   },
   "components": [
     {
-      "name": "Primary Button (owner size)",
+      "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The main action on a screen, e.g. Call. 44px minimum height on owner and clinic screens.",
+      "description": "The one main action in a group (Call). 48px tall on owner pages; hover darkens, never lightens.",
       "html": "<button class=\"ds-btn-primary\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/></svg>Call</button>",
-      "css": ".ds-btn-primary { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; background: var(--primary); color: var(--primary-foreground); border: 1px solid transparent; border-radius: 0.75rem; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 150ms; } .ds-btn-primary:hover { background: color-mix(in oklch, var(--primary) 80%, transparent); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); } .ds-btn-primary:active { transform: translateY(1px); }"
+      "css": ".ds-btn-primary { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 12px; border-radius: 1.05rem; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 150ms, border-color 150ms, filter 150ms; background: var(--primary); color: var(--primary-foreground); border: 0; } .ds-btn-primary:hover { filter: brightness(0.85); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ring, var(--primary)); outline-offset: 2px; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); } .ds-btn-primary:active { transform: translateY(1px); } @media (prefers-reduced-motion: reduce) { .ds-btn-primary { transition: none; } }"
     },
     {
       "name": "Outline Button",
       "kind": "button",
       "refersTo": "button-outline",
-      "description": "Secondary actions next to the primary one (Messenger, Directions).",
-      "html": "<button class=\"ds-btn-outline\">Directions</button>",
-      "css": ".ds-btn-outline { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: var(--background); color: var(--foreground); border: 1px solid var(--border); border-radius: 0.75rem; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 150ms; } .ds-btn-outline:hover { background: var(--muted); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); } .ds-btn-outline:active { transform: translateY(1px); }"
+      "description": "Secondary actions (Messenger, Directions, View branch): a 2px blue border at rest so it reads as a button without hover.",
+      "html": "<button class=\"ds-btn-outline\">View branch<span style=\"position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)\"> Balibago</span><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m9 18 6-6-6-6\"/></svg></button>",
+      "css": ".ds-btn-outline { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 12px; border-radius: 1.05rem; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background-color 150ms, border-color 150ms, filter 150ms; position: relative; background: var(--background); color: var(--primary); border: 2px solid var(--primary); } .ds-btn-outline:hover { background: var(--muted); } .ds-btn-outline:focus-visible { outline: 2px solid var(--ring, var(--primary)); outline-offset: 2px; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); } .ds-btn-outline:active { transform: translateY(1px); } @media (prefers-reduced-motion: reduce) { .ds-btn-outline { transition: none; } }"
     },
     {
-      "name": "Text Input",
-      "kind": "input",
-      "refersTo": "input",
-      "description": "Form field with a visible label; 16px text so iOS does not zoom.",
-      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Clinic name</span><input class=\"ds-input\" placeholder=\"e.g. Sunrise Vet Clinic\" /></label>",
-      "css": ".ds-field { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 6px; } .ds-field-label { font-size: 0.875rem; font-weight: 500; color: var(--foreground); } .ds-input { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; height: 44px; padding: 0 12px; font-size: 1rem; color: var(--foreground); background: transparent; border: 1px solid var(--border); border-radius: 0.75rem; transition: border-color 150ms; } .ds-input::placeholder { color: var(--muted-foreground); } .ds-input:focus-visible { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); }"
+      "name": "Cover Header",
+      "kind": "nav",
+      "refersTo": "header",
+      "description": "The booklet cover: a blue band, the white wordmark, and a 6px binding-pink strip. \"Find a vet\" joins it only once a search page exists (P1-5b).",
+      "html": "<header class=\"ds-cover\"><a class=\"ds-cover-mark\" href=\"#\" aria-label=\"PAW home\"><svg aria-hidden=\"true\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"4\" r=\"2\"/><circle cx=\"18\" cy=\"8\" r=\"2\"/><circle cx=\"20\" cy=\"16\" r=\"2\"/><path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\"/></svg>PAW</a></header>",
+      "css": ".ds-cover { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; height: 60px; padding: 0 16px; background: var(--primary); border-bottom: 6px solid var(--binding); } .ds-cover-mark { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; border-radius: 0.6rem; color: var(--primary-foreground); font-size: 1.5rem; font-weight: 800; letter-spacing: 0.025em; text-decoration: none; } .ds-cover-mark:focus-visible { outline: 2px solid var(--primary-foreground); outline-offset: 2px; }"
     },
     {
-      "name": "Card",
-      "kind": "card",
-      "refersTo": "card",
-      "description": "White surface with a hairline ring; tint (muted/accent) groups content before any shadow.",
-      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Services</div><p class=\"ds-card-body\">Kapon (cat) · ₱1,500–₱2,500</p></div>",
-      "css": ".ds-card { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 8px; padding: 16px; background: var(--background); color: var(--foreground); border-radius: 1.05rem; box-shadow: 0 0 0 1px color-mix(in oklch, var(--foreground) 10%, transparent); } .ds-card-title { font-size: 1rem; font-weight: 500; } .ds-card-body { margin: 0; font-size: 1rem; }"
-    },
-    {
-      "name": "Quick Chip",
+      "name": "Sticker Labels",
       "kind": "chip",
-      "refersTo": "chip",
-      "description": "Search shortcut on home and results (Open now, Kapon, Bakuna, species).",
-      "html": "<button class=\"ds-chip\">Kapon</button>",
-      "css": ".ds-chip { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; background: var(--muted); color: var(--foreground); border: 1px solid transparent; border-radius: 9999px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 150ms; } .ds-chip:hover { background: var(--border); } .ds-chip:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 50%, transparent); }"
+      "refersTo": "sticker",
+      "description": "Species a clinic treats, like the vaccine stickers in a pet booklet: white, hairline border with a 2px lower edge. Not pills, not tappable.",
+      "html": "<div class=\"ds-treats\"><span class=\"ds-treats-lead\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"4\" r=\"2\"/><circle cx=\"18\" cy=\"8\" r=\"2\"/><circle cx=\"20\" cy=\"16\" r=\"2\"/><path d=\"M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z\"/></svg>Treats</span><ul class=\"ds-stickers\"><li class=\"ds-sticker\">Dog</li><li class=\"ds-sticker\">Cat</li><li class=\"ds-sticker\">Rabbit</li></ul></div>",
+      "css": ".ds-treats { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; color: var(--foreground); font-size: 1rem; } .ds-treats-lead { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; } .ds-treats-lead svg { color: var(--muted-foreground); } .ds-stickers { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; } .ds-sticker { padding: 4px 12px; background: var(--background); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 0.6rem; font-weight: 600; }"
     },
     {
-      "name": "Emergency Chip",
-      "kind": "chip",
-      "refersTo": "chip",
-      "description": "Always-visible entry to the emergency view (UX7). The only use of the emergency color besides that view.",
-      "html": "<button class=\"ds-chip-emergency\">Emergency</button>",
-      "css": ".ds-chip-emergency { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; background: var(--emergency); color: var(--primary-foreground); border: 1px solid transparent; border-radius: 9999px; font-size: 1rem; font-weight: 600; cursor: pointer; } .ds-chip-emergency:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in oklch, var(--emergency) 50%, transparent); }"
-    },
-    {
-      "name": "Open Status",
+      "name": "Status Card with Confirmation Stamp",
       "kind": "custom",
-      "refersTo": "status-open",
-      "description": "OpenStatusText + HoursFreshness: status as icon + text + color, with the freshness line underneath (UX4, UX5).",
-      "html": "<div class=\"ds-status\"><p class=\"ds-status-line\"><span class=\"ds-status-icon\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg></span><strong class=\"ds-status-label\">Open</strong><span>· closes 6 PM</span></p><p class=\"ds-status-fresh\">Hours confirmed 5 days ago by the clinic</p></div>",
-      "css": ".ds-status { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 2px; color: var(--foreground); font-size: 1rem; } .ds-status-line { margin: 0; display: flex; align-items: center; gap: 6px; } .ds-status-icon { display: inline-flex; color: var(--status-open); } .ds-status-label { font-weight: 600; color: var(--status-open); } .ds-status-fresh { margin: 0; font-size: 0.875rem; color: var(--muted-foreground); }"
+      "refersTo": "status-card",
+      "description": "The signature: the status at text-status on the pink booklet page, the emergency line, then under a binding rule the tilted violet stamp with its date. Aging hours turn the stamp Stale Amber.",
+      "html": "<section class=\"ds-status-card\"><p class=\"ds-status\"><svg aria-hidden=\"true\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg><strong>Open</strong><span>· closes 6 PM</span></p><p class=\"ds-emergency\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/><path d=\"M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27\"/></svg>Takes emergencies</p><div class=\"ds-status-foot\"><p class=\"ds-stamp\"><span class=\"ds-stamp-title\">Hours confirmed</span><span class=\"ds-stamp-detail\">Nov 8, 2026 · by PAW</span></p><p class=\"ds-stamp-age\">Confirmed 11 days ago.</p><a class=\"ds-link\" href=\"#\">See all hours<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m9 18 6-6-6-6\"/></svg></a></div></section>",
+      "css": ".ds-status-card { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 12px; padding: 16px; background: var(--page); color: var(--foreground); border-radius: 1.35rem; font-size: 1.125rem; } .ds-status { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 1.5rem; line-height: 1.3; } .ds-status svg, .ds-status strong { color: var(--status-open); font-weight: 800; } .ds-emergency { display: flex; align-items: center; gap: 6px; margin: 0; font-weight: 500; } .ds-status-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding-top: 12px; border-top: 2px solid var(--binding); } .ds-stamp { margin: 0; padding: 6px 12px; border: 2px solid var(--stamp); border-radius: 0.75rem; color: var(--stamp); line-height: 1.375; transform: rotate(-2deg); } .ds-stamp-title { display: block; font-size: 0.875rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; } .ds-stamp-detail { display: block; font-size: 1rem; font-weight: 700; } .ds-stamp-age { margin: 0; font-size: 0.875rem; color: var(--muted-foreground); } .ds-link { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; color: var(--primary); font-size: 1rem; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; } .ds-link:hover { text-decoration-thickness: 2px; } .ds-link:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }"
+    },
+    {
+      "name": "Entry Label and Service Rows",
+      "kind": "custom",
+      "refersTo": "entry-label",
+      "description": "A section heading on a 2px ruled line, then a service group as an uppercase entry label on a binding rule, with its rows on white divided by hairlines.",
+      "html": "<section class=\"ds-section\"><h2 class=\"ds-section-title\">Services and prices</h2><h3 class=\"ds-entry-label\">Surgery</h3><ul class=\"ds-rows\"><li><span>Kapon (cat)</span><strong>₱1,500–₱2,500</strong></li><li><span>Kapon (dog)</span><strong>From ₱2,500</strong></li></ul><p class=\"ds-foot\">Prices are estimates. Please confirm with the clinic.</p></section>",
+      "css": ".ds-section { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 12px; color: var(--foreground); font-size: 1rem; } .ds-section-title { margin: 0; padding-bottom: 8px; border-bottom: 2px solid var(--border); font-size: 1.25rem; font-weight: 800; letter-spacing: -0.025em; } .ds-entry-label { margin: 0; padding: 8px 0 4px; border-bottom: 2px solid var(--binding); color: var(--muted-foreground); font-size: 0.875rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; } .ds-rows { margin: 0; padding: 0; list-style: none; } .ds-rows li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--border); font-weight: 500; } .ds-rows li:first-child { border-top: 0; } .ds-rows strong { font-weight: 600; } .ds-foot { margin: 0; font-size: 0.875rem; color: var(--muted-foreground); }"
+    },
+    {
+      "name": "Branch Card",
+      "kind": "card",
+      "refersTo": "branch-card",
+      "description": "One branch: plain-text heading, address, status, then its buttons lined up at the bottom. Only the buttons are tappable; the 2px border turns blue on hover.",
+      "html": "<div class=\"ds-branch\"><h3 class=\"ds-branch-name\">Balibago</h3><p class=\"ds-branch-addr\">123 Fixture Street, Balibago, City of Angeles</p><p class=\"ds-branch-status\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m9 12 2 2 4-4\"/></svg><strong>Open</strong><span>· closes 6 PM</span></p><div class=\"ds-branch-actions\"><a class=\"ds-branch-call\" href=\"#\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/></svg>Call</a><a class=\"ds-branch-view\" href=\"#\">View branch<svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m9 18 6-6-6-6\"/></svg></a></div></div>",
+      "css": ".ds-branch { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; gap: 8px; max-width: 360px; padding: 16px; background: var(--background); color: var(--foreground); border: 2px solid var(--border); border-radius: 1.35rem; transition: border-color 150ms; } .ds-branch:hover { border-color: var(--primary); } .ds-branch-name { margin: 0; font-size: 1.125rem; font-weight: 700; } .ds-branch-addr { margin: 0; color: var(--muted-foreground); } .ds-branch-status { display: flex; align-items: center; gap: 6px; margin: 0; } .ds-branch-status svg, .ds-branch-status strong { color: var(--status-open); font-weight: 800; } .ds-branch-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 8px; } .ds-branch-call, .ds-branch-view { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 12px; border-radius: 1.05rem; font-weight: 700; text-decoration: none; } .ds-branch-call { background: var(--primary); color: var(--primary-foreground); } .ds-branch-call:hover { filter: brightness(0.85); } .ds-branch-view { background: var(--background); color: var(--primary); border: 2px solid var(--primary); } .ds-branch-view:hover { background: var(--muted); } .ds-branch-call:focus-visible, .ds-branch-view:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }"
+    },
+    {
+      "name": "Contact Bar",
+      "kind": "custom",
+      "refersTo": "contact-bar-button",
+      "description": "Call · Messenger · Directions fixed at the bottom in the thumb zone: 56px buttons, Call widest, secondary buttons stack icon over label on phones. The only shadow on owner pages.",
+      "html": "<div class=\"ds-bar\" role=\"region\" aria-label=\"Contact\"><a class=\"ds-bar-primary\" href=\"#\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/></svg>Call</a><a class=\"ds-bar-secondary\" href=\"#\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7.9 20A9 9 0 1 0 4 16.1L2 22Z\"/></svg>Messenger</a><a class=\"ds-bar-secondary\" href=\"#\"><svg aria-hidden=\"true\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polygon points=\"3 11 22 2 13 21 11 13 3 11\"/></svg>Directions</a></div>",
+      "css": ".ds-bar { font-family: var(--font-nunito-sans), 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; gap: 8px; padding: 10px 16px; background: var(--background); border-top: 1px solid var(--border); box-shadow: 0 -4px 16px -8px color-mix(in oklch, var(--foreground) 25%, transparent); } .ds-bar-primary, .ds-bar-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; min-width: 0; padding: 0 12px; border-radius: 1.05rem; font-weight: 700; text-decoration: none; transition: background-color 150ms, filter 150ms; } .ds-bar-primary { flex: 1.4; background: var(--primary); color: var(--primary-foreground); font-size: 1.125rem; } .ds-bar-primary:hover { filter: brightness(0.85); } .ds-bar-secondary { flex: 1; background: var(--background); color: var(--primary); border: 2px solid var(--primary); } .ds-bar-secondary:hover { background: var(--muted); } .ds-bar-primary:focus-visible, .ds-bar-secondary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; } .ds-bar a:active { transform: translateY(1px); } @media (max-width: 639px) { .ds-bar-secondary { flex-direction: column; gap: 2px; padding: 0 4px; font-size: 0.875rem; } }"
     }
   ],
   "narrative": {
-    "northStar": "The Neighbor Who Knows",
-    "overview": "PAW is the local who has already called around: they know which clinic is open right now, which one sees rabbits, and roughly what a kapon costs, and they tell you plainly. Warm, local and word-of-mouth in feel, but the facts are exact and dated. Friendliness comes from soft shapes, warm tints and plain words, never from cartoons, mascots or jokes.\n\nDensity depends on the audience (UX14). Owner pages are mobile-first at 360 px and say one thing at a time: status, distance, Call. The clinic dashboard has big forgiving controls, one task per screen. /admin is dense and desktop-first, with shadcn defaults. In an emergency the warmth steps back and only the facts and actions remain.",
+    "northStar": "The Pet Health Booklet",
+    "overview": "Every Filipino pet owner has the booklet a vet hands out: a colored cover, entries written in, vaccine stickers, and a dated stamp for every visit. PAW's pages borrow that. The header is the blue cover with a pink binding. Facts are written in as entries on ruled lines. The animals a clinic treats are sticker labels. Every confirmation is stamped with its date. It feels trusted, warm and familiar, never cartoonish, generic, cold or busy.\n\nThe voice is a caring, plain neighbor (AI_DOCS/DESIGN.md §2.1): short warm English, say what's true, then what to do. Density depends on the audience (UX14). Owner pages are mobile-first at 360px and answer \"can I go there now?\" in three seconds: status, freshness, Call. /dashboard inherits this world with big, forgiving controls. /admin stays dense shadcn defaults, sharing only the tokens and the font. In an emergency the booklet steps back: only the status, distance and Call remain.",
     "keyCharacteristics": [
-      "Status first: open / closing / closed / unknown, always as text + icon + color.",
-      "Freshness is always visible (\"Hours confirmed 5 days ago by the clinic\").",
-      "Soft, rounded, friendly surfaces on a white page; color is kept for status and actions.",
-      "Light: the system font, no decorative images, a map only when asked for."
+      "The cover header: a booklet-blue band, white wordmark, a 6px binding-pink strip.",
+      "Entries on ruled lines: names and section headings sit on 2px rules.",
+      "One pink booklet page per screen: the status card.",
+      "Sticker labels for species, not pills.",
+      "A tilted violet stamp for every real confirmation, with its date.",
+      "Status always as text, icon and color; freshness always visible with its source."
     ],
     "rules": [
       {
         "name": "The Meaning-Only Color Rule",
-        "body": "Status, stale, verified and emergency colors mean exactly one thing each. Never use them for decoration, and never show status by color alone (UX4).",
+        "body": "Status, stale, stamp and emergency colors each mean one thing. Never use them for decoration, and never show status by color alone (UX4).",
+        "section": "colors"
+      },
+      {
+        "name": "The Stamp Ink Rule",
+        "body": "Stamp violet marks real confirmations only: the hours stamp and the verified badge. Nothing decorative is ever stamped.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Page Rule",
+        "body": "The `page` pink is the status card (or the closed notice in its place) and nothing else on a clinic page, so it is always the first thing read.",
+        "section": "colors"
+      },
+      {
+        "name": "The Any-Tint Contrast Rule",
+        "body": "Every text color passes WCAG AA on white and on the `page`, `muted` and `accent` tints (lowest: `primary` on `page`, 4.62:1). Status and secondary text may sit on any of them. The old White-Under-Status rule is retired.",
         "section": "colors"
       },
       {
         "name": "The Token-Only Rule",
-        "body": "Components use the Tailwind classes these tokens produce (bg-primary, text-status-open), never raw values. Changing the brand is an edit to globals.css only.",
+        "body": "Components use the Tailwind classes these tokens produce (`bg-primary`, `text-status-open`, `bg-page`), never raw values. Changing the brand is an edit to `globals.css` only.",
         "section": "colors"
       },
       {
         "name": "The 16px Floor Rule",
-        "body": "Owner-facing body text is never below 1rem. text-sm is for secondary lines only, and never for a phone number, a price or a status.",
+        "body": "Owner-facing body text is never below 1rem. 0.875rem is for secondary lines only, never for a phone number, a price or a status.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Named Steps Rule",
+        "body": "Beyond Tailwind's scale there are exactly two named steps, `text-title` and `text-status`. A new size joins them in `globals.css`, never as an arbitrary value in a component.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Tables use tabular numerals so hours line up.",
         "section": "typography"
       },
       {
         "name": "The Tint-Before-Shadow Rule",
-        "body": "To group or lift content, use a tinted surface first. A shadow is only for something that really floats above the page.",
+        "body": "To group or lift content, use a tint or a rule first. A shadow is only for something that really floats above the page.",
         "section": "elevation"
+      },
+      {
+        "name": "The Looks-Tappable Rule",
+        "body": "Anything tappable looks tappable at rest, with no hover needed (phones have none): a button with a verb label (outline buttons carry a 2px blue border at rest), or a link that is underlined or ends in an arrow. `text-primary` is only for tappable things; a card heading is plain text. Repeated buttons name their target for screen readers. Source: AI_DOCS/DESIGN.md §2 principle 9 and §8 \"Making actions obvious\".",
+        "section": "components"
+      },
+      {
+        "name": "The Cached-Truth Rule",
+        "body": "The cached HTML only says what stays true whenever it's served: the stamp's date and the named day's hours. Relative ages, the live status and today's row appear after hydration (UX20).",
+        "section": "components"
       }
     ],
     "dos": [
       "Do show status as text + icon + color, and freshness with its source, wherever hours appear.",
-      "Do keep the main action (Call) primary-colored, in the thumb zone, and at least 44px tall on owner and clinic screens.",
-      "Do use muted / accent tints to group content before reaching for borders or shadows.",
-      "Do pair every icon with a visible label (DESIGN §2, principle 6)."
+      "Do keep the main action (Call) Booklet Blue, in the thumb zone, 48px tall on owner pages and 56px in the contact bar; every owner control is at least 44px.",
+      "Do put names and section headings on a 2px ruled line, and service groups under uppercase entry labels on a binding rule.",
+      "Do keep the `page` pink for the status card (or the closed notice) only.",
+      "Do stamp only real confirmations, with their date, and give never-confirmed hours no stamp.",
+      "Do make every action look tappable at rest: a button with a verb label and, for outline buttons, a 2px blue border; or a link that is underlined or ends in an arrow (the Looks-Tappable Rule).",
+      "Do give repeated buttons a visually hidden target for screen readers (\"Call Balibago\").",
+      "Do pair every icon with a visible label."
     ],
     "donts": [
-      "Don't use raw color values, or status colors for decoration.",
-      "Don't add mascots, cartoon illustrations, pet puns or emoji: friendly, not childish (DESIGN §7).",
-      "Don't add motion, hero images or extra client JavaScript to owner pages without a reason; the performance budget (DESIGN §9) is for mid-range Android on mobile data.",
-      "Don't put anything in the emergency view except open-now, distance and Call (UX7)."
+      "Don't use raw color values or arbitrary sizes, or status and stamp colors for decoration.",
+      "Don't color text Booklet Blue when it can't be tapped; card headings and plain text stay in ink.",
+      "Don't make a whole card tappable or a heading the only way in; the buttons are the targets.",
+      "Don't use shadows except on floating layers (contact bar, dialogs, popovers).",
+      "Don't add mascots, cartoon illustrations, pet puns or emoji: friendly, not childish (AI_DOCS/DESIGN.md §7).",
+      "Don't link the header to a page that doesn't exist yet.",
+      "Don't put anything in the emergency view except the status (open now, or \"call for emergencies\"), distance and Call (UX7).",
+      "Don't add motion, hero images or extra client JavaScript to owner pages without a reason; the performance budget (AI_DOCS/DESIGN.md §9) is for mid-range Android on mobile data.",
+      "Don't restyle /admin toward the owner look; it stays dense shadcn defaults (UX14)."
     ]
   }
 }
