@@ -1,6 +1,7 @@
 import type { Database } from '@paw/db';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import type { PhotoStorage } from '../../storage.ts';
+import { publicCityRoutes } from './cities.ts';
 import { publicListingRoutes } from './listings.ts';
 import { publicSearchRoutes } from './search.ts';
 import { publicTaxonomyRoutes } from './taxonomy.ts';
@@ -18,4 +19,5 @@ export const publicRoutes: FastifyPluginAsyncZod<{
   await app.register(publicListingRoutes, { database, storage });
   await app.register(publicSearchRoutes, { database });
   await app.register(publicTaxonomyRoutes, { database });
+  await app.register(publicCityRoutes, { database });
 };
