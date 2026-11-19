@@ -308,13 +308,41 @@ Notes for later issues:
 
 ### P1-5b · Search UI: home, results, emergency view
 `frontend` · Depends on: P1-5a, P1-4
-- [ ] Home (UX1): search box, quick chips, location prompt, city picker fallback
-- [ ] Results list (UX2/UX3), filter sheet, zero-results state (UX12)
-- [ ] Emergency view (UX7)
+Shipped as two PRs: 5b-1 (home, results, filters) on `56-search-ui`, then 5b-2 (the emergency view and checks).
+
+**5b-1: home, results, filters**
+- [x] `GET /v1/cities` (public): cities with a published branch, for the city picker (ARCHITECTURE D46)
+- [x] Home (UX1): search box, quick chips, location line with "Use my location" and a city picker fallback; the browser remembers only the kind of location chosen
+- [x] Results list (UX2/UX3) at `/search`, rendered per request, `noindex, follow` (D46); filter sheet (Popover API, works without JavaScript), removable filter chips, "Show more results", zero-results state (UX12)
+- [x] "Find a vet" button in the header (DESIGN §7.1)
+
+**5b-2: emergency view, checks**
+- [ ] Emergency view (UX7) at `/emergency`; the Emergency chips (home, results) link there instead of `/search?emergency=true`
+- [ ] `packages/lighthouse`: add the home page and a fixture `/search` to the runs (the search form and result list are client JavaScript; check the 205 KB budget)
+- [ ] Impeccable `critique` / `audit` / `adapt` (360px) on home, search and emergency
 - [ ] Usability check (3–5 people)
 - [ ] Maybe (DESIGN.md UX21): species filter on the clinic page's services, preselected when the owner arrives from a species search. Decide from the usability check and from how many services have species by then
 
 **Done when:** the 4 owner journeys (pitch kit §6) work on staging on a phone, apart from the map.
+
+Notes for later issues:
+- **5b-2:** the filter sheet's GET form leaves empty values in the URL (`species=&category=`); harmless (`parseSearchParams` drops them), but the emergency view could clean them up with a client submit like `SearchForm`'s.
+- **P1-5c:** results carry `branch.location` for the pins; the list is `ResultList` (`components/search/result-list.tsx`), so the map can share its results, including those added by "Show more".
+- **P1-6:** city landing pages can take their list from `GET /v1/cities`, and reuse `ResultCard` for their listings.
+
+### P1-5d · Home sections below the search
+`frontend` · Depends on: P1-5b (5b-1; the emergency band links to 5b-2's `/emergency` once it exists, `/search?emergency=true` until then)
+Decided 2026-11-19: DESIGN.md UX22 (the order, copy and limits).
+- [ ] (A) Emergency band, time-aware (moves up and grows at night, Manila time, via `useNow`)
+- [ ] (D) "Open now in {city}": 3 nearest open branches as `ResultCard`s + "See all open now ›" (one uncached `/v1/search?openNow=true&limit=3` per home visit); hidden when none
+- [ ] (B) "What does your pet need?": 6 tiles from the taxonomy groups, owner words in `messages/en.json`, each → `searchHref({ category })`
+- [ ] (C) "Who's your patient?": every species as a big sticker → `searchHref({ species })`
+- [ ] (E) "Hours you can trust": the `ConfirmationStamp` look, large, with copy true today (no monthly-confirmation promise before P1-10)
+- [ ] (F) Booklet illustration: inline SVG in the tokens (no mascots, ~5 KB, no JS)
+- [ ] Quick chips trimmed to Open now · Emergency; "Free · No sign-up needed" under the search (owner pitch kit §1)
+- [ ] `packages/lighthouse`: the home page in the runs; Impeccable `critique` + `adapt` (360px) on it
+
+**Done when:** the home answers "can I go now?", "who does kapon?" and "who treats rabbits?" without typing, on a phone, inside the performance budget.
 
 ### P1-5c · Map view
 `frontend` · Depends on: P1-5b
