@@ -69,16 +69,20 @@ function DayHours({
  * "Open · closes 6 PM", "Closed · opens 8 AM tomorrow", "Hours unknown"; before
  * hydration, the hours of the day the page was rendered, by name. `reach` (how the branch
  * can be contacted) picks the "Hours unknown" advice, so it never says "call" without a phone.
+ * `quiet` greys it out (the emergency view's closed branches that take emergency calls).
  */
 export function LiveStatus({
   hours,
   renderedAt,
   reach,
+  quiet = false,
   className,
 }: {
   hours: BranchHours;
   renderedAt: string;
   reach: ContactReach;
+  /** Greyed out, no status color (see OpenStatusText). */
+  quiet?: boolean;
   className?: string;
 }) {
   const now = useNow();
@@ -88,11 +92,18 @@ export function LiveStatus({
         hours={hours}
         date={toManila(new Date(renderedAt)).date}
         reach={reach}
-        className={className}
+        className={cn(quiet && 'text-muted-foreground', className)}
       />
     );
   }
-  return <OpenStatusText status={openStatus(hours, now)} reach={reach} className={className} />;
+  return (
+    <OpenStatusText
+      status={openStatus(hours, now)}
+      reach={reach}
+      quiet={quiet}
+      className={className}
+    />
+  );
 }
 
 /**

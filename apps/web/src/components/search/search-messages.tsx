@@ -24,6 +24,7 @@ export async function SearchMessages({ children }: { children: ReactNode }) {
     <NextIntlClientProvider
       messages={{
         Search: messages.Search,
+        Emergency: messages.Emergency,
         Hours: messages.Hours,
         Prices: messages.Prices,
         Listing: listing,

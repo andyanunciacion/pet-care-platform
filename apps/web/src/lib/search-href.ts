@@ -1,4 +1,5 @@
-// Search URLs (/search?…), built one way for every link, chip and form on the search pages.
+// Search URLs (/search?…, /emergency?…), built one way for every link, chip and form on the
+// search pages.
 // No Zod here: Client Components import this file, and the owner pages' JavaScript budget is
 // tight (DESIGN §9). Parsing a URL back into a search is search-params.ts (server only).
 
@@ -60,6 +61,15 @@ export function searchParamsOf(state: SearchState): URLSearchParams {
 export function searchHref(state: SearchState): string {
   const query = searchParamsOf(state).toString();
   return query === '' ? '/search' : `/search?${query}`;
+}
+
+/**
+ * The emergency view (DESIGN UX7): "/emergency?cityCode=0330100000". It takes only the place
+ * (and the page after): the words and filters of a search don't apply to an emergency.
+ */
+export function emergencyHref(location: SearchLocation, cursor?: string): string {
+  const query = searchParamsOf({ location, ...(cursor !== undefined && { cursor }) }).toString();
+  return query === '' ? '/emergency' : `/emergency?${query}`;
 }
 
 /** The search as GET /v1/search takes it. */

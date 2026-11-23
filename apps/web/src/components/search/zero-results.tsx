@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import type { Taxonomy } from '@/lib/public-types';
 import { activeFilters, widerRadius } from '@/lib/search-filters';
-import { firstPage, searchHref, type SearchState } from '@/lib/search-href';
+import { emergencyHref, firstPage, searchHref, type SearchState } from '@/lib/search-href';
 import { NightEmergencyLink } from './night-emergency-link';
+import { LinkPending } from './pending';
 
 const offerLink =
   'inline-flex min-h-11 items-center gap-1 font-semibold text-primary underline underline-offset-4 hover:decoration-2';
@@ -17,17 +18,22 @@ const offerLink =
 export async function ZeroResults({ state, taxonomy }: { state: SearchState; taxonomy: Taxonomy }) {
   const t = await getTranslations('Search');
   const base = firstPage(state);
-  const wider = widerRadius(state);
+  const wider = widerRadius(state.location);
   const filters = activeFilters(state, taxonomy);
   const offerLabel = (filter: (typeof filters)[number]) => {
     if (filter.kind === 'query') return t('zero.dropQuery', { q: filter.name ?? '' });
-    const name =
-      filter.name ?? (filter.kind === 'emergency' ? t('emergencyFilter') : t('openNowFilter'));
-    return t('zero.dropFilter', { name });
+    return t('zero.dropFilter', { name: filter.name ?? t('openNowFilter') });
   };
 
   const offers: { href: string; label: string }[] = [
-    ...(wider === null ? [] : [{ href: wider.href, label: t('zero.widen', { km: wider.km }) }]),
+    ...(wider === null
+      ? []
+      : [
+          {
+            href: searchHref({ ...base, location: wider.location }),
+            label: t('zero.widen', { km: wider.km }),
+          },
+        ]),
     ...filters.map((filter) => ({ href: filter.href, label: offerLabel(filter) })),
     ...(state.location.kind === 'city'
       ? [{ href: searchHref({ ...base, location: { kind: 'all' } }), label: t('zero.allAreas') }]
@@ -46,16 +52,13 @@ export async function ZeroResults({ state, taxonomy }: { state: SearchState; tax
           <li key={offer.href}>
             <Link href={offer.href} className={offerLink}>
               {offer.label}
-              <ChevronRight aria-hidden className="size-4 shrink-0" />
+              <LinkPending className="size-4">
+                <ChevronRight aria-hidden className="size-4 shrink-0" />
+              </LinkPending>
             </Link>
           </li>
         ))}
-        {state.emergency !== true && (
-          <NightEmergencyLink
-            href={searchHref({ location: state.location, emergency: true })}
-            label={t('zero.emergency')}
-          />
-        )}
+        <NightEmergencyLink href={emergencyHref(state.location)} label={t('zero.emergency')} />
       </ul>
     </div>
   );

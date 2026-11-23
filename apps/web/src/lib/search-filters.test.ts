@@ -52,6 +52,10 @@ describe('activeFilters', () => {
     ]);
   });
 
+  it("doesn't list Emergency: it's its own view (/emergency), not a filter", () => {
+    expect(activeFilters({ location: { kind: 'all' }, emergency: true }, taxonomy)).toEqual([]);
+  });
+
   it('finds a group by its code too', () => {
     expect(
       activeFilters({ location: { kind: 'all' }, category: 'surgery' }, taxonomy)[0]?.name,
@@ -61,16 +65,14 @@ describe('activeFilters', () => {
 
 describe('widerRadius', () => {
   it('offers 25 km, then 50 km, then nothing', () => {
-    expect(widerRadius({ location: near })).toEqual({
-      km: 25,
-      href: '/search?lat=15.145&lng=120.589&radiusKm=25',
-    });
-    expect(widerRadius({ location: { ...near, radiusKm: 25 } })?.km).toBe(50);
-    expect(widerRadius({ location: { ...near, radiusKm: 50 } })).toBeNull();
+    expect(widerRadius(near)).toEqual({ km: 25, location: { ...near, radiusKm: 25 } });
+    expect(widerRadius({ ...near, radiusKm: 25 })?.km).toBe(50);
+    expect(widerRadius({ ...near, radiusKm: 50 })).toBeNull();
   });
 
   it('has nothing to widen for a city or the whole area', () => {
-    expect(widerRadius({ location: { kind: 'all' } })).toBeNull();
+    expect(widerRadius({ kind: 'city', code: '0330100000' })).toBeNull();
+    expect(widerRadius({ kind: 'all' })).toBeNull();
   });
 });
 

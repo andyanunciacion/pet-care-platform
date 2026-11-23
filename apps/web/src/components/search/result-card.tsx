@@ -16,7 +16,7 @@ import type { SearchBranch, SearchResult } from '@/lib/public-types';
 // service with its price (service searches only), freshness, then Call and View clinic.
 // Rendered by ResultList, a Client Component, so "Show more" can add cards in the browser.
 
-function reachOf(branch: SearchBranch): ContactReach {
+export function reachOf(branch: SearchBranch): ContactReach {
   if (branch.phone !== null) return 'call';
   return branch.messenger !== null ? 'message' : 'visit';
 }
@@ -31,7 +31,7 @@ const isOneOfSeveral = (path: string) => path.split('/').filter(Boolean).length 
  * The card's area line: "Balibago, Angeles City", after the branch name when there are
  * several, unless the branch is named after its barangay (then the area already says it).
  */
-function areaLine(branch: SearchBranch): string {
+export function areaLine(branch: SearchBranch): string {
   const area = [branch.barangay?.name, branch.city.name].filter(Boolean).join(', ');
   const named = isOneOfSeveral(branch.path) && branch.name !== branch.barangay?.name;
   return named ? `${branch.name} · ${area}` : area;

@@ -14,7 +14,7 @@
     "metaTitle": "Find a vet",
     "metaTitleQuery": "“{q}”: vets and clinics",
     "searchLabel": "Search for a clinic, service or animal",
-    "searchPlaceholder": "Kapon, bakuna, rabbit, clinic name…",
+    "searchPlaceholder": "Kapon, bakuna, rabbit…",
     "submit": "Search",
     "searching": "Searching…",
     "location": {
@@ -53,7 +53,6 @@
     "activeFilters": "Active filters",
     "removeFilter": "Remove filter",
     "queryFilter": "“{q}”",
-    "emergencyFilter": "Emergency",
     "openNowFilter": "Open now",
     "viewClinic": "View clinic",
     "verified": "Verified",
@@ -72,6 +71,22 @@
       "allAreas": "Search all areas",
       "emergency": "Need a vet tonight? See clinics open now or taking emergency calls"
     }
+  },
+  "Emergency": {
+    "metaTitle": "Emergency vets: open now or taking emergency calls",
+    "title": "Pet emergency",
+    "callFirst": "Call before you go, so the clinic knows you're coming.",
+    "showHere": "Show clinics here",
+    "nearest": "Show the nearest to me",
+    "locationFailed": "We couldn't get your location. Pick a city below.",
+    "openGroup": "Open now",
+    "callableGroup": "Closed, but taking emergency calls",
+    "loading": "Finding clinics…",
+    "none": "No clinic {where, select, near {near you} city {in {city}} other {in the area}} is open now or taking emergency calls",
+    "noneHint": "Try a wider area:",
+    "widen": "Look up to {km} km away",
+    "allAreas": "Look in all areas",
+    "searchAll": "Not an emergency? Search all clinics"
   },
   "Listing": {
     "metaTitle": "{name} · {city}",
