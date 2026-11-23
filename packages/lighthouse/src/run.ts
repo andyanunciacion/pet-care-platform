@@ -1,8 +1,9 @@
-// `pnpm lighthouse`: checks a public clinic page against the performance budget (DESIGN §9,
-// ARCHITECTURE D44), locally and in CI alike. It seeds the fixture listing (seed.ts), serves
-// its images in place of the photo bucket, builds the web app and starts it with the API on
+// `pnpm lighthouse`: checks public pages against the performance budget (DESIGN §9,
+// ARCHITECTURE D44), locally and in CI alike: the fixture clinic page, the home, a search
+// and the emergency view (PAGES). It seeds the fixture listings (seed.ts), serves their
+// images in place of the photo bucket, builds the web app and starts it with the API on
 // their own ports (so a running `pnpm dev` is left alone), then runs Lighthouse CI against
-// the page with the assertions in lighthouserc.json. Reports land in .lighthouseci/.
+// each page with the assertions in lighthouserc.json. Reports land in .lighthouseci/.
 //
 // Needs the Docker Postgres (DATABASE_URL, default the local one) and Chrome.
 // `--skip-build` reuses the last web build (only when nothing in apps/web changed);
@@ -29,6 +30,16 @@ const IMAGES_PORT = 4100;
 const WEB_URL = `http://localhost:${String(WEB_PORT)}`;
 const API_URL = `http://127.0.0.1:${String(API_PORT)}`;
 const PHOTOS_URL = `http://127.0.0.1:${String(IMAGES_PORT)}`;
+
+/** Angeles City, where both fixture listings are (migration 0004). */
+const ANGELES = '0330100000';
+
+/**
+ * The pages Lighthouse checks. The search pages are rendered per request (ARCHITECTURE D46)
+ * and carry the most client JavaScript (search form, result list). The fixture clinic takes
+ * emergencies and has a phone, so the emergency view has a result at any hour.
+ */
+const PAGES = [FIXTURE_PATH, '/', `/search?cityCode=${ANGELES}`, `/emergency?cityCode=${ANGELES}`];
 
 /** The web app's settings for the build and the server (they override apps/web/.env). */
 const webEnv = { API_URL, SITE_URL: WEB_URL, PHOTOS_URL, NEXT_TELEMETRY_DISABLED: '1' };
@@ -161,12 +172,13 @@ async function main(): Promise<number> {
     const api = node(path.join(API_DIR, 'src', 'server.ts'), [], API_DIR, apiEnv(databaseUrl));
     const web = node(nextBin, ['start', '--port', String(WEB_PORT)], WEB_DIR, webEnv);
     await waitFor(`${API_URL}/health`, api.exited);
-    // The first visit renders and caches the page (ISR), so Lighthouse measures a cached one.
-    await waitFor(`${WEB_URL}${FIXTURE_PATH}`, web.exited);
+    // The first visit renders and caches the clinic page (ISR), so Lighthouse measures a
+    // cached one; the search pages are rendered per request either way.
+    for (const page of PAGES) await waitFor(`${WEB_URL}${page}`, web.exited);
 
     if (process.argv.includes('--serve')) {
-      // To look at the fixture page yourself, until Ctrl+C.
-      console.log(`Serving ${WEB_URL}${FIXTURE_PATH}`);
+      // To look at the pages yourself, until Ctrl+C.
+      for (const page of PAGES) console.log(`Serving ${WEB_URL}${page}`);
       console.log(`and the edge cases at ${WEB_URL}${EDGE_CASE_PATH} (Ctrl+C to stop)`);
       await new Promise<void>((resolve) =>
         process.once('SIGINT', () => {
@@ -178,7 +190,11 @@ async function main(): Promise<number> {
 
     const lhci = node(
       lhciBin,
-      ['autorun', '--config=lighthouserc.json', `--collect.url=${WEB_URL}${FIXTURE_PATH}`],
+      [
+        'autorun',
+        '--config=lighthouserc.json',
+        ...PAGES.map((page) => `--collect.url=${WEB_URL}${page}`),
+      ],
       PACKAGE_DIR,
       {},
     );
