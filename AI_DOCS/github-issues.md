@@ -317,27 +317,30 @@ Shipped as two PRs: 5b-1 (home, results, filters) on `56-search-ui`, then 5b-2 (
 - [x] "Find a vet" button in the header (DESIGN §7.1)
 
 **5b-2: emergency view, checks**
-- [ ] Emergency view (UX7) at `/emergency`; the Emergency chips (home, results) link there instead of `/search?emergency=true`
-- [ ] `packages/lighthouse`: add the home page and a fixture `/search` to the runs (the search form and result list are client JavaScript; check the 205 KB budget)
-- [ ] Impeccable `critique` / `audit` / `adapt` (360px) on home, search and emergency
+- [x] Emergency view (UX7) at `/emergency`: location line only (no search box or filters) plus "Show the nearest to me", open now then "Closed, but taking emergency calls", stripped cards with a big Call; the Emergency chips (home, results) and the night zero-results link go there, and `/search?emergency=true` redirects there keeping the place
+- [x] `packages/lighthouse`: the home page, a fixture `/search` and `/emergency` in the runs (the search form and result list are client JavaScript; check the 205 KB budget)
+- [x] Impeccable `critique` / `audit` / `adapt` (360px) on home, search and emergency. `critique` on `/emergency` (about 29/40; the detector found nothing; fixed: the callable card's red "Closed", the location-failure fallback, "Show the nearest to me", focus after changing the place, the "near you" empty state). `audit` + `adapt` on all three: 20/20 (no overflow, targets or contrast issues at 360px; fixed: the search placeholder was cut off). Real touch and slow networks are left for the usability check
 - [ ] Usability check (3–5 people)
 - [ ] Maybe (DESIGN.md UX21): species filter on the clinic page's services, preselected when the owner arrives from a species search. Decide from the usability check and from how many services have species by then
 
 **Done when:** the 4 owner journeys (pitch kit §6) work on staging on a phone, apart from the map.
 
 Notes for later issues:
-- **5b-2:** the filter sheet's GET form leaves empty values in the URL (`species=&category=`); harmless (`parseSearchParams` drops them), but the emergency view could clean them up with a client submit like `SearchForm`'s.
+- **Later (small):** the filter sheet's GET form leaves empty values in the URL (`species=&category=`); harmless (`parseSearchParams` drops them). A client submit like `SearchForm`'s would clean them up, at the cost of client JavaScript in a component that has none.
+- **Location line:** `useSearchLocation` + `LocationPicker` (`components/search/location-picker.tsx`) are shared by the search form and the emergency view; reuse them for any page that asks where (P1-6 landing pages, the P1-5d "Open now in {city}" section).
+- **Emergency links:** build them with `emergencyHref(location)` (`src/lib/search-href.ts`); `emergency` is no longer a `/search` filter.
+- **Follow-up issue (small):** city names come from PSGC ("City of Angeles"), but owners say "Angeles City" (DESIGN UX1's own example). Add a display name for cities (API + web: the location line, cards, `GET /v1/cities`), decided once for every page.
 - **P1-5c:** results carry `branch.location` for the pins; the list is `ResultList` (`components/search/result-list.tsx`), so the map can share its results, including those added by "Show more".
 - **P1-6:** city landing pages can take their list from `GET /v1/cities`, and reuse `ResultCard` for their listings.
 
 ### P1-5d · Home sections below the search
-`frontend` · Depends on: P1-5b (5b-1; the emergency band links to 5b-2's `/emergency` once it exists, `/search?emergency=true` until then)
+`frontend` · Depends on: P1-5b (the emergency band links to `/emergency` with `emergencyHref`)
 Decided 2026-11-19: DESIGN.md UX22 (the order, copy and limits).
 - [ ] (A) Emergency band, time-aware (moves up and grows at night, Manila time, via `useNow`)
 - [ ] (D) "Open now in {city}": 3 nearest open branches as `ResultCard`s + "See all open now ›" (one uncached `/v1/search?openNow=true&limit=3` per home visit); hidden when none
 - [ ] (B) "What does your pet need?": 6 tiles from the taxonomy groups, owner words in `messages/en.json`, each → `searchHref({ category })`
 - [ ] (C) "Who's your patient?": every species as a big sticker → `searchHref({ species })`
-- [ ] (E) "Hours you can trust": the `ConfirmationStamp` look, large, with copy true today (no monthly-confirmation promise before P1-10)
+- [ ] (E) "Why we built PAW" (UX22, UX23): the `ConfirmationStamp` look, large, beside the 4 problem → fix lines from the owner deck's "Sound familiar?" slide, then "Free · No sign-up needed" (and "Learn more about PAW ›" once `/about` exists, P1-6); copy true today (no monthly-confirmation promise before P1-10)
 - [ ] (F) Booklet illustration: inline SVG in the tokens (no mascots, ~5 KB, no JS)
 - [ ] Quick chips trimmed to Open now · Emergency; "Free · No sign-up needed" under the search (owner pitch kit §1)
 - [ ] `packages/lighthouse`: the home page in the runs; Impeccable `critique` + `adapt` (360px) on it
@@ -356,6 +359,7 @@ Decided 2026-11-19: DESIGN.md UX22 (the order, copy and limits).
 - [ ] City, service × city, and 24-hour landing pages (ARCHITECTURE.md §8 URLs)
 - [ ] Dynamic `sitemap.xml`, `robots.txt`, canonical URLs, OG images
 - [ ] `/for-clinics` page (from P0-D2 learnings)
+- [ ] `/about` page (DESIGN.md UX23): what PAW is, why it was built, how it works, how hours stay accurate, FAQ, coverage; copy from `pitch/pet-owners.md`, only what's true when it ships. Then link it from the home's "Why we built PAW" (P1-5d) and a footer
 
 **Done when:** the pages are indexable on staging and pass Lighthouse SEO checks.
 

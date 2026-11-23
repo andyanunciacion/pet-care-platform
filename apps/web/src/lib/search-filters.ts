@@ -1,15 +1,16 @@
 import { DEFAULT_RADIUS_KM, MAX_RADIUS_KM, toManila } from '@paw/domain';
 import type { Taxonomy } from './public-types';
-import { firstPage, searchHref, type SearchState } from './search-href';
+import { firstPage, searchHref, type SearchLocation, type SearchState } from './search-href';
 
 // What narrows a results page (the words and the filters), each with the link that drops it:
 // the removable chips above the results, and the "Search without …" offers when nothing
 // matched (DESIGN UX12). The words are one too, so a quick chip like "Kapon" can be undone.
+// Emergency isn't a filter: it's its own view, /emergency (UX7).
 
 export interface ActiveFilter {
-  /** Which filter, for the label: the words, a species or category name, or "Open now"/"Emergency". */
-  kind: 'query' | 'species' | 'category' | 'openNow' | 'emergency';
-  /** The words, or the species or category name; null for openNow and emergency (fixed copy). */
+  /** Which filter, for the label: the words, a species or category name, or "Open now". */
+  kind: 'query' | 'species' | 'category' | 'openNow';
+  /** The words, or the species or category name; null for openNow (fixed copy). */
   name: string | null;
   /** The same search without this filter. */
   href: string;
@@ -52,27 +53,22 @@ export function activeFilters(state: SearchState, taxonomy: Taxonomy): ActiveFil
       href: searchHref({ ...base, openNow: undefined }),
     });
   }
-  if (state.emergency === true) {
-    filters.push({
-      kind: 'emergency',
-      name: null,
-      href: searchHref({ ...base, emergency: undefined }),
-    });
-  }
   return filters;
 }
 
 /**
- * A wider radius to offer when nothing matched near the owner: 25 km, then the maximum. Null
- * when the search isn't near a point or is already as wide as it goes.
+ * A wider radius to offer when nothing was found near the owner: 25 km, then the maximum.
+ * Null when the place isn't a point or is already as wide as it goes. The caller builds the
+ * link (a search, or the emergency view).
  */
-export function widerRadius(state: SearchState): { km: number; href: string } | null {
-  const { location } = state;
+export function widerRadius(
+  location: SearchLocation,
+): { km: number; location: SearchLocation } | null {
   if (location.kind !== 'near') return null;
   const current = location.radiusKm ?? DEFAULT_RADIUS_KM;
   const km = [25, MAX_RADIUS_KM].find((step) => step > current);
   if (km === undefined) return null;
-  return { km, href: searchHref({ ...firstPage(state), location: { ...location, radiusKm: km } }) };
+  return { km, location: { ...location, radiusKm: km } };
 }
 
 /** 7 PM to 7 AM in Manila: when an owner who found nothing may need an emergency clinic (UX12). */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { firstPage, roundCoord, searchHref, type SearchState } from './search-href';
+import { emergencyHref, firstPage, roundCoord, searchHref, type SearchState } from './search-href';
 import { parseSearchParams } from './search-params';
 
 const ANGELES = '0330100000';
@@ -89,5 +89,24 @@ describe('searchHref', () => {
   it('gives a bare /search for the whole area, and firstPage drops the cursor', () => {
     expect(searchHref({ location: { kind: 'all' } })).toBe('/search');
     expect(searchHref(firstPage({ location: { kind: 'all' }, cursor: 'abc' }))).toBe('/search');
+  });
+});
+
+describe('emergencyHref', () => {
+  it('takes only the place, rounded like a search, and the page after', () => {
+    expect(emergencyHref({ kind: 'city', code: ANGELES })).toBe(`/emergency?cityCode=${ANGELES}`);
+    expect(
+      emergencyHref({ kind: 'near', lat: 15.145_678_9, lng: 120.588_712_3, radiusKm: 25 }, 'abc'),
+    ).toBe('/emergency?lat=15.146&lng=120.589&radiusKm=25&cursor=abc');
+    expect(emergencyHref({ kind: 'all' })).toBe('/emergency');
+  });
+
+  it('reads back into the same place', () => {
+    const params = new URL(emergencyHref({ kind: 'city', code: ANGELES }), 'https://paw.test')
+      .searchParams;
+    expect(parseSearchParams(Object.fromEntries(params)).location).toEqual({
+      kind: 'city',
+      code: ANGELES,
+    });
   });
 });

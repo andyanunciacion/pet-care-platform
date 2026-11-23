@@ -1,9 +1,11 @@
 import { HeartPulse } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { ActiveFilters } from '@/components/search/active-filters';
 import { FilterButton, FilterSheet } from '@/components/search/filter-sheet';
+import { LinkPending } from '@/components/search/pending';
 import { ResultList } from '@/components/search/result-list';
 import { SearchForm } from '@/components/search/search-form';
 import { SearchMessages } from '@/components/search/search-messages';
@@ -11,7 +13,7 @@ import { ZeroResults } from '@/components/search/zero-results';
 import { apiClient } from '@/lib/api';
 import { loadCities, loadTaxonomy } from '@/lib/search-data';
 import { activeFilters } from '@/lib/search-filters';
-import { apiQuery, searchHref } from '@/lib/search-href';
+import { apiQuery, emergencyHref, searchHref } from '@/lib/search-href';
 import { parseSearchParams } from '@/lib/search-params';
 
 // Search results (DESIGN UX2, UX3, UX12): the list, filters and "nothing found" offers. The
@@ -34,6 +36,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function SearchPage({ searchParams }: Props) {
   const t = await getTranslations('Search');
   const state = parseSearchParams(await searchParams);
+  // Emergency is its own view (UX7), not a filter: older links go there, keeping the place.
+  if (state.emergency === true) redirect(emergencyHref(state.location));
   const [taxonomy, cities, search] = await Promise.all([
     loadTaxonomy(),
     loadCities(),
@@ -71,15 +75,15 @@ export default async function SearchPage({ searchParams }: Props) {
                 .length
             }
           />
-          {state.emergency !== true && (
-            <Link
-              href={searchHref({ location, emergency: true })}
-              className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border-2 border-emergency bg-background px-4 font-bold text-emergency transition-colors duration-150 hover:bg-muted active:translate-y-px motion-reduce:transition-none"
-            >
+          <Link
+            href={emergencyHref(location)}
+            className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border-2 border-emergency bg-background px-4 font-bold text-emergency transition-colors duration-150 hover:bg-muted active:translate-y-px motion-reduce:transition-none"
+          >
+            <LinkPending className="size-5">
               <HeartPulse aria-hidden className="size-5" />
-              {t('chips.emergency')}
-            </Link>
-          )}
+            </LinkPending>
+            {t('chips.emergency')}
+          </Link>
           <ActiveFilters filters={filters} />
         </div>
         <FilterSheet key={`filters-${key}`} state={state} taxonomy={taxonomy} />

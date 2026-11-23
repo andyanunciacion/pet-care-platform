@@ -58,15 +58,19 @@ const UNKNOWN_ADVICE = {
  * "Open · closes 6 PM", "Closed today · opens 8 AM tomorrow", or "Hours unknown" with what to
  * do on the next line ("Call before you go."), in body text: the advice is the useful part,
  * so it isn't greyed out with the label. `reach` picks the advice; the admin preview leaves
- * it at "call".
+ * it at "call". `quiet` greys it out with a neutral clock: the emergency view uses it on a
+ * branch that's closed but takes emergency calls, where the emergency line is what matters
+ * and a red "Closed" would read as "no help here" (DESIGN UX7).
  */
 export function OpenStatusText({
   status,
   reach = 'call',
+  quiet = false,
   className,
 }: {
   status: OpenStatus;
   reach?: ContactReach;
+  quiet?: boolean;
   className?: string;
 }) {
   const t = useTranslations('Hours');
@@ -91,14 +95,16 @@ export function OpenStatusText({
         return [t('unknown'), null, null];
     }
   })();
-  const { Icon, color } = STYLE[status.state];
+  const { Icon, color } = quiet
+    ? { Icon: Clock, color: 'text-muted-foreground' }
+    : STYLE[status.state];
 
   return (
-    <div className={cn('flex flex-col gap-0.5', className)}>
+    <div className={cn('flex flex-col gap-0.5', quiet && 'text-muted-foreground', className)}>
       <p className="flex items-center gap-1.5">
         {/* Sized with the text, so the big status on the clinic page gets a bigger icon. */}
         <Icon aria-hidden className={cn('size-[1.15em] shrink-0', color)} />
-        <span className={cn('font-extrabold', color)}>{label}</span>
+        <span className={cn(quiet ? 'font-semibold' : 'font-extrabold', color)}>{label}</span>
         {detail !== null && <span>· {detail}</span>}
       </p>
       {note !== null && <p className="pl-6.5 text-sm text-muted-foreground">{note}</p>}

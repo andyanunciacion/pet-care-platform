@@ -2,6 +2,7 @@ import { X } from 'lucide-react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import type { ActiveFilter } from '@/lib/search-filters';
+import { LinkPending } from './pending';
 
 /** The words and filters in use as removable chips ("“kapon” ×", "Rabbit ×"), each a link to the search without it. */
 export async function ActiveFilters({ filters }: { filters: ActiveFilter[] }) {
@@ -9,7 +10,7 @@ export async function ActiveFilters({ filters }: { filters: ActiveFilter[] }) {
   const t = await getTranslations('Search');
   const label = (filter: ActiveFilter) => {
     if (filter.kind === 'query') return t('queryFilter', { q: filter.name ?? '' });
-    return filter.name ?? (filter.kind === 'emergency' ? t('emergencyFilter') : t('openNowFilter'));
+    return filter.name ?? t('openNowFilter');
   };
 
   return (
@@ -21,7 +22,9 @@ export async function ActiveFilters({ filters }: { filters: ActiveFilter[] }) {
             className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border-2 border-primary bg-muted px-3 font-semibold text-primary transition-colors duration-150 hover:bg-background active:translate-y-px motion-reduce:transition-none"
           >
             {label(filter)}
-            <X aria-hidden className="size-4" />
+            <LinkPending className="size-4">
+              <X aria-hidden className="size-4" />
+            </LinkPending>
             <span className="sr-only">{`: ${t('removeFilter')}`}</span>
           </Link>
         </li>

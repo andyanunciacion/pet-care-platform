@@ -6,6 +6,7 @@ import { outlineAction, primaryAction } from '@/lib/action-styles';
 import type { Taxonomy } from '@/lib/public-types';
 import { firstPage, searchHref, type SearchState } from '@/lib/search-href';
 import { cn } from '@/lib/utils';
+import { SubmitPending } from './pending';
 
 // The filter sheet (DESIGN §8 FilterSheet): animal, service and "open now", in a sheet that
 // slides over the results. Built on the browser's Popover API, so it opens, closes on Esc
@@ -74,7 +75,6 @@ export async function FilterSheet({ state, taxonomy }: { state: SearchState; tax
           </>
         )}
         {location.kind === 'city' && <input type="hidden" name="cityCode" value={location.code} />}
-        {state.emergency === true && <input type="hidden" name="emergency" value="true" />}
 
         <fieldset className="flex flex-col gap-1">
           <legend className="mb-2 text-sm font-extrabold tracking-wider text-muted-foreground uppercase">
@@ -137,9 +137,9 @@ export async function FilterSheet({ state, taxonomy }: { state: SearchState; tax
           <Link href={cleared} className={cn(outlineAction, 'px-5')}>
             {t('clearFilters')}
           </Link>
-          <button type="submit" className={cn(primaryAction, 'px-5')}>
+          <SubmitPending pendingLabel={t('searching')} className={cn(primaryAction, 'px-5')}>
             {t('applyFilters')}
-          </button>
+          </SubmitPending>
         </div>
       </Form>
     </div>
